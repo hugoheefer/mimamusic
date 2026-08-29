@@ -16,7 +16,7 @@
   */
   :root {
     --bg: #000000;
-    --ink: #f4f4f4;
+    --ink: #989898;              /* real site body copy: body { color: #989898 } */
     --ink-dim: #7e7e7e;
     --accent: #cb4752;            /* real template red — links + red headings */
     --accent-soft: #cb4752;
@@ -48,7 +48,7 @@
 
     --font-script: "Henny Penny", "Comic Sans MS", cursive;        /* logo + grey headings */
     --font-title: "Fredericka the Great", "Henny Penny", cursive;  /* red headings */
-    --font-body: "Gabriela", Georgia, "Times New Roman", serif;
+    --font-body: Arial, Helvetica, "Helvetica Neue", sans-serif;   /* content text: real site body { font-family: Arial, Helvetica, sans-serif } */
   }
 
   * { box-sizing: border-box; }
@@ -59,8 +59,8 @@
     background: var(--bg);
     color: var(--ink);
     font-family: var(--font-body);
-    font-size: 15px;
-    line-height: 1.55;
+    font-size: 14px;                /* real site: body { font-size: 14px; line-height: 20px } */
+    line-height: 20px;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -165,9 +165,9 @@
   .page-title.is-dim { color: var(--title-grey); }
 
   .prose { max-width: var(--measure); }
-  .prose p { margin: 0 0 1.15em; }
+  .prose p { margin: 0 0 10px; }
   .prose p.tight { margin-bottom: 0.2em; }
-  .prose strong { font-weight: 700; }
+  .prose strong { font-weight: 700; color: var(--accent); }   /* real site: .item_introtext strong { color: #cb4752 } */
   .t-red { color: var(--accent-soft); }
   .t-red-strong { color: var(--accent-soft); font-weight: 700; }
   .prose ul { margin: 0 0 1.15em; padding-left: 1.1em; }
@@ -328,23 +328,21 @@
 <main>
   <!-- HOME -->
   <section class="page" id="page-home" data-owner="home">
-    <div class="prose">
-      <article class="art">
+    <div class="home-cols">
+      <article class="home-col hc-dir">
         <h2 class="page-title is-red">Dirigeren</h2>
+        <p>Een intensieve verbinding aangaan met je musici en samen hoorbaar maken wat er in je hoofd klinkt.</p>
         <div class="ph home-fig-dir">[home-foto: dirigeren]</div>
-        <p>Een intensieve verbinding aangaan met je musici en samen hoorbaar maken
-        wat er in je hoofd klinkt.</p>
       </article>
-      <article class="art">
+      <article class="home-col hc-ond">
         <h2 class="page-title is-red">Onderwijs</h2>
+        <p>Leerlingen meenemen in jouw liefde voor muziek en mogelijkheden aanbieden om hier aan mee te doen.</p>
         <div class="ph home-fig-ond">[home-foto: onderwijs]</div>
-        <p>Leerlingen meenemen in jouw liefde voor muziek en mogelijkheden aanbieden
-        om hier aan mee te doen.</p>
       </article>
-      <article class="art">
+      <article class="home-col hc-dwf">
         <h2 class="page-title is-red">Dwarsfluit</h2>
+        <p>Muziek zonder woorden. Het instrument als spreekbuis.</p>
         <div class="ph home-fig-dwf">[home-foto: dwarsfluit]</div>
-        <p>Muziek zonder woorden.<br>Het instrument als spreekbuis.</p>
       </article>
     </div>
   </section>

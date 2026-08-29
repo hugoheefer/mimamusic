@@ -208,11 +208,27 @@ trashed design; ids 24/25/26).
 | 16 | **Onderwijs** | “Leerlingen meenemen in jouw liefde voor muziek en mogelijkheden aanbieden om hier aan mee te doen.” | `images/2012-11-06__De_Bron_leslokaal_4.jpg` | 321×180 | block, below text (wrapped in its own `<h1>`) |
 | 15 | **Dwarsfluit** | “Muziek zonder woorden. / Het instrument als spreekbuis.” | `images/home/Wilma_fluitist_1986.jpg` (alt “home 3”, title “fluitist”) | 222×290 | block, below text |
 
-**Prototype layout (owner decision 2026‑08‑29):** all three blocks are
-**heading → photo → text below**, photo as a left‑aligned block (no float, no
-text‑wrap) at the sizes above. Simpler and consistent; overrides the original
-per‑block placement in the table. Fake carousel + its CSS/JS removed from
-`build_images.py`; `.home-figure--dir/ond/dwf` classes added.
+**Prototype layout (owner decision 2026‑08‑29): reproduce the original.**
+The live homepage is a Joomla category blog in **3 equal columns** (`items-row
+cols-3`, each `col-sm-4`), confirmed identical in the live site *and* the
+April 2025 Wayback capture. Prototype now matches:
+- 3 columns side by side (`#page-home .home-cols` flex, 33.333% each), **stack
+  below 768 px**.
+- Each column: title → **one `<p>`** of body copy → photo **below**. (The original
+  splits each line into its own `<p>`, which gave paragraph‑sized gaps between
+  lines; collapsed to one naturally‑wrapping paragraph so line spacing = the
+  20px `line-height` used everywhere else.)
+- Per column the **text and the photo share one width** (`.hc-dir/ond/dwf` →
+  249 / 321 / 222 px) so their left *and* right edges line up. Photos are plain
+  left‑aligned blocks (dropped the original `pull-left` float — no effect here).
+- All columns left‑aligned; column 1's left edge = container left edge = menu‑bar
+  left edge (same `.container` / `--pad` as `.site-header`, `.nav-inner`, `.page`,
+  `.foot-inner` — true on every page).
+
+Not a final design choice — owner may modernise later (the vertical stack we'd
+briefly built is the obvious alternative). Fake carousel + its CSS/JS were
+removed from `build_images.py`; `.home-cols` / `.home-col` / `.home-figure--*`
+classes added.
 
 Open points still to resolve:
 - **`{loadmoduleid 92}`** sits inside every home `<h1>`, before the coloured word.
@@ -413,12 +429,12 @@ SELECT id, catid, imgtitle, imgfilename, imgdate, published FROM `mm_joomgallery
 | # | Decision | Why | Revisit? |
 |---|---|---|---|
 | D1 | All‑black ground | It's the GK5 "Theatre" template default, not a chosen identity | Ask owner if she wants it lighter |
-| D2 | Fonts from live `template.css`: logo + grey headings **Henny Penny**, red headings **Fredericka the Great**, body **Gabriela** serif | Confirmed in CSS, not a guess | Keep; owner may dislike the quirky display faces → then pick alternatives |
-| D3 | Red `#cb4752`, grey heading `#7e7e7e`, body `#f4f4f4` | `#cb4752`/`#7e7e7e` from CSS; body lightened from CSS `#f4f4f4`‑ish for legibility (real `.copyright` is `#2b2b2b`, near‑invisible) | Keep; revisit copyright colour |
-| D4 | Heading colour = red on top‑level pages, grey on sub‑pages & Agenda | CSS: `.title` (red) vs `.heading-style-1` (grey) | Keep |
+| D2 | **Content text = `Arial, Helvetica, sans-serif`, 14px / line-height 20px** — from the real `body {}` rule in `template.css` (fetched 2026‑08‑29). The Google fonts (Henny Penny, Fredericka the Great, Gabriela) load, but **Gabriela is only applied to bare `h1..h6`**, never body copy — the earlier "body = Gabriela serif" was wrong and is now corrected in the prototype. `--font-body` was Gabriela serif → now Arial. | `template.css` `body { font-family: Arial, Helvetica, sans-serif; font-size:14px; line-height:20px }` | Keep (it's the real thing); modernise later with owner |
+| D3 | Content text colour **`#989898`** (was `#f4f4f4`); red `#cb4752`, grey heading `#7e7e7e`. Bold inside content = red `#cb4752` (`.item_introtext strong`). | All from `template.css`: `body { color:#989898 }` | Keep; still revisit near‑invisible `.copyright #2b2b2b` |
+| D4 | Prototype uses **one clean `.page-title`** (Fredericka the Great, red, `clamp(26–34px)`). The real site has **no consistent heading system** — headings are hand‑typed inside the article body with ad‑hoc inline styles: home blocks `<h1><span style="color:#9a2d2d">`; Arrangeren `<h2><span style="color:#ff0000;font-size:14pt">`; Onderwijs/Geschiedenis show the Joomla auto `<h3 class="item_title">` (Gabriela serif). Template default for bare `h1..h6` = Gabriela serif `#333`, `h1` = 2em. | The original is genuinely inconsistent | **DECISION NEEDED** — reproduce the per‑page inline mess, or keep the prototype's unified title? (see open items) |
 | D5 | **1200px centred container** (`margin: 0 auto`); ~1170px text column | Matches live `template.css` `.container` | Keep |
 | D6 | Nav = single‑column dropdowns; **parent items (Koren, workshop/les) are links** → click = go to landing page, hover/focus = open dropdown; dropdown lists **only the children** (no repeated parent) | Standard mega‑menu behaviour; simplifies the original DJ‑MegaMenu; menus are tiny | Fine → Squarespace Folders (folder landing page + child pages) |
-| D7 | ~~Home slider~~ → **removed**. Home = 3 blocks, layout **heading → photo → text** for all three; photo a left‑aligned block (`2017-12b.jpg` 249×275 / `De_Bron_leslokaal_4.jpg` 321×180 / `Wilma_fluitist_1986.jpg` 222×290) per `mm_content` 21/16/15 | SQL 7b: no carousel. Owner chose uniform photo‑above‑text over the original per‑block placement | Settled |
+| D7 | ~~Home slider~~ → **removed**. Home reproduces the original: **3 columns** (`col-sm-4`), each title → 2 `<p>` lines → photo below (`2017-12b.jpg` 249×275 `pull-left` / `De_Bron_leslokaal_4.jpg` 321×180 / `Wilma_fluitist_1986.jpg` 222×290) per `mm_content` 21/16/15; stacks <768px | SQL 7b: no carousel. Owner: reproduce original now, modernise later with her | Revisit with owner |
 | D8 | Footer badge = real `MIMAmusic_LOGO2-4.png` | Actual asset | Keep |
 | D9 | Dropped the "Joomla!" footer line | No Joomla cruft on the rebuild | — |
 | D10 | Transcribed copy keeps original quirks ("2017 .", "Dat  was", "Sind 2014") | Faithful until owner proofreads | Owner proofread pass |
@@ -426,9 +442,15 @@ SELECT id, catid, imgtitle, imgfilename, imgdate, published FROM `mm_joomgallery
 ## 11. Open items to resolve before the Squarespace build
 
 **Data — phpMyAdmin, prefix `mm_` (full queries in §7):**
-- [x] 7a template branding — **got it from `template.css` instead**: 1200px centred
-  container, fonts (Henny Penny / Fredericka the Great / Gabriela), red `#cb4752`,
-  grey `#7e7e7e`. Still want: mega‑menu skin CSS `custom-124.css`, heading sizes.
+- [x] 7a template branding — **have `template.css`** (saved 2026‑08‑29). Confirmed:
+  `body { font-family: Arial, Helvetica, sans-serif; font-size:14px; line-height:20px;
+  color:#989898; background:#000 }`; bare `h*` = Gabriela serif `#333` / `h1` 2em;
+  `h*.heading-style-1` = Henny Penny `#7e7e7e` **48px**; `h*.title` = Fredericka the
+  Great `#cb4752` (no explicit size). Fonts via `//fonts.googleapis.com` (Fredericka
+  the Great, Gabriela, Henny Penny, + Open Sans for the megamenu).
+  Still want: mega‑menu skin `custom-124.css`; module 92 (SQL 7d).
+- [ ] **Heading system decision** (see D4) — the real site's per‑page inline heading
+  styles vs the prototype's single `.page-title`.
 - [ ] 7b / 7c all article bodies (every block still marked *"nog op te halen"*)
       — **Home (21/16/15) DONE 2026‑08‑29**, see §4 Home
 - [ ] 7d published module content (footer text, logo markup, sidebar) — **incl. module 92**

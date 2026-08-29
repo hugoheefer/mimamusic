@@ -79,12 +79,24 @@ def build():
   .ph.contain.has-img img { object-fit: contain; }
   .ph-lead { float: right; width: 340px; height: 232px; margin: 2px 0 16px 44px; }
 
-  /* homepage block photos (one per block, from articles 21/16/15) — photo above text */
-  .home-figure--dir { width: 249px; height: 275px; margin: 4px 0 14px; }
-  .home-figure--ond { width: 321px; height: 180px; margin: 4px 0 14px; }
-  .home-figure--dwf { width: 222px; height: 290px; margin: 4px 0 14px; }
-  @media (max-width: 620px) {
-    .home-figure--dir, .home-figure--ond, .home-figure--dwf { width: 100%; max-width: 321px; height: auto; aspect-ratio: 4 / 3; }
+  /* homepage — original Joomla category layout: 3 equal columns (col-sm-4),
+     each: heading -> text -> photo below. Text and photo share one width per
+     column so their left+right edges align. Stacks below 768px. */
+  #page-home .home-cols { display: flex; flex-wrap: wrap; margin: 0 calc(var(--pad) * -1); }
+  #page-home .home-col { flex: 0 0 33.333%; max-width: 33.333%; padding: 0 var(--pad); }
+  #page-home .home-col > .page-title:first-child { margin: 0 0 16px; }
+  #page-home .home-col p { margin: 0 0 14px; }
+  #page-home .hc-dir p, #page-home .hc-dir .home-figure { width: 249px; max-width: 100%; }
+  #page-home .hc-ond p, #page-home .hc-ond .home-figure { width: 321px; max-width: 100%; }
+  #page-home .hc-dwf p, #page-home .hc-dwf .home-figure { width: 222px; max-width: 100%; }
+  .home-figure--dir { height: 275px; }
+  .home-figure--ond { height: 180px; }
+  .home-figure--dwf { height: 290px; }
+  @media (max-width: 767px) {
+    #page-home .home-col { flex: 0 0 100%; max-width: 100%; margin-bottom: 34px; }
+    #page-home .hc-dir p, #page-home .hc-ond p, #page-home .hc-dwf p,
+    #page-home .hc-dir .home-figure, #page-home .hc-ond .home-figure, #page-home .hc-dwf .home-figure { width: 100%; max-width: 340px; }
+    .home-figure--dir, .home-figure--ond, .home-figure--dwf { height: auto; aspect-ratio: 4 / 3; }
   }
 
   .badge-img { width: 84px; height: 84px; margin-top: 22px; display: block; }
