@@ -198,12 +198,9 @@ def build():
     h = h.replace('<!--IMG:emmaus-->',
                   ph("Emmaus1.jpg", "Basisschool Emmaus", "teaser-img"), 1)
 
-    # Dwarsfluit / de fluitist
-    h = h.replace(
-        '    <article class="art">\n      <h2 class="page-title is-red">fluitist</h2>\n      <p class="pending">Artikel-id&nbsp;11 (&ldquo;de fluitist&rdquo;). Tekst nog op te halen.</p>\n    </article>',
-        '    <article class="art clearfix">\n      <h2 class="page-title is-red">fluitist</h2>\n      '
-        + ph("Wilma_fluitist_1986.jpg", "Wilma als fluitiste, 1986", "ph-side")
-        + '\n      <p class="pending">Artikel-id&nbsp;11 (&ldquo;de fluitist&rdquo;). Tekst nog op te halen.</p>\n    </article>', 1)
+    # Dwarsfluit / de fluitist — photo floats beside the article body
+    h = h.replace('<!--IMG:fluitist-->',
+                  ph("Wilma_fluitist_1986.jpg", "Wilma als fluitiste, 1986", "ph-side"), 1)
 
     # workshop/les landing = the "Muzikale ondersteuning" leading article only
     # (heading + one paragraph, no photo, no teasers — matches the rendered live page)

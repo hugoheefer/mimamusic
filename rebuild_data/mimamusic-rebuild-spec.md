@@ -69,8 +69,13 @@ Published Artifact: **https://claude.ai/code/artifact/bea26d35-ff4c-45c7-bad8-65
   `color:#ff0000; font-size:14pt`. The DB "Arrangementen" examples article
   (id 14, 2019) is **not surfaced on the live page** → placeholder dropped from
   the prototype; still recorded in the article inventory / §11 for a future add.
-- **Dwarsfluit / Privacy** — sections built; bodies still placeholder (see
-  pending).
+- **Dwarsfluit** — synced from the DB 2026‑08‑29: category blog, **4 published
+  articles stacked** in DB `ordering` — Geschiedenis (1), fluitist (2),
+  Dwarsfluitles (4), Blokfluitles (5). id 12 "informatie" is state ‑2 (trashed)
+  → omitted. Bodies are the article `introtext` verbatim (leading/trailing empty
+  `<p>&nbsp;</p>` dropped; copy quirks kept — "Daarna heeft heb ik…",
+  "sopranino.Ben je…", lowercase "je hebt…").
+- **Privacy** — section built; body still placeholder (see pending).
 - **Sub‑pages** `page-spirit / -singin / -miks / -voluum` — real bodies are in
   hand from query (h) but **not yet pasted in** (still placeholder).
 - **Photos:** all 20 files from `mimamusic.nl/images/` in `website/images/`
@@ -85,9 +90,9 @@ Published Artifact: **https://claude.ai/code/artifact/bea26d35-ff4c-45c7-bad8-65
 ### Still pending
 - **Sub‑page bodies** (text already pulled via query (h) — just needs pasting):
   Spirit, Singin'Gestel, Popkoor MIKS, Koor Voluum.
-- **Bodies still to pull** (query (h) per category): **Dwarsfluit**
-  (Dwarsfluitles id 33, Blokfluitles id 10, de fluitist id 11, Geschiedenis),
-  **Workshopmogelijkheden** full body, **Privacy**. (Arrangeren body is in —
+- **Bodies still to pull** (query (h) per category):
+  **Workshopmogelijkheden** full body, **Privacy**. (Dwarsfluit bodies are in —
+  4 articles synced from the DB 2026‑08‑29, see §4 / D16. Arrangeren body is in —
   synced from the live page 2026‑08‑29; only the DB "Arrangementen" examples
   article id 14 is still un‑pulled and is not on the live page anyway.)
 - **SQL 7f** events — grid confirmed empty; agenda mechanism = open owner
@@ -376,13 +381,20 @@ we hebben samen wel veel plezier gehad." + link to
 (text + `Emmaus1.jpg` 275×183, link to the school site). Matches the original.
 
 ### Dwarsfluit  (category `dwarsfluit`)
-| id | title | alias | state |
-|---|---|---|---|
-| 10 | Blokfluitles | blokfluitles | 1 |
-| 33 | Dwarsfluitles | dwarsfluitles-categorie | 1 |
-| 11 | fluitist | dwarsfluitist | 1 |
-| 18 | Geschiedenis | dwarsfluit-geschiedenis | 1 |
-| 12 | informatie | informatie | -2 (skip) |
+Page = category blog, articles stacked in DB `ordering` (col shown below).
+Bodies transcribed into the prototype 2026‑08‑29 from the DB `introtext`.
+| id | title | alias | state | ordering | body |
+|---|---|---|---|---|---|
+| 18 | Geschiedenis | dwarsfluit-geschiedenis | 1 (featured) | 1 | **in** — 2 paragraphs, keeps "Daarna heeft heb ik…" |
+| 11 | fluitist | dwarsfluitist | 1 | 2 | **in** — 1 paragraph ("Van jongs af aan…") |
+| 12 | informatie | informatie | -2 (trashed) | 3 | **omitted** — not published |
+| 33 | Dwarsfluitles | dwarsfluitles-categorie | 1 | 4 | **in** — intro + `<br>`-list of lesvormen + "De lessen vinden in Rosmalen plaats." |
+| 10 | Blokfluitles | blokfluitles | 1 | 5 | **in** — 1 paragraph, keeps "sopranino.Ben je…" |
+
+Article‑order assumption: the live category blog is taken to sort by `ordering`
+ascending (the 1..5 sequence is hand‑assigned). Confirm against the menu‑item
+params once **SQL 7e** is in hand — if it sorts by date/most‑hits the stack
+order changes.
 
 ### Arrangeren  (category `Arrangeren`)
 | id | title | alias | state | note |
@@ -572,7 +584,7 @@ ORDER BY c.state DESC, c.ordering;
 | Home (3 blocks, 1 photo each) | Home page: three text sections, each a short heading + 2 lines + one image block (no slideshow) |
 | Koren (+ 3 choir articles) | **Folder** “Koren” with a landing page + 3 sub‑pages (Spirit, Singin’Gestel, Popkoor MIKS). Keep archived “Koor Voluum” as a 4th sub‑page if wanted |
 | Onderwijs | Single page |
-| Dwarsfluit | Single page (sections: lessen, blokfluit, de fluitist, geschiedenis) |
+| Dwarsfluit | Single page, 4 stacked sections in DB order: Geschiedenis, fluitist, Dwarsfluitles, Blokfluitles |
 | Arrangeren | Single page (live = one article only; examples/portfolio article id 14 not currently published) |
 | workshop/les (+ 2 articles) | Folder with landing + “Muzikale ondersteuning” + “Workshopmogelijkheden” |
 | Agenda (JEvents) | **Events** collection page |
@@ -607,6 +619,7 @@ ORDER BY c.state DESC, c.ordering;
 | D12 | **One text measure everywhere.** The original renders the same article at two widths — full (`col-sm-12`) on its own page, half (`cols-2`/`col-sm-6`) as a category‑blog teaser. Prototype drops that split: all content text (leading, teaser, sub‑page) flows at the shared `--measure` (~1170px, menu‑bar width); teaser blocks are full‑width stacked, not `cols-2`. | Owner pointed at the full‑width version; also serves "all pages breathe the same look" | Keep |
 | D14 | **Section landings = leading article only** (owner, 2026‑08‑29, from the live rendered Koren page). Koren landing shows just Koordirigent + text + 4 photos; the choir teasers were removed. Per‑choir content lives on its own sub‑page via the dropdown. Onderwijs/Bs Emmaus teaser kept pending owner review. Supersedes the earlier "match the original cols‑2 teasers". | Live rendered page shows no teasers; broken‑JS site isn't a reliable visual ref, owner's call is | Confirm Bs Emmaus with owner |
 | D15 | **Arrangeren page synced to the live render** (owner, 2026‑08‑29, from a screenshot of `/index.php/arrangeren-menu`). Live shows **one article only** — heading + 2 paragraphs + mailto — with the heading carrying an inline quirk `color:#ff0000; font-size:14pt` (not the `.page-title` Gabriela/`#cb4752` treatment). Prototype changed to match: dropped the `.is-red` class on that `<h2>` for inline `style="color:#ff0000; font-size:14pt"`, dropped the `<article class="art">` wrapper (single article, same shape as Onderwijs/Workshop landing), and **removed the pending "Arrangementen" placeholder article** (DB id 14, 2019 examples) — it is not on the live page. Still in the article inventory (§ Arrangeren) for a possible later add. | Owner: match the original | Owner: confirm the `#ff0000`/14pt heading is wanted long‑term or should be normalised to `.page-title` |
+| D16 | **Dwarsfluit page synced from the DB** (owner supplied the 5 `mm_content` rows, 2026‑08‑29). Prototype's 4 pending placeholders replaced with the real `introtext`. Order set to DB `ordering` — **Geschiedenis, fluitist, Dwarsfluitles, Blokfluitles** (was Dwarsfluitles/Blokfluitles/fluitist/Geschiedenis); id 12 "informatie" dropped (state ‑2). Empty `<p>&nbsp;</p>` editor paragraphs at the head/tail of each body were **not** carried over; copy quirks were (double verb "Daarna heeft heb ik", missing space "sopranino.Ben je", lowercase sentence start "je hebt…"). Dwarsfluitles' hyphen list kept as `<br>`-separated lines (matches the live `<br />- ` markup, not a real `<ul>`). Headings stay `.page-title is-red` (linked category‑blog titles). The **fluitist** article keeps its floated photo (`Wilma_fluitist_1986.jpg`, `.ph-side`) — injection moved to a `<!--IMG:fluitist-->` marker in `build_images.py` (was a whole‑`<article>` string match that the new body would have silently broken). Its body column is set to **`.prose.is-narrow` = `max-width:50%`** (owner, 2026‑08‑29) so the text sits beside the photo and runs taller instead of full‑measure; resets to full width below the 760px breakpoint where `.ph-side` unfloats. | Owner: match the original | Owner: confirm article order (depends on 7e menu params); decide if the `<br>` list should become a real bullet list |
 | D13 | **Vertical rhythm matched to live `template.css`, via the shared rules** (so every page moves together): `.page { padding-bottom: 69px }` (= live `#content { padding-bottom:69px }`, was 96); `.foot-inner { padding: 49px … 40px }` + `.badge-img { margin-top:0 }` (= live `.footer-wrapper-inner { padding-top:49px }`, was 40+22); **removed `main { min-height: 76vh }`** — that was stretching `<main>` on short pages (Singin'Gestel, MIKS, Spirit, Voluum) so the footer divider sat far below the content. Live site has no such rule; footer now sits directly under the content, black fills the rest of the viewport. **Paragraph spacing** `.prose p` / `.teaser p` `margin-bottom` 10 → **20px** (= live `p { margin:0; padding:0 0 20px }`) — site‑wide, one knob. | Owner: match the original's spacing | Keep |
 
 ## 11. Open items to resolve before the Squarespace build
@@ -623,8 +636,10 @@ ORDER BY c.state DESC, c.ordering;
   styles vs the prototype's single `.page-title`.
 - [ ] 7b / 7c all article bodies (every block still marked *"nog op te halen"*)
       — **Home (21/16/15) DONE 2026‑08‑29**, see §4 Home;
-      **Arrangeren (id 36) DONE 2026‑08‑29** synced from the live render (§4, D15).
-      Still open: DB id 14 "Arrangementen" examples (not on the live page).
+      **Arrangeren (id 36) DONE 2026‑08‑29** synced from the live render (§4, D15);
+      **Dwarsfluit (id 18/11/33/10) DONE 2026‑08‑29** synced from the DB (§4, D16).
+      Still open: DB id 14 "Arrangementen" examples (not on the live page);
+      Workshopmogelijkheden; Privacy; sub‑page bodies (Spirit/Singin'/MIKS/Voluum).
 - [ ] 7d published module content (footer text, logo markup, sidebar) — **incl. module 92**
       (`{loadmoduleid 92}` appears inside every homepage heading)
 - [ ] 7e Home menu item + per‑item params
@@ -696,7 +711,7 @@ ORDER BY c.state DESC, c.ordering;
   `squarespace-trial.md`), or dropdown‑only. Privacy in footer nav only.
 - **Expectation**: ~85–90% with the style editor, ~95%+ with modest Custom CSS.
 - **Home**: Slideshow section + three text sections (Homepage 1/2/3).
-- **Dwarsfluit**: one page, four stacked sections (Dwarsfluitles, Blokfluitles, de fluitist, Geschiedenis).
+- **Dwarsfluit**: one page, four stacked sections in DB `ordering`: Geschiedenis, fluitist, Dwarsfluitles, Blokfluitles.
 - **Arrangeren**: one page (single article, as live). Add an "Arrangementen"
   examples section only if id 14 gets published / owner asks.
 - **Agenda**: Squarespace Events collection; import from 7f.
@@ -710,6 +725,14 @@ ORDER BY c.state DESC, c.ordering;
 The prototype is static HTML, so the leading option is **static hosting we control**
 rather than a closed builder. Squarespace stays the "least technical, monthly fee,
 no code access" fallback (see `squarespace-trial.md`).
+
+### Photo injection markers
+`build_images.py` swaps labelled placeholders in the `.src.html` for baked
+data‑URI `<img>`s. Section‑landing rows use `<!--BAND:*-->`, single photos use
+`<!--IMG:*-->` (emmaus, fluitist) or a literal `<div class="ph …">…origineel…</div>`
+placeholder string. **2026‑08‑29:** the Dwarsfluit "fluitist" photo moved from a
+brittle whole‑`<article>` string match to a `<!--IMG:fluitist-->` marker when the
+article got its real body — keep new photo hooks as markers, not HTML‑blob matches.
 
 ### Deploy artifact
 `build_images.py` writes the self‑contained build to **two** places:

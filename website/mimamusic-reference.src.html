@@ -174,6 +174,7 @@
   .page-title.is-dim { color: #6f6f6f; }             /* live uses #333 (near-invisible on black); kept readable — flag for owner */
 
   .prose { max-width: var(--measure); }
+  .prose.is-narrow { max-width: 50%; }   /* Dwarsfluit "fluitist": ~half width beside the floated photo, so the column runs taller */
   .prose p { margin: 0 0 20px; }   /* live: p { margin:0; padding:0 0 20px } */
   .prose p.tight { margin-bottom: 0.2em; }
   .prose strong { font-weight: 700; color: var(--accent); }   /* real site: .item_introtext strong { color: #cb4752 } */
@@ -294,6 +295,7 @@
   @media (max-width: 760px) {
     .nav-link { padding: 13px 13px; font-size: 10.5px; letter-spacing: 0.08em; }
     .ph-portrait, .ph-side { float: none; width: 100%; max-width: 280px; margin: 0 0 16px; }
+    .prose.is-narrow { max-width: none; }   /* full width once the photo unfloats */
     .page { padding-top: 52px; }
   }
 </style>
@@ -454,20 +456,12 @@
     </div>
   </section>
 
-  <!-- DWARSFLUIT (4 articles in the category) -->
+  <!-- DWARSFLUIT (category blog; 4 published articles, stacked in DB `ordering`:
+       Geschiedenis 1, fluitist 2, Dwarsfluitles 4, Blokfluitles 5. id 12
+       "informatie" is state -2 (trashed) -> omitted. Bodies = article introtext
+       verbatim from the DB (leading/trailing empty <p>&nbsp;</p> editor cruft
+       dropped; original copy quirks kept). -->
   <section class="page" id="page-dwarsfluit" data-owner="dwarsfluit" hidden>
-    <article class="art">
-      <h2 class="page-title is-red">Dwarsfluitles</h2>
-      <p class="pending">Artikel-id&nbsp;33. Tekst nog op te halen uit de database &mdash; SQL 7b.</p>
-    </article>
-    <article class="art">
-      <h2 class="page-title is-red">Blokfluitles</h2>
-      <p class="pending">Artikel-id&nbsp;10. Tekst nog op te halen uit de database &mdash; SQL 7b.</p>
-    </article>
-    <article class="art">
-      <h2 class="page-title is-red">fluitist</h2>
-      <p class="pending">Artikel-id&nbsp;11 (&ldquo;de fluitist&rdquo;). Tekst nog op te halen.</p>
-    </article>
     <article class="art">
       <h2 class="page-title is-red">Geschiedenis</h2>
       <div class="prose">
@@ -478,7 +472,41 @@
         Delnoye.</p>
         <p>Naast het spelen in diverse samenstellingen heb ik lange tijd dwarsfluitles gegeven aan
         muziekscholen. Uiteindelijk besloot ik om zelfstandig verder te gaan. Dat betekende dat ik
-        vooral thuis les ben gaan geven en veel andere dingen erbij ben gaan doen.</p>
+        vooral thuis les ben gaan geven en veel andere dingen erbij gaan doen.</p>
+      </div>
+    </article>
+    <article class="art clearfix">
+      <h2 class="page-title is-red">fluitist</h2>
+      <!--IMG:fluitist-->
+      <div class="prose is-narrow">
+        <p>Van jongs af aan heb ik podiumervaring opgedaan, als solist, als begeleider van koren,
+        in ensembles en in orkesten, zowel symfonieorkesten als harmonieorkesten. Hoewel mijn
+        focus meer en meer op dirigeren is komen te liggen speel ik nog steeds met veel plezier
+        regelmatig bij allerlei gelegenheden. Heb je een fluitist nodig neem dan gerust contact
+        op.</p>
+      </div>
+    </article>
+    <article class="art">
+      <h2 class="page-title is-red">Dwarsfluitles</h2>
+      <div class="prose">
+        <p>Er zijn veel mogelijkheden als het over dwarsfluitles gaat. Het is maar net waar je
+        zelf de voorkeur aan geeft. Hier wat voorbeelden:<br>
+        - alleen les<br>
+        - samen les<br>
+        - ensemble les<br>
+        - les gericht op de techniek van het fluitspelen<br>
+        - les gericht op dat leuke stuk of die song<br>
+        en wat je verder nog kunt bedenken.</p>
+        <p>De lessen vinden in Rosmalen plaats.</p>
+      </div>
+    </article>
+    <article class="art">
+      <h2 class="page-title is-red">Blokfluitles</h2>
+      <div class="prose">
+        <p>je hebt grote en kleine blokfluiten, je hebt ze in allerlei soorten en maten. In
+        blokfluitensembles wordt graag met verschillende maten van blokfluiten samen gespeeld.
+        De klank reikt dan van zeer laag door de (contra) basblokfluit tot zeer hoog door de
+        (kleine) sopranino.Ben je ge&iuml;nteresseerd dan kun je bij me aankloppen.</p>
       </div>
     </article>
   </section>
