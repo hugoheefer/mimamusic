@@ -12,6 +12,65 @@ Squarespace later), without needing access to the compromised Joomla install.
 
 ---
 
+## 0. Prototype status  (living — update on every prototype change)
+
+**Prototype:** `website/` in this repo — `mimamusic-reference.src.html` (edit) →
+`build_images.py` → `mimamusic-reference.html` (published Artifact:
+https://claude.ai/code/artifact/fcf1a98b-ad3e-460c-9f94-3b4a51c561fd).
+Reference inputs (this spec + `screenshots old site/`) live in `rebuild_data/`.
+
+### Done
+- Visual shell reproduced from the screenshots: all‑black GK5 "Theatre" look,
+  grey mega‑menu bar, script headings (**red** = top‑level page, **grey** =
+  sub‑page / Agenda), ~92px left indent, ~1180px text column, circular MIMA
+  footer badge (real logo image).
+- Full nav + every section built, incl. **Koren** and **workshop/les** landing
+  pages, **Dwarsfluit** as 4 articles, **Arrangeren** + "Arrangementen" block,
+  archived **Koor Voluum**, **Privacy** page (footer‑linked only).
+- **Home** = fading 3‑slide carousel + Homepage 1/2/3 blocks (bodies still
+  placeholder).
+- **Agenda** = static repro of the JEvents month grid (Aug 2026).
+- **Photos:** all 20 images from `mimamusic.nl/images/` downloaded to
+  `website/images/` (full‑res) + `website/images/web/` (shrunk, ≤1000px q72),
+  wired in where they map to the old pages — inventory below.
+
+### Still pending
+- **SQL 7a** — real brand colours + `googleFont` (prototype uses guessed
+  `#e42a1a` + "Berkshire Swash" as the script face).
+- **SQL 7b/7c** — bodies for every block still marked *"nog op te halen"*:
+  Homepage 1/2/3, Koordirigent, Onderwijs, Dwarsfluitles, Blokfluitles, de
+  fluitist, Muzikale ondersteuning, Workshopmogelijkheden intro, Arrangementen,
+  Koor Voluum, Privacy.
+- **SQL 7f** — events. **SQL 7g** — gallery images.
+- Header wordmark is styled text (the real one is template‑font text, not an asset).
+- Koor Voluum has no photo of its own.
+
+### Image inventory  (`website/images/` — filename → use in prototype)
+| file | used on |
+|---|---|
+| `MIMAmusic_LOGO2-4.png` | footer badge (circular MIMA·Music) |
+| `2017-12b.jpg` | home slider — Wilma conducting, 2017 |
+| `Wilma_fluitist_1986.jpg` | home slider + Dwarsfluit "de fluitist" (B&W, flute, 1986) |
+| `2012-11-06__De_Bron_leslokaal_4.jpg` | home slider — wide music‑room |
+| `2012-11-06__De_Bron_leslokaal.jpg` | Onderwijs row — keyboard classroom |
+| `2014-10-08_Bieb_Heyhoef3.jpg` | Onderwijs row — library workshop |
+| `djembe_60.jpg` | Onderwijs row — djembé circle |
+| `2010-kerst__dirigent_wilma_in_de_sneeuw.jpg` | Koren landing — lead image |
+| `_DSC8853.jpg` | Spirit — teal robes |
+| `spirit_3.jpg` | Spirit — red/blue scarves |
+| `2024-05_met_kinderen.jpg` | Singin'Gestel — church, green |
+| `2024-03-20.jpg` | Singin'Gestel — blue steps, hands up |
+| `MIKS_logo.png` | Popkoor MIKS logo |
+| `boomwhackers_1c.jpg` | Workshopmogelijkheden — side image |
+| `2020-12-jamulus.png` | workshop/les landing — side image (headset) |
+| `2020-06-28_Wilma.jpg` | Contact — portrait |
+| `2015-09-23_GGK_40.png` | *unused* — old GGK photo |
+| `Wilma_2024.jpg` | *unused* |
+| `Wilma_vleermuis_2022.jpg` | *unused* |
+| `Emmaus1.jpg` | *unused* — school photo |
+
+---
+
 ## 1. Site identity
 
 | | |
@@ -254,8 +313,9 @@ SELECT id, catid, imgtitle, imgfilename, imgdate, published FROM `mm_joomgallery
 - **Wayback Machine**: `https://web.archive.org/web/2*/mimamusic.nl` — pull a
   recent clean snapshot for layout + imagery (slider slides, footer banners,
   gallery photos). Use an older snapshot if a recent one shows malware effects.
-- **Images**: `/images/`, `/templates/theme3339/images/` — logo, slider, choir
-  photos, portraits.
+- **Images**: `/images/` — ✅ **done**, all 20 files pulled to `website/images/`
+  (see §0 inventory). Still worth checking `/templates/theme3339/images/` for the
+  header wordmark asset and any footer‑banner art.
 
 ---
 

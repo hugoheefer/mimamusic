@@ -31,11 +31,11 @@ Requires Python 3 + Pillow (only for `--resize`).
   Gavick GK5 "Theatre" template, script headings (red on top-level pages, grey on
   sub-pages), grey mega-menu bar, narrow left-indented column.
 - **Display font** = `Berkshire Swash` as a stand-in; the real face is the template's
-  `googleFont` param (SQL 7a in `../mimamusic-rebuild-spec.md`).
+  `googleFont` param (SQL 7a in `../rebuild_data/mimamusic-rebuild-spec.md`).
 - **Colours** (`--accent #e42a1a` etc.) sampled by eye — confirm against SQL 7a.
 - **Header wordmark** is styled text (the real one is template-font text, not an image).
 - **Structure** (nav, pages, categories) from the database recon in
-  `../mimamusic-rebuild-spec.md`.
+  `../rebuild_data/mimamusic-rebuild-spec.md` — kept current (see its §0).
 - Blocks marked *"nog op te halen"* need article bodies from SQL 7b/7c.
 - **Photos**: real images are wired in where they map cleanly to the old pages.
   Unused but downloaded: `2015-09-23_GGK_40.png`, `Wilma_2024.jpg`,
