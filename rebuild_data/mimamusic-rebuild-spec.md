@@ -202,14 +202,17 @@ nothing to "restore". The homepage is genuinely just three short blocks, each
 **heading + 2 lines + one still photo** (NOT a carousel — the Swiper was an old,
 trashed design; ids 24/25/26).
 
-| id | block (heading) | text | photo (per `introtext`) | size | placement |
+| id | block (heading) | text | photo (per `introtext`) | size | original placement |
 |---|---|---|---|---|---|
-| 21 | **Dirigeren** | “Een intensieve verbinding aangaan met je musici en samen hoorbaar maken wat er in je hoofd klinkt.” | `images/home/2017-12b.jpg` (alt “homepage 1”, title “dirigeren”) | 249×275 | `class="pull-left"` — float left, text wraps |
-| 16 | **Onderwijs** | “Leerlingen meenemen in jouw liefde voor muziek en mogelijkheden aanbieden om hier aan mee te doen.” | `images/2012-11-06__De_Bron_leslokaal_4.jpg` | 321×180 | block, below text (was wrapped in its own `<h1>`) |
+| 21 | **Dirigeren** | “Een intensieve verbinding aangaan met je musici en samen hoorbaar maken wat er in je hoofd klinkt.” | `images/home/2017-12b.jpg` (alt “homepage 1”, title “dirigeren”) | 249×275 | `class="pull-left"` — float left, text wrapped |
+| 16 | **Onderwijs** | “Leerlingen meenemen in jouw liefde voor muziek en mogelijkheden aanbieden om hier aan mee te doen.” | `images/2012-11-06__De_Bron_leslokaal_4.jpg` | 321×180 | block, below text (wrapped in its own `<h1>`) |
 | 15 | **Dwarsfluit** | “Muziek zonder woorden. / Het instrument als spreekbuis.” | `images/home/Wilma_fluitist_1986.jpg` (alt “home 3”, title “fluitist”) | 222×290 | block, below text |
 
-Prototype now matches this (fake carousel + its CSS/JS removed from
-`build_images.py`; `.home-figure--dir/ond/dwf` classes added).
+**Prototype layout (owner decision 2026‑08‑29):** all three blocks are
+**heading → photo → text below**, photo as a left‑aligned block (no float, no
+text‑wrap) at the sizes above. Simpler and consistent; overrides the original
+per‑block placement in the table. Fake carousel + its CSS/JS removed from
+`build_images.py`; `.home-figure--dir/ond/dwf` classes added.
 
 Open points still to resolve:
 - **`{loadmoduleid 92}`** sits inside every home `<h1>`, before the coloured word.
@@ -415,7 +418,7 @@ SELECT id, catid, imgtitle, imgfilename, imgdate, published FROM `mm_joomgallery
 | D4 | Heading colour = red on top‑level pages, grey on sub‑pages & Agenda | CSS: `.title` (red) vs `.heading-style-1` (grey) | Keep |
 | D5 | **1200px centred container** (`margin: 0 auto`); ~1170px text column | Matches live `template.css` `.container` | Keep |
 | D6 | Nav = single‑column dropdowns; **parent items (Koren, workshop/les) are links** → click = go to landing page, hover/focus = open dropdown; dropdown lists **only the children** (no repeated parent) | Standard mega‑menu behaviour; simplifies the original DJ‑MegaMenu; menus are tiny | Fine → Squarespace Folders (folder landing page + child pages) |
-| D7 | ~~Home slider~~ → **removed**. Home is 3 blocks, each with one inline photo (`2017-12b.jpg` float‑left 249×275 / `De_Bron_leslokaal_4.jpg` 321×180 / `Wilma_fluitist_1986.jpg` 222×290) per `mm_content` 21/16/15 | SQL 7b confirmed no carousel | Confirm float/placement nuance with owner |
+| D7 | ~~Home slider~~ → **removed**. Home = 3 blocks, layout **heading → photo → text** for all three; photo a left‑aligned block (`2017-12b.jpg` 249×275 / `De_Bron_leslokaal_4.jpg` 321×180 / `Wilma_fluitist_1986.jpg` 222×290) per `mm_content` 21/16/15 | SQL 7b: no carousel. Owner chose uniform photo‑above‑text over the original per‑block placement | Settled |
 | D8 | Footer badge = real `MIMAmusic_LOGO2-4.png` | Actual asset | Keep |
 | D9 | Dropped the "Joomla!" footer line | No Joomla cruft on the rebuild | — |
 | D10 | Transcribed copy keeps original quirks ("2017 .", "Dat  was", "Sind 2014") | Faithful until owner proofreads | Owner proofread pass |

@@ -79,12 +79,11 @@ def build():
   .ph.contain.has-img img { object-fit: contain; }
   .ph-lead { float: right; width: 340px; height: 232px; margin: 2px 0 16px 44px; }
 
-  /* homepage block photos (one per block, from articles 21/16/15) */
-  .home-figure--dir { float: left; width: 249px; height: 275px; margin: 4px 26px 8px 0; }
-  .home-figure--ond { width: 321px; height: 180px; margin: 12px 0 6px; }
-  .home-figure--dwf { width: 222px; height: 290px; margin: 6px 0 4px; }
+  /* homepage block photos (one per block, from articles 21/16/15) — photo above text */
+  .home-figure--dir { width: 249px; height: 275px; margin: 4px 0 14px; }
+  .home-figure--ond { width: 321px; height: 180px; margin: 4px 0 14px; }
+  .home-figure--dwf { width: 222px; height: 290px; margin: 4px 0 14px; }
   @media (max-width: 620px) {
-    .home-figure--dir { float: none; }
     .home-figure--dir, .home-figure--ond, .home-figure--dwf { width: 100%; max-width: 321px; height: auto; aspect-ratio: 4 / 3; }
   }
 
