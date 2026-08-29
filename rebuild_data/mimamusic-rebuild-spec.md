@@ -476,3 +476,33 @@ SELECT id, catid, imgtitle, imgfilename, imgdate, published FROM `mm_joomgallery
 - **Contact**: text + Form block (recipient = owner) + Map block (real address).
 - **Cookie banner**: Squarespace setting. Chat / comments / newsletter per §11.
 - Enter the §12 redirect table in Squarespace URL mappings.
+
+## 14. Hosting / deploy  (platform NOT locked)
+
+The prototype is static HTML, so the leading option is **static hosting we control**
+rather than a closed builder. Squarespace stays the "least technical, monthly fee,
+no code access" fallback (see `squarespace-trial.md`).
+
+### Deploy artifact
+`build_images.py` writes the self‑contained build to **two** places:
+`website/mimamusic-reference.html` and repo‑root **`docs/index.html`** (+ `docs/.nojekyll`).
+`docs/` is the publish directory for both GitHub Pages and Cloudflare Pages — no
+build step needed on the host (images are data URIs, fonts from Google CDN).
+
+### First test — GitHub Pages (chosen 2026‑08‑29)
+Repo: `github.com/hugoheefer/mimamusic` (branch `master`).
+1. Commit `docs/index.html` + `docs/.nojekyll` and push.
+2. GitHub → repo **Settings → Pages** → Source: *Deploy from a branch* →
+   Branch `master`, folder `/docs` → Save.
+3. URL: **https://hugoheefer.github.io/mimamusic/** (live after ~1 min).
+- Free plan needs the repo **public**; if it's private, either make it public for
+  the test or use Cloudflare Pages (deploys private repos free).
+
+### Real hosting (later, with a CMS for the owner)
+- **Cloudflare Pages** — same repo, auto‑deploy on push; private‑repo friendly,
+  built‑in redirects (`_redirects`), privacy analytics (no cookie banner), Workers
+  for a form backend and for the Git‑CMS OAuth.
+- **Editor for Wilma**: Decap CMS or **Sveltia CMS** in the repo → `/admin` login,
+  her save = git commit = auto‑deploy. She never touches code.
+- Alternative: self‑hosted WordPress (prototype → theme) on a host we manage
+  (e.g. Vimexx) — familiar admin, but back to PHP‑CMS maintenance.

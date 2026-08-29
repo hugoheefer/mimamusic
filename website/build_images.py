@@ -15,8 +15,10 @@ import os
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.dirname(HERE)
 SRC_FILE = os.path.join(HERE, "mimamusic-reference.src.html")
 OUT_FILE = os.path.join(HERE, "mimamusic-reference.html")
+DOCS_FILE = os.path.join(REPO, "docs", "index.html")   # served by GitHub Pages (master:/docs)
 IMG_ORIG = os.path.join(HERE, "images")
 IMG_WEB = os.path.join(HERE, "images", "web")
 MAXW = 1000
@@ -191,7 +193,13 @@ def build():
 
     with open(OUT_FILE, "w", encoding="utf-8") as f:
         f.write(h)
-    print("built %s  (%.2f MB, %d images)"
+
+    # deploy artifact for Cloudflare Pages / GitHub Pages (output dir: docs/)
+    os.makedirs(os.path.dirname(DOCS_FILE), exist_ok=True)
+    with open(DOCS_FILE, "w", encoding="utf-8") as f:
+        f.write(h)
+
+    print("built %s + docs/index.html  (%.2f MB, %d images)"
           % (os.path.basename(OUT_FILE), len(h) / 1024 / 1024, h.count("<img ")))
 
 
