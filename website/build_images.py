@@ -79,24 +79,37 @@ def build():
   .ph.contain.has-img img { object-fit: contain; }
   .ph-lead { float: right; width: 340px; height: 232px; margin: 2px 0 16px 44px; }
 
-  /* homepage — original Joomla category layout: 3 equal columns (col-sm-4),
-     each: heading -> text -> photo below. Text and photo share one width per
-     column so their left+right edges align. Stacks below 768px. */
-  #page-home .home-cols { display: flex; flex-wrap: wrap; margin: 0 calc(var(--pad) * -1); }
-  #page-home .home-col { flex: 0 0 33.333%; max-width: 33.333%; padding: 0 var(--pad); }
-  #page-home .home-col > .page-title:first-child { margin: 0 0 16px; }
-  #page-home .home-col p { margin: 0 0 14px; }
-  #page-home .hc-dir p, #page-home .hc-dir .home-figure { width: 249px; max-width: 100%; }
-  #page-home .hc-ond p, #page-home .hc-ond .home-figure { width: 321px; max-width: 100%; }
-  #page-home .hc-dwf p, #page-home .hc-dwf .home-figure { width: 222px; max-width: 100%; }
-  .home-figure--dir { height: 275px; }
-  .home-figure--ond { height: 180px; }
-  .home-figure--dwf { height: 290px; }
-  @media (max-width: 767px) {
-    #page-home .home-col { flex: 0 0 100%; max-width: 100%; margin-bottom: 34px; }
+  /* homepage — original Joomla 3-column category layout, lightly tuned:
+     - all 3 columns use ONE content width, so the gaps between photos are equal
+       and the text measure is consistent
+     - text block reserves an equal height -> the 3 photos start on one line
+     - photos share one height -> bottoms line up too (modest object-fit crop;
+       the portrait keeps its top so the face is safe)
+     - display heading eased a step for a calmer ratio to the narrow column
+     Stacks below 768px. */
+  #page-home .home-cols { display: flex; flex-wrap: wrap; justify-content: space-between; }
+  #page-home .home-col { flex: 0 0 auto; }
+  #page-home .home-col > .page-title:first-child { font-size: clamp(22px, 2.4vw, 27px); margin: 0 0 14px; }
+  #page-home .home-col p { margin: 0 0 16px; min-height: 80px; }
+  #page-home .home-figure { height: 240px; }
+  /* per-column width shared by text + photo. Onderwijs keeps its native 16:9
+     (427 = 240 x 16/9) and shows uncropped; the band still fits the menu-bar
+     width: 270 + 427 + 270 + two equal gaps = the 1170px measure. */
+  #page-home .hc-dir p, #page-home .hc-dir .home-figure { width: 270px; max-width: 100%; }
+  #page-home .hc-ond p, #page-home .hc-ond .home-figure { width: 427px; max-width: 100%; }
+  #page-home .hc-dwf p, #page-home .hc-dwf .home-figure { width: 270px; max-width: 100%; }
+  #page-home .hc-ond .home-figure img { object-fit: contain; }
+  #page-home .hc-dwf .home-figure img { object-position: center top; }
+  @media (max-width: 1040px) {
+    #page-home .home-cols { flex-direction: column; flex-wrap: nowrap; }
+    #page-home .home-col { margin-bottom: 34px; }
+    #page-home .home-col p { min-height: 0; }
+    #page-home .home-col > .page-title:first-child { font-size: clamp(22px, 5.5vw, 27px); }
     #page-home .hc-dir p, #page-home .hc-ond p, #page-home .hc-dwf p,
-    #page-home .hc-dir .home-figure, #page-home .hc-ond .home-figure, #page-home .hc-dwf .home-figure { width: 100%; max-width: 340px; }
-    .home-figure--dir, .home-figure--ond, .home-figure--dwf { height: auto; aspect-ratio: 4 / 3; }
+    #page-home .hc-dir .home-figure, #page-home .hc-ond .home-figure, #page-home .hc-dwf .home-figure { width: 100%; max-width: 440px; }
+    #page-home .home-figure { height: auto; }
+    #page-home .hc-dir .home-figure, #page-home .hc-dwf .home-figure { aspect-ratio: 9 / 8; }
+    #page-home .hc-ond .home-figure { aspect-ratio: 16 / 9; }
   }
 
   .badge-img { width: 84px; height: 84px; margin-top: 22px; display: block; }

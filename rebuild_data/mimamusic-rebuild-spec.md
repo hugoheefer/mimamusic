@@ -218,9 +218,22 @@ April 2025 Wayback capture. Prototype now matches:
   splits each line into its own `<p>`, which gave paragraph‑sized gaps between
   lines; collapsed to one naturally‑wrapping paragraph so line spacing = the
   20px `line-height` used everywhere else.)
-- Per column the **text and the photo share one width** (`.hc-dir/ond/dwf` →
-  249 / 321 / 222 px) so their left *and* right edges line up. Photos are plain
-  left‑aligned blocks (dropped the original `pull-left` float — no effect here).
+- **UX polish pass (2026‑08‑29):**
+  - All 3 photos share **height 240 px** and their text blocks reserve an equal
+    height, so the photos line up on one top *and* bottom shelf.
+  - **Dirigeren / Dwarsfluit**: 270 px wide (slight `object-fit: cover` crop;
+    Dwarsfluit portrait pinned `object-position: center top` to keep the face).
+  - **Onderwijs**: kept at its **native 16:9** → `427 = 240 × 16/9` wide, shown
+    **uncropped** (`object-fit: contain`).
+  - Row laid out `justify-content: space-between` across the 1170 px measure
+    (= the grey menu‑bar width): `270 + 427 + 270 + two equal 101 px gaps`.
+    Left edge of Dirigeren = menu‑bar left edge; right edge of Dwarsfluit =
+    menu‑bar right edge; the two inter‑photo gaps are equal. Fits with room to
+    spare, so no shrink needed.
+  - Display heading eased to `clamp(22–27px)` on the homepage only.
+  - Stacks to one column below 1040 px (the middle photo is wide).
+  - Original per‑photo sizes (249×275 / 321×180 / 222×290) recorded above if
+    ever wanted back. Photos are plain left‑aligned blocks (dropped `pull-left`).
 - All columns left‑aligned; column 1's left edge = container left edge = menu‑bar
   left edge (same `.container` / `--pad` as `.site-header`, `.nav-inner`, `.page`,
   `.foot-inner` — true on every page).
