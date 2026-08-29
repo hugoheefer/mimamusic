@@ -3,7 +3,7 @@
 Compiled 2026‑08‑29 from a live database recon of the existing Joomla site plus
 browser‑console evidence. Purpose: give a complete, source‑independent blueprint
 for rebuilding the site 1:1 in another system (static HTML prototype now →
-Squarespace later), without needing access to the compromised Joomla install.
+final platform TBD, see §14/§15), without needing access to the compromised Joomla install.
 
 > The original site is a **compromised, end‑of‑life Joomla 3.9+ install** (see
 > `Out of scope / do not copy`). Rebuild content and structure from this doc;
@@ -489,14 +489,16 @@ no code access" fallback (see `squarespace-trial.md`).
 `docs/` is the publish directory for both GitHub Pages and Cloudflare Pages — no
 build step needed on the host (images are data URIs, fonts from Google CDN).
 
-### First test — GitHub Pages (chosen 2026‑08‑29)
-Repo: `github.com/hugoheefer/mimamusic` (branch `master`).
-1. Commit `docs/index.html` + `docs/.nojekyll` and push.
-2. GitHub → repo **Settings → Pages** → Source: *Deploy from a branch* →
-   Branch `master`, folder `/docs` → Save.
-3. URL: **https://hugoheefer.github.io/mimamusic/** (live after ~1 min).
-- Free plan needs the repo **public**; if it's private, either make it public for
-  the test or use Cloudflare Pages (deploys private repos free).
+### First test — GitHub Pages  (tried 2026‑08‑29, now PAUSED)
+- Ran briefly at **https://hugoheefer.github.io/mimamusic/** from `master` `/docs`.
+- Repo set **back to private** 2026‑08‑29 → Pages stops building on the free plan,
+  so the URL is now down. This is a deliberate pause, not a rollback:
+  `docs/index.html` + `docs/.nojekyll` stay in the repo, `build_images.py` keeps
+  regenerating them, and the claude.ai Artifact preview still works.
+- Decision deferred to §15 step 3: whether GitHub Pages (needs public repo or paid),
+  Cloudflare Pages (private‑repo friendly), or another host is the right home.
+- The WIP prototype (specs panel, "nog op te halen" markers, single‑page JS nav) is
+  a preview only; the real public site needs real pages + a CMS.
 
 ### Real hosting (later, with a CMS for the owner)
 - **Cloudflare Pages** — same repo, auto‑deploy on push; private‑repo friendly,
@@ -506,3 +508,45 @@ Repo: `github.com/hugoheefer/mimamusic` (branch `master`).
   her save = git commit = auto‑deploy. She never touches code.
 - Alternative: self‑hosted WordPress (prototype → theme) on a host we manage
   (e.g. Vimexx) — familiar admin, but back to PHP‑CMS maintenance.
+
+---
+
+## 15. Roadmap / sequencing  (agreed plan)
+
+Governs the order of work. The point: the technical rewrite (step 4) touches all
+the markup, so don't over‑polish before it, and get the owner's input before it.
+
+### Step 1 — "Close enough" prototype  *(essentially done)*
+- Structure, real fonts/colours/layout (from `template.css`), real photos in place.
+- **Do not** chase the last ~5% pixel‑fidelity to the *old* site — it's an EOL
+  template with quirks worth dropping, not preserving.
+
+### Step 2 — Owner review NOW, on the big questions  *(before deep polish)*
+- [ ] Keep the black look, or lighten / modernise?
+- [ ] Keep Henny Penny / Fredericka the Great, or swap for cleaner faces?
+- [ ] Structure: nav right? Keep the Agenda (was empty)? Keep archived choirs?
+      Want photo galleries?
+- [ ] Owner proofreads every text; hands over missing article bodies + slider photos.
+- [ ] How hands‑on does she want to be, and how often will she update? (drives the
+      CMS choice)
+- Show her the GitHub Pages preview: https://hugoheefer.github.io/mimamusic/
+
+### Step 3 — Lock the maintenance model + tooling
+- Decide before the rewrite (it dictates the structure).
+- Expected: static multi‑page site + Git‑based CMS (**Sveltia / Decap**) for the
+  owner, hosted on **Cloudflare Pages** (or GitHub Pages + an OAuth helper).
+- A CMS means content lives in editable data files (markdown / YAML), not baked
+  into HTML.
+
+### Step 4 — Technical rewrite into the real structure
+- Split the single file into **real pages with real URLs** (needed for SEO and the
+  §12 301 redirects — the JS page‑switching prototype can't do that).
+- Real `<img>` files (drop the data‑URI baking); shared header/footer via a light
+  generator (Eleventy / Astro / Hugo); wire in the CMS config.
+- Move styling over. **Prep now:** extract the inline `<style>` into a real
+  `styles.css` — markup changes in the rewrite, but an organised stylesheet
+  carries over almost intact, so polish effort isn't wasted.
+
+### Step 5 — Fine‑polish in the real environment (with the owner)
+- Then: content migration, redirects, Search Console, go‑live, decommission
+  Joomla — see §12.
