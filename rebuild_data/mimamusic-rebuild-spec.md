@@ -265,6 +265,28 @@ Open points still to resolve:
 | 5 | LevensWijs Koor | levenswijs-koor | -2 | skip |
 | 41 | project- mannenkoor | project-mannenkoor | -2 | skip |
 
+**Koren landing = Joomla category blog** (pulled from live `/index.php/koren`
+2026‑08‑29): a **leading** article (id 19 *Koordirigent* — full paragraph +
+4‑photo row) followed by **cols‑2** teaser blocks for each choir (Spirit id 1,
+Popkoor MIKS id 43, Singin'Gestel id 2, …), each with its own 1–2 photos.
+
+*Koordirigent body:* "Wat is er nou heerlijker dan het dirigeren van een koor…
+Elk concert wordt daardoor een vreugdevolle uiting van positieve energie."
+
+*Koordirigent 4‑photo row* — original: native ratios, all ≈158 px tall,
+left‑aligned, small gaps, empty space to the right. **Prototype (owner decision
+2026‑08‑29):** same equal‑height treatment as the homepage band — flex‑grow ∝
+each photo's aspect ratio so the row spans the full menu‑bar width (~252 px tall,
+ratios preserved, no cropping). Photos:
+`2010-kerst__dirigent_wilma_in_de_sneeuw.jpg` (105×158) ·
+`2015-09-23_GGK_40.png` (236×157) · `Wilma_vleermuis_2022.jpg` (160×158) ·
+`Wilma_2024.jpg` (212×159).
+
+**Prototype (2026‑08‑29):** Koren landing rebuilt as *Koordirigent* heading
+(`is-red`) + paragraph + `.koren-band` 4‑photo row. Choir‑teaser blocks below
+**not yet added** — sub‑pages reachable via the KOREN dropdown. The old
+placeholder choir‑list `<ul>` was removed.
+
 ### Onderwijs  (category `Onderwijs`)
 - Articles are beyond the first 25 rows of the recon — **bodies still to fetch** (see §7).
 

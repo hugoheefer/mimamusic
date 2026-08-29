@@ -114,6 +114,20 @@ def build():
 
   .badge-img { width: 84px; height: 84px; margin-top: 22px; display: block; }
   @media (max-width: 760px) { .ph-lead { float: none; width: 100%; max-width: 340px; margin: 0 0 16px; } }
+
+  /* koren landing — photo row: native ratios, one common height, whole row spans
+     the menu-bar width (like the homepage band). flex-grow ∝ each photo's aspect
+     ratio, aspect-ratio locked → equal heights, no cropping, full width. */
+  .koren-band { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 10px; margin: 24px 0 4px; width: 100%; }
+  .koren-band .koren-photo { min-width: 0; padding: 0; border: 0; background: none; overflow: hidden; }
+  .koren-band .koren-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .koren-band .kb-1 { flex: 0.665 1 0; aspect-ratio: 105 / 158; }
+  .koren-band .kb-2 { flex: 1.503 1 0; aspect-ratio: 236 / 157; }
+  .koren-band .kb-3 { flex: 1.013 1 0; aspect-ratio: 160 / 158; }
+  .koren-band .kb-4 { flex: 1.333 1 0; aspect-ratio: 212 / 159; }
+  @media (max-width: 620px) {
+    .koren-band .koren-photo { flex: 1 1 calc(50% - 5px); }
+  }
 """
     h = h.replace(
         "\n  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }",
@@ -127,13 +141,14 @@ def build():
     h = h.replace('<div class="ph home-fig-dwf">[home-foto: dwarsfluit]</div>',
                   ph("Wilma_fluitist_1986.jpg", "Wilma als fluitiste, 1986", "home-figure home-figure--dwf"), 1)
 
-    # koren landing lead image
-    h = h.replace('<section class="page" id="page-koren" data-owner="koren" hidden>',
-                  '<section class="page clearfix" id="page-koren" data-owner="koren" hidden>', 1)
-    h = h.replace(
-        '  <section class="page clearfix" id="page-koren" data-owner="koren" hidden>\n    <h2 class="page-title is-dim">Koren</h2>\n    <div class="prose">\n',
-        '  <section class="page clearfix" id="page-koren" data-owner="koren" hidden>\n    <h2 class="page-title is-dim">Koren</h2>\n    <div class="prose">\n      '
-        + ph("2010-kerst__dirigent_wilma_in_de_sneeuw.jpg", "Wilma dirigeert", "ph-lead") + "\n", 1)
+    # koren landing — "Koordirigent" intro + 4-photo band, native ratios, ~158px tall, left-aligned
+    koren_band = [("2010-kerst__dirigent_wilma_in_de_sneeuw.jpg", "Wilma dirigeert in de sneeuw, kerst 2010", "kb-1"),
+                  ("2015-09-23_GGK_40.png", "Gestels Gemengd Koor, 2015", "kb-2"),
+                  ("Wilma_vleermuis_2022.jpg", "Wilma dirigeert, 2022", "kb-3"),
+                  ("Wilma_2024.jpg", "Wilma, 2024", "kb-4")]
+    for i, (fn, alt, cls) in enumerate(koren_band, 1):
+        h = h.replace('<div class="ph %s">[koor-foto %d]</div>' % (cls, i),
+                      ph(fn, alt, "koren-photo " + cls), 1)
 
     # Spirit
     h = h.replace(
