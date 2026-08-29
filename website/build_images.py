@@ -151,7 +151,7 @@ def build():
   .teaser .photo-band { margin-top: 16px; }
   .teaser-logo.has-img { width: 175px; height: 52px; padding: 0; border: 0; margin-top: 14px; }
   .teaser-logo.contain.has-img { background: #fff; }
-  .teaser-img.has-img { width: 100%; max-width: 275px; margin-top: 14px; aspect-ratio: 275 / 183; border: 0; }
+  .teaser-img.has-img { width: 100%; max-width: 380px; margin-top: 14px; aspect-ratio: 275 / 183; border: 0; }   /* ~253px tall = same height as the top .photo-band */
 """
     h = h.replace(
         "\n  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }",
