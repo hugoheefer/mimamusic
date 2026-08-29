@@ -64,8 +64,13 @@ Published Artifact: **https://claude.ai/code/artifact/bea26d35-ff4c-45c7-bad8-65
   (244×264 — owner prefers it to the original). (§4 Contact)
 - **Agenda** — static repro of the JEvents month grid + a reader‑facing line
   ("…op dit moment geen activiteiten gepland…"). Live grid is empty.
-- **Dwarsfluit / Arrangeren / Privacy** — sections built; bodies still
-  placeholder (see pending).
+- **Arrangeren** — synced to the live page 2026‑08‑29: **single article** (main
+  section text, 2 paragraphs, mailto). Heading transcribes the live inline quirk
+  `color:#ff0000; font-size:14pt`. The DB "Arrangementen" examples article
+  (id 14, 2019) is **not surfaced on the live page** → placeholder dropped from
+  the prototype; still recorded in the article inventory / §11 for a future add.
+- **Dwarsfluit / Privacy** — sections built; bodies still placeholder (see
+  pending).
 - **Sub‑pages** `page-spirit / -singin / -miks / -voluum` — real bodies are in
   hand from query (h) but **not yet pasted in** (still placeholder).
 - **Photos:** all 20 files from `mimamusic.nl/images/` in `website/images/`
@@ -82,8 +87,9 @@ Published Artifact: **https://claude.ai/code/artifact/bea26d35-ff4c-45c7-bad8-65
   Spirit, Singin'Gestel, Popkoor MIKS, Koor Voluum.
 - **Bodies still to pull** (query (h) per category): **Dwarsfluit**
   (Dwarsfluitles id 33, Blokfluitles id 10, de fluitist id 11, Geschiedenis),
-  **Arrangeren** (Arrangeren + Arrangementen), **Workshopmogelijkheden** full
-  body, **Privacy**.
+  **Workshopmogelijkheden** full body, **Privacy**. (Arrangeren body is in —
+  synced from the live page 2026‑08‑29; only the DB "Arrangementen" examples
+  article id 14 is still un‑pulled and is not on the live page anyway.)
 - **SQL 7f** events — grid confirmed empty; agenda mechanism = open owner
   decision. **SQL 7g** gallery images (JoomGallery) — not exported.
 - Module `92` (`{loadmoduleid 92}` in each home heading) — what is it? (query d)
@@ -381,8 +387,8 @@ we hebben samen wel veel plezier gehad." + link to
 ### Arrangeren  (category `Arrangeren`)
 | id | title | alias | state | note |
 |---|---|---|---|---|
-| 36 | Arrangeren | arrangeren | 1 | main section text |
-| 14 | Arrangementen | arrangementen | 1 | portfolio/examples (2019) |
+| 36 | Arrangeren | arrangeren | 1 | main section text — **in the prototype** (synced to live 2026‑08‑29); heading inline quirk `#ff0000` / 14pt |
+| 14 | Arrangementen | arrangementen | 1 | portfolio/examples (2019) — **not rendered on the live page**; omitted from the prototype, add later if owner wants it |
 | 42 | Sound of silence | sound-of-silence | 0 | unpublished example — include only if content is complete |
 | 20 | Arrangeren | arrangeren-2 | -2 (skip) |
 
@@ -567,7 +573,7 @@ ORDER BY c.state DESC, c.ordering;
 | Koren (+ 3 choir articles) | **Folder** “Koren” with a landing page + 3 sub‑pages (Spirit, Singin’Gestel, Popkoor MIKS). Keep archived “Koor Voluum” as a 4th sub‑page if wanted |
 | Onderwijs | Single page |
 | Dwarsfluit | Single page (sections: lessen, blokfluit, de fluitist, geschiedenis) |
-| Arrangeren | Single page + examples/portfolio section |
+| Arrangeren | Single page (live = one article only; examples/portfolio article id 14 not currently published) |
 | workshop/les (+ 2 articles) | Folder with landing + “Muzikale ondersteuning” + “Workshopmogelijkheden” |
 | Agenda (JEvents) | **Events** collection page |
 | Contact (bootstrap tabs) | Contact page: about text + details + **Form block** + **Map block** |
@@ -600,6 +606,7 @@ ORDER BY c.state DESC, c.ordering;
 | D11 | **Footer** (owner, 2026‑08‑29, evolved): first stripped to just the circular MiMaMusic badge (dropped the "Privacy" link and the "Joomla! is Free Software…" line for good). Then the owner asked for `Copyright © <year> MimaMusic. All Rights Reserved.` back — **home page only**, **below** the badge — with the year auto‑set (`document.getElementById('cur-year').textContent = new Date().getFullYear()`, toggled by `show()`). `.foot-nav` CSS gone; `.copyright` re‑added (`12px #8f8f8f`). `#page-privacy` still in the markup but unlinked. | Owner iterated on it | Owner: confirm home‑only + below‑badge placement; decide if other pages need any footer link |
 | D12 | **One text measure everywhere.** The original renders the same article at two widths — full (`col-sm-12`) on its own page, half (`cols-2`/`col-sm-6`) as a category‑blog teaser. Prototype drops that split: all content text (leading, teaser, sub‑page) flows at the shared `--measure` (~1170px, menu‑bar width); teaser blocks are full‑width stacked, not `cols-2`. | Owner pointed at the full‑width version; also serves "all pages breathe the same look" | Keep |
 | D14 | **Section landings = leading article only** (owner, 2026‑08‑29, from the live rendered Koren page). Koren landing shows just Koordirigent + text + 4 photos; the choir teasers were removed. Per‑choir content lives on its own sub‑page via the dropdown. Onderwijs/Bs Emmaus teaser kept pending owner review. Supersedes the earlier "match the original cols‑2 teasers". | Live rendered page shows no teasers; broken‑JS site isn't a reliable visual ref, owner's call is | Confirm Bs Emmaus with owner |
+| D15 | **Arrangeren page synced to the live render** (owner, 2026‑08‑29, from a screenshot of `/index.php/arrangeren-menu`). Live shows **one article only** — heading + 2 paragraphs + mailto — with the heading carrying an inline quirk `color:#ff0000; font-size:14pt` (not the `.page-title` Gabriela/`#cb4752` treatment). Prototype changed to match: dropped the `.is-red` class on that `<h2>` for inline `style="color:#ff0000; font-size:14pt"`, dropped the `<article class="art">` wrapper (single article, same shape as Onderwijs/Workshop landing), and **removed the pending "Arrangementen" placeholder article** (DB id 14, 2019 examples) — it is not on the live page. Still in the article inventory (§ Arrangeren) for a possible later add. | Owner: match the original | Owner: confirm the `#ff0000`/14pt heading is wanted long‑term or should be normalised to `.page-title` |
 | D13 | **Vertical rhythm matched to live `template.css`, via the shared rules** (so every page moves together): `.page { padding-bottom: 69px }` (= live `#content { padding-bottom:69px }`, was 96); `.foot-inner { padding: 49px … 40px }` + `.badge-img { margin-top:0 }` (= live `.footer-wrapper-inner { padding-top:49px }`, was 40+22); **removed `main { min-height: 76vh }`** — that was stretching `<main>` on short pages (Singin'Gestel, MIKS, Spirit, Voluum) so the footer divider sat far below the content. Live site has no such rule; footer now sits directly under the content, black fills the rest of the viewport. **Paragraph spacing** `.prose p` / `.teaser p` `margin-bottom` 10 → **20px** (= live `p { margin:0; padding:0 0 20px }`) — site‑wide, one knob. | Owner: match the original's spacing | Keep |
 
 ## 11. Open items to resolve before the Squarespace build
@@ -615,7 +622,9 @@ ORDER BY c.state DESC, c.ordering;
 - [ ] **Heading system decision** (see D4) — the real site's per‑page inline heading
   styles vs the prototype's single `.page-title`.
 - [ ] 7b / 7c all article bodies (every block still marked *"nog op te halen"*)
-      — **Home (21/16/15) DONE 2026‑08‑29**, see §4 Home
+      — **Home (21/16/15) DONE 2026‑08‑29**, see §4 Home;
+      **Arrangeren (id 36) DONE 2026‑08‑29** synced from the live render (§4, D15).
+      Still open: DB id 14 "Arrangementen" examples (not on the live page).
 - [ ] 7d published module content (footer text, logo markup, sidebar) — **incl. module 92**
       (`{loadmoduleid 92}` appears inside every homepage heading)
 - [ ] 7e Home menu item + per‑item params
@@ -688,7 +697,8 @@ ORDER BY c.state DESC, c.ordering;
 - **Expectation**: ~85–90% with the style editor, ~95%+ with modest Custom CSS.
 - **Home**: Slideshow section + three text sections (Homepage 1/2/3).
 - **Dwarsfluit**: one page, four stacked sections (Dwarsfluitles, Blokfluitles, de fluitist, Geschiedenis).
-- **Arrangeren**: one page + "Arrangementen" examples section.
+- **Arrangeren**: one page (single article, as live). Add an "Arrangementen"
+  examples section only if id 14 gets published / owner asks.
 - **Agenda**: Squarespace Events collection; import from 7f.
 - **Galleries**: Gallery sections/pages from 7g.
 - **Contact**: text + Form block (recipient = owner) + Map block (real address).
