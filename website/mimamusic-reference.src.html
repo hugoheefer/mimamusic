@@ -2,7 +2,7 @@
 <meta name="description" content="Reproduction of the current mimamusic.nl design plus the full site structure from the database recon, as a build target for the Squarespace rebuild." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredericka+the+Great&family=Gabriela&family=Henny+Penny&display=swap" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gabriela&family=Henny+Penny&display=swap" />
 <style>
   /*
     SINGLE-THEME BY INTENT — reproduction of mimamusic.nl, an all-black Joomla
@@ -20,7 +20,7 @@
     --ink-dim: #7e7e7e;
     --accent: #cb4752;            /* real template red — links + red headings */
     --accent-soft: #cb4752;
-    --title-red: #cb4752;         /* h*.title  -> Fredericka the Great */
+    --title-red: #cb4752;         /* linked section titles + links */
     --title-grey: #7e7e7e;        /* h*.heading-style-1 -> Henny Penny */
     --divider: #333333;           /* the two horizontal rules (real site: #1c1c1c) */
     --rule: #333333;
@@ -162,12 +162,16 @@
   .art + .art { margin-top: 62px; }
 
   .page-title {
-    font: 400 clamp(26px, 3.3vw, 34px)/1.15 var(--font-script);   /* grey headings: 'Henny Penny' */
+    /* live site: section titles are bare <h3 class="item_title"> -> base rule
+       h1..h6 { font-family:'Gabriela',serif; font-weight:400; line-height:1.5 },
+       Bootstrap h3 size = 24px. Colour comes from the link (#cb4752) or, when
+       unlinked (sub-pages), the h3 base #333. */
+    font: 400 24px/1.5 "Gabriela", Georgia, "Times New Roman", serif;
     margin: 0 0 26px;
     text-wrap: balance;
   }
-  .page-title.is-red { font-family: var(--font-title); color: var(--title-red); }   /* 'Fredericka the Great' */
-  .page-title.is-dim { color: var(--title-grey); }
+  .page-title.is-red { color: var(--title-red); }    /* #cb4752 — linked h3.item_title on category pages */
+  .page-title.is-dim { color: #6f6f6f; }             /* live uses #333 (near-invisible on black); kept readable — flag for owner */
 
   .prose { max-width: var(--measure); }
   .prose p { margin: 0 0 10px; }
@@ -661,9 +665,9 @@
 
   <h3>Type (from template.css)</h3>
   <dl>
-    <dt>logo + grey headings</dt><dd>Henny Penny</dd>
-    <dt>red headings</dt><dd>Fredericka the Great</dd>
-    <dt>body</dt><dd>Gabriela (serif)</dd>
+    <dt>logo</dt><dd>Henny Penny</dd>
+    <dt>section titles (h1&ndash;h6)</dt><dd>Gabriela, serif &mdash; 24px/1.5, weight 400</dd>
+    <dt>body</dt><dd>Arial, Helvetica, sans-serif &mdash; 14px/20</dd>
     <dt>nav</dt><dd>Arial / sans</dd>
     <dt>heading colour</dt><dd>red = top-level pages, grey = sub-pages &amp; Agenda</dd>
   </dl>
