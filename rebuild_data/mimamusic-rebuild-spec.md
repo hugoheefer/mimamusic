@@ -458,9 +458,16 @@ SELECT id, catid, imgtitle, imgfilename, imgdate, published FROM `mm_joomgallery
 
 ## 13. Squarespace build notes
 
-- **Plan**: Business tier+ if Custom CSS is needed (likely, for spacing polish); decide after 7a.
-- **Fonts**: script face from Adobe Fonts to match real `googleFont`; body = plain grotesque / Arial‑like.
-- **Nav**: two Folders (Koren, workshop/les) — landing page + children each; Privacy in footer nav only.
+> Full feasibility matrix, plan choice, Custom CSS starting points and the trial
+> log live in **`squarespace-trial.md`** (same folder). Summary below.
+
+- **Plan**: **Business** or higher — Custom CSS / Code Injection is *not* on Personal.
+- **Fonts**: Gabriela (body) is a standard Google font; Henny Penny + Fredericka the
+  Great may need a Custom CSS `@import` or Adobe Fonts.
+- **Nav**: two Folders (Koren, workshop/les) — but a folder *title is not a link* in
+  Squarespace. Resolve: "overzicht" first child, or a JS injection (snippet in
+  `squarespace-trial.md`), or dropdown‑only. Privacy in footer nav only.
+- **Expectation**: ~85–90% with the style editor, ~95%+ with modest Custom CSS.
 - **Home**: Slideshow section + three text sections (Homepage 1/2/3).
 - **Dwarsfluit**: one page, four stacked sections (Dwarsfluitles, Blokfluitles, de fluitist, Geschiedenis).
 - **Arrangeren**: one page + "Arrangementen" examples section.
