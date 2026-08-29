@@ -415,9 +415,17 @@ Contact page: about text + contact details + form + map.
 
 ### Agenda / events
 - Original: **JEvents** month calendar at `index.php?option=com_jevents&view=month`.
-- Rebuild: an **Events collection** (Squarespace Events page) or a simple
-  chronological “Agenda” list: date, time, title, location, description.
-- Event data still to export (see §7) — `mm_jevents_*` tables.
+  **Live grid is currently empty** (checked Aug 2026 — no events any day).
+- **Prototype (2026‑08‑29):** the dev placeholder ("export SQL 7f") was replaced
+  with a plain reader‑facing line above the mock grid: *"In de agenda staan de
+  komende concerten, kerkdiensten en optredens van MiMaMusic en de koren. Op dit
+  moment staan er geen activiteiten gepland — kom hier binnenkort terug voor
+  nieuwe data."* The month grid stays as a static visual.
+- **OPEN — decide with owner** what powers the agenda on the new site:
+  Squarespace Events collection · embedded Google Calendar (keeps the grid, easy
+  for a non‑dev) · a hand‑maintained "Aankomende optredens" list · or drop the
+  page. Run §7 query (f) once to confirm there's no hidden past/future event
+  data worth carrying (`mm_jevents_*`).
 
 ### Photo galleries
 - **JoomGallery** is installed (`mm_joomgallery*` tables) — the site has one or
