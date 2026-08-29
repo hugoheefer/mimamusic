@@ -27,8 +27,9 @@ Reference inputs (this spec + `screenshots old site/`) live in `rebuild_data/`.
 - Full nav + every section built, incl. **Koren** and **workshop/les** landing
   pages, **Dwarsfluit** as 4 articles, **Arrangeren** + "Arrangementen" block,
   archived **Koor Voluum**, **Privacy** page (footer‑linked only).
-- **Home** = fading 3‑slide carousel + Homepage 1/2/3 blocks (bodies still
-  placeholder).
+- **Home** = fading 3‑slide carousel (full‑frame, `object-fit: contain` on black —
+  no cropping) + Homepage 1/2/3 blocks (bodies still placeholder). Real slide set
+  + banner shape still unknown (trashed articles → check Wayback).
 - **Agenda** = static repro of the JEvents month grid (Aug 2026).
 - **Photos:** all 20 images from `mimamusic.nl/images/` downloaded to
   `website/images/` (full‑res) + `website/images/web/` (shrunk, ≤1000px q72),
@@ -351,3 +352,96 @@ SELECT id, catid, imgtitle, imgfilename, imgdate, published FROM `mm_joomgallery
 - Exact logo lockup.
 - Homepage slider image set.
 - Footer composition.
+
+---
+
+## 10. Design decisions log  (prototype — keep or revisit)
+
+| # | Decision | Why | Revisit? |
+|---|---|---|---|
+| D1 | All‑black ground | It's the GK5 "Theatre" template default, not a chosen identity | Ask owner if she wants it lighter |
+| D2 | Script face (logo + headings) = `Berkshire Swash` stand‑in | Real face = template `googleFont` (SQL 7a) | Yes — needs 7a; match via Adobe Fonts or use logo image |
+| D3 | `--accent #e42a1a`, dim heading `#707070`, body `#f4f4f4` | Sampled by eye from screenshots | Confirm vs 7a |
+| D4 | Heading colour = red on top‑level pages, grey on sub‑pages & Agenda | Observed pattern in screenshots | Keep unless owner objects |
+| D5 | ~92px left indent, ~1180px left‑aligned text column | Matches screenshots | Keep |
+| D6 | Nav = single‑column dropdowns | Simplifies the original DJ‑MegaMenu; menus are tiny | Fine → Squarespace Folders |
+| D7 | Home slider = `object-fit: contain` on black, 16:10 box, 3 slides, 5 s fade | Show full frames; real slide set/shape unknown | Replace with real Wayback slides |
+| D8 | Footer badge = real `MIMAmusic_LOGO2-4.png` | Actual asset | Keep |
+| D9 | Dropped the "Joomla!" footer line | No Joomla cruft on the rebuild | — |
+| D10 | Transcribed copy keeps original quirks ("2017 .", "Dat  was", "Sind 2014") | Faithful until owner proofreads | Owner proofread pass |
+
+## 11. Open items to resolve before the Squarespace build
+
+**Data — phpMyAdmin, prefix `mm_` (full queries in §7):**
+- [ ] 7a template branding (colours, `googleFont`, logo path, layout)
+- [ ] 7b / 7c all article bodies (every block still marked *"nog op te halen"*)
+- [ ] 7d published module content (footer text, logo markup, sidebar)
+- [ ] 7e Home menu item + per‑item params
+- [ ] 7f events (JEvents) → Agenda
+- [ ] 7g JoomGallery categories + image filenames
+
+**Assets:**
+- [ ] Header wordmark asset (`/templates/theme3339/images/`) or confirm font‑only
+- [ ] Real homepage slider images + intended size (Wayback)
+- [ ] Footer‑banner art if wanted (`banner-footer` category; Wayback)
+- [ ] Koor Voluum photo (or accept none)
+- [ ] Gallery photos per 7g
+- [ ] Any higher‑res originals the owner still has
+
+**Content / copy:**
+- [ ] Owner proofreads all transcribed text
+- [ ] Home blocks 1/2/3 final text + which image pairs with block 2
+- [ ] Privacy statement — accurate current NL/GDPR text
+- [ ] Contact — real postal address (map) + form recipient address
+
+**Owner decisions:**
+- [ ] Keep the dark look or lighten it?
+- [ ] Live chat (Olark) — re‑add / Squarespace chat / drop?
+- [ ] Comments (Komento) — native / Disqus / drop?
+- [ ] Newsletter (AcyMailing) — want it?
+- [ ] Keep archived pages (Koor Voluum) visible?
+- [ ] Galleries — how many / which / pages or sections?
+
+## 12. Go‑live / cutover checklist
+
+- [ ] Build on the Squarespace trial URL; owner reviews.
+- [ ] **Domain**: keep `mimamusic.nl`; point web DNS (A/CNAME or nameservers) to Squarespace.
+- [ ] **Email**: leave **MX records untouched** — do not break `@mimamusic.nl` mail.
+- [ ] Pick canonical host (www or non‑www); 301 the other (also fixes the old FontAwesome CORS bug).
+- [ ] **301 redirect map** old → new (finalise from a Screaming Frog crawl of the live site):
+
+  | old | new |
+  |---|---|
+  | `/`, `/index.php` | `/` |
+  | `/index.php/koren` | `/koren` |
+  | `/index.php/koren/gospelpopkoor-spirit` | `/koren/gospelpopkoor-spirit` |
+  | `/index.php/koren/singin-gestel` | `/koren/singin-gestel` |
+  | `/index.php/koren/popkoor-miks` | `/koren/popkoor-miks` |
+  | `/index.php/onderwijs` | `/onderwijs` |
+  | `/index.php/dwarsfluit` | `/dwarsfluit` |
+  | `/index.php/arrangeren-menu` | `/arrangeren` |
+  | `/index.php/workshops-en-les` | `/workshop-les` |
+  | `/index.php/workshops-en-les/muzikale-ondersteuning` | `/workshop-les/muzikale-ondersteuning` |
+  | `/index.php/workshops-en-les/workshopmogelijkheden` | `/workshop-les/workshopmogelijkheden` |
+  | `/index.php/agenda` | `/agenda` |
+  | `/index.php/contact` | `/contact` |
+  | JEvents event URLs (`?option=com_jevents…`) | `/agenda` |
+
+- [ ] Recreate/submit `sitemap.xml` in Google Search Console; keep good old page titles + meta descriptions.
+- [ ] After go‑live: watch Search Console coverage + 404s for a few weeks.
+- [ ] **Archive** the Joomla site (files + DB dump), then fully decommission it — don't leave the compromised install running.
+- [ ] Rotate all remaining shared passwords once Joomla is gone.
+
+## 13. Squarespace build notes
+
+- **Plan**: Business tier+ if Custom CSS is needed (likely, for spacing polish); decide after 7a.
+- **Fonts**: script face from Adobe Fonts to match real `googleFont`; body = plain grotesque / Arial‑like.
+- **Nav**: two Folders (Koren, workshop/les) — landing page + children each; Privacy in footer nav only.
+- **Home**: Slideshow section + three text sections (Homepage 1/2/3).
+- **Dwarsfluit**: one page, four stacked sections (Dwarsfluitles, Blokfluitles, de fluitist, Geschiedenis).
+- **Arrangeren**: one page + "Arrangementen" examples section.
+- **Agenda**: Squarespace Events collection; import from 7f.
+- **Galleries**: Gallery sections/pages from 7g.
+- **Contact**: text + Form block (recipient = owner) + Map block (real address).
+- **Cookie banner**: Squarespace setting. Chat / comments / newsletter per §11.
+- Enter the §12 redirect table in Squarespace URL mappings.

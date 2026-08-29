@@ -293,8 +293,8 @@
   .ph.contain.has-img img { object-fit: contain; }
   .ph-lead { float: right; width: 340px; height: 232px; margin: 2px 0 16px 44px; }
 
-  .slider { position: relative; width: 100%; max-width: var(--measure); aspect-ratio: 1180 / 545; margin-bottom: 40px; background: #0b0b0b; overflow: hidden; }
-  .slider .slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 700ms ease; }
+  .slider { position: relative; width: 100%; max-width: var(--measure); aspect-ratio: 16 / 10; margin-bottom: 40px; background: #000; overflow: hidden; }
+  .slider .slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity 700ms ease; }
   .slider .slide.is-on { opacity: 1; }
   .slider .dots { position: absolute; left: 0; right: 0; bottom: 12px; display: flex; gap: 8px; justify-content: center; }
   .slider .dots button { width: 9px; height: 9px; padding: 0; border: 0; border-radius: 50%; background: rgba(255,255,255,.45); cursor: pointer; }
