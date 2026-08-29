@@ -371,12 +371,24 @@ Sub‑pages `#page-ondersteuning` (same text, `is-dim` title) and
 ### Contact  (category `Contact`)
 | id | title | alias | state | note |
 |---|---|---|---|---|
-| 38 | over mij, | over-mij | 1 | **About the musician** (2022) |
+| 38 | over mij, | over-mij | 1 | **the whole Contact page** — about + contact details |
 | 39 | contact-foto | contact-foto | -2 | photo asset only |
 
-Contact page was rendered as **Bootstrap tabs of 2 articles** (module
-`mod_bootstraptabs` “bootstrap contactpagina 2 artikelen”). Rebuild as a single
-Contact page: about text + contact details + form + map.
+Live `/index.php/contact` (fetched 2026‑08‑29) is now just the **"over mij,"**
+leading article (the old Bootstrap‑tabs module is gone). Content, in order:
+- `2020-06-28_Wilma.jpg` (214×231) float right
+- **`MiMaMusic`** first line — `<strong 18pt>`: "MiMa" `#ffffff` + "Music"
+  `#ce3939` `<em>` italic; then " is mijn bedrijfsnaam sinds 2017 ." normal
+- "Mijn naam is **Wilma van der Schoot**" — bold `#9a2d2d`
+- bio paragraph (4 lines, `<br>`)
+- "Voor contact kun je mailen:" → cloaked email (`wilmavanderschoot@mimamusic.nl`)
+- "of bellen" — white 10pt · "06-27418262" — `#ce3939` 14pt
+
+**Prototype (2026‑08‑29):** text + inline styling synced to the above
+(`#ce3939`, `#9a2d2d`, 18pt/14pt/10pt). **Photo kept as the prototype's
+`ph-portrait`** (owner: its placing/size is better than the original). Old
+"Bootstrap‑tabs / build a form + map" placeholder removed. A real **contact
+form** (replacing the `/at/` email) is still a later step.
 
 ### Privacy  (category `Privacy`)
 - Privacy statement. Fetch body (rows beyond first 25). Link from footer.
@@ -540,7 +552,7 @@ ORDER BY c.state DESC, c.ordering;
 | D1 | All‑black ground | It's the GK5 "Theatre" template default, not a chosen identity | Ask owner if she wants it lighter |
 | D2 | **Content text = `Arial, Helvetica, sans-serif`, 14px / line-height 20px** — from the real `body {}` rule in `template.css` (fetched 2026‑08‑29). The Google fonts (Henny Penny, Fredericka the Great, Gabriela) load, but **Gabriela is only applied to bare `h1..h6`**, never body copy — the earlier "body = Gabriela serif" was wrong and is now corrected in the prototype. `--font-body` was Gabriela serif → now Arial. | `template.css` `body { font-family: Arial, Helvetica, sans-serif; font-size:14px; line-height:20px }` | Keep (it's the real thing); modernise later with owner |
 | D3 | Content text colour **`#989898`** (was `#f4f4f4`); red `#cb4752`, grey heading `#7e7e7e`. Bold inside content = red `#cb4752` (`.item_introtext strong`). | All from `template.css`: `body { color:#989898 }` | Keep; still revisit near‑invisible `.copyright #2b2b2b` |
-| D4 | **RESOLVED 2026‑08‑29 — section titles = Gabriela serif.** Prototype `.page-title` was Henny Penny / Fredericka the Great, `clamp(26–34px)`; owner asked to match the live site. Confirmed against `template.css` + a pasted live DOM of a sub‑page: section titles are bare `<h3 class="item_title">` → template base `h1..h6 { font-family:'Gabriela',serif; font-weight:400; line-height:1.5 }`, Bootstrap `h3` = **24px**; colour `#cb4752` when the title is a link (category‑landing titles), `#333` when not (sub‑pages). Prototype now: `.page-title { font: 400 24px/1.5 "Gabriela", Georgia, serif }`; `.is-red` `#cb4752`, `.is-dim` `#6f6f6f` (live is `#333`, near‑invisible on black — kept readable, flag for owner). `Fredericka the Great` dropped from the font load (unused). The per‑page inline heading quirks in article bodies (home `#9a2d2d`, Arrangeren `#ff0000` 14pt) are still transcribed as‑is where they occur. | Owner: match the original | Owner: OK the `#6f6f6f` vs live `#333` for sub‑page titles |
+| D4 | **RESOLVED 2026‑08‑29 — section titles = Gabriela serif.** Prototype `.page-title` was Henny Penny / Fredericka the Great, `clamp(26–34px)`; owner asked to match the live site. Confirmed against `template.css` + a pasted live DOM of a sub‑page: section titles are bare `<h3 class="item_title">` → template base `h1..h6 { font-family:'Gabriela',serif; font-weight:400; line-height:1.5 }`, Bootstrap `h3` = **24px**; colour `#cb4752` when the title is a link (category‑landing titles), `#333` when not (sub‑pages). Prototype now: `.page-title { font: 400 20px/1.5 "Gabriela", Georgia, serif }`; `.is-red` `#cb4752`, `.is-dim` `#6f6f6f` (live is `#333`, near‑invisible on black — kept readable, flag for owner). `Fredericka the Great` dropped from the font load (unused). The per‑page inline heading quirks in article bodies (home `#9a2d2d`, Arrangeren `#ff0000` 14pt) are still transcribed as‑is where they occur. | Owner: match the original | Owner: OK the `#6f6f6f` vs live `#333` for sub‑page titles |
 | D5 | **1200px centred container** (`margin: 0 auto`); ~1170px text column | Matches live `template.css` `.container` | Keep |
 | D6 | Nav = single‑column dropdowns; **parent items (Koren, workshop/les) are links** → click = go to landing page, hover/focus = open dropdown; dropdown lists **only the children** (no repeated parent) | Standard mega‑menu behaviour; simplifies the original DJ‑MegaMenu; menus are tiny | Fine → Squarespace Folders (folder landing page + child pages) |
 | D7 | ~~Home slider~~ → **removed**. Home reproduces the original: **3 columns** (`col-sm-4`), each title → 2 `<p>` lines → photo below (`2017-12b.jpg` 249×275 `pull-left` / `De_Bron_leslokaal_4.jpg` 321×180 / `Wilma_fluitist_1986.jpg` 222×290) per `mm_content` 21/16/15; stacks <768px | SQL 7b: no carousel. Owner: reproduce original now, modernise later with her | Revisit with owner |
@@ -550,7 +562,7 @@ ORDER BY c.state DESC, c.ordering;
 | D11 | **Footer stripped to just the circular MiMaMusic badge** (owner req. 2026‑08‑29): removed the "Privacy" link, the "Copyright © 2026…" line and the "Joomla! is Free Software…" line from every page. `.foot-nav`/`.copyright` CSS deleted. `#page-privacy` section still in the markup but now unlinked. | Owner wants a clean footer | Decide what (if anything) the real footer carries — Privacy link, contact, social — see §Footer |
 | D12 | **One text measure everywhere.** The original renders the same article at two widths — full (`col-sm-12`) on its own page, half (`cols-2`/`col-sm-6`) as a category‑blog teaser. Prototype drops that split: all content text (leading, teaser, sub‑page) flows at the shared `--measure` (~1170px, menu‑bar width); teaser blocks are full‑width stacked, not `cols-2`. | Owner pointed at the full‑width version; also serves "all pages breathe the same look" | Keep |
 | D14 | **Section landings = leading article only** (owner, 2026‑08‑29, from the live rendered Koren page). Koren landing shows just Koordirigent + text + 4 photos; the choir teasers were removed. Per‑choir content lives on its own sub‑page via the dropdown. Onderwijs/Bs Emmaus teaser kept pending owner review. Supersedes the earlier "match the original cols‑2 teasers". | Live rendered page shows no teasers; broken‑JS site isn't a reliable visual ref, owner's call is | Confirm Bs Emmaus with owner |
-| D13 | **Vertical rhythm matched to live `template.css`, via the shared rules** (so every page moves together): `.page { padding-bottom: 69px }` (= live `#content { padding-bottom:69px }`, was 96); `.foot-inner { padding: 49px … 40px }` + `.badge-img { margin-top:0 }` (= live `.footer-wrapper-inner { padding-top:49px }`, was 40+22); **removed `main { min-height: 76vh }`** — that was stretching `<main>` on short pages (Singin'Gestel, MIKS, Spirit, Voluum) so the footer divider sat far below the content. Live site has no such rule; footer now sits directly under the content, black fills the rest of the viewport. | Owner: match the original's footer spacing | Keep |
+| D13 | **Vertical rhythm matched to live `template.css`, via the shared rules** (so every page moves together): `.page { padding-bottom: 69px }` (= live `#content { padding-bottom:69px }`, was 96); `.foot-inner { padding: 49px … 40px }` + `.badge-img { margin-top:0 }` (= live `.footer-wrapper-inner { padding-top:49px }`, was 40+22); **removed `main { min-height: 76vh }`** — that was stretching `<main>` on short pages (Singin'Gestel, MIKS, Spirit, Voluum) so the footer divider sat far below the content. Live site has no such rule; footer now sits directly under the content, black fills the rest of the viewport. **Paragraph spacing** `.prose p` / `.teaser p` `margin-bottom` 10 → **20px** (= live `p { margin:0; padding:0 0 20px }`) — site‑wide, one knob. | Owner: match the original's spacing | Keep |
 
 ## 11. Open items to resolve before the Squarespace build
 

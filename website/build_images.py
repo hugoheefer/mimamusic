@@ -147,7 +147,7 @@ def build():
   .teaser-title { font-family: var(--font-title); color: var(--title-red); font-size: 19px; font-weight: 400; line-height: 1.3; margin: 0 0 12px; }
   .teaser-title a { color: inherit; text-decoration: none; }
   .teaser-title a:hover { text-decoration: underline; }
-  .teaser p { margin: 0 0 10px; }
+  .teaser p { margin: 0 0 20px; }   /* match .prose p (live: p padding-bottom 20px) */
   .teaser .photo-band { margin-top: 16px; }
   .teaser-logo.has-img { width: 175px; height: 52px; padding: 0; border: 0; margin-top: 14px; }
   .teaser-logo.contain.has-img { background: #fff; }

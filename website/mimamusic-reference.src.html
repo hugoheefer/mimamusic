@@ -166,7 +166,7 @@
        h1..h6 { font-family:'Gabriela',serif; font-weight:400; line-height:1.5 },
        Bootstrap h3 size = 24px. Colour comes from the link (#cb4752) or, when
        unlinked (sub-pages), the h3 base #333. */
-    font: 400 24px/1.5 "Gabriela", Georgia, "Times New Roman", serif;
+    font: 400 20px/1.5 "Gabriela", Georgia, "Times New Roman", serif;
     margin: 0 0 26px;
     text-wrap: balance;
   }
@@ -174,7 +174,7 @@
   .page-title.is-dim { color: #6f6f6f; }             /* live uses #333 (near-invisible on black); kept readable — flag for owner */
 
   .prose { max-width: var(--measure); }
-  .prose p { margin: 0 0 10px; }
+  .prose p { margin: 0 0 20px; }   /* live: p { margin:0; padding:0 0 20px } */
   .prose p.tight { margin-bottom: 0.2em; }
   .prose strong { font-weight: 700; color: var(--accent); }   /* real site: .item_introtext strong { color: #cb4752 } */
   .t-red { color: var(--accent-soft); }
@@ -210,7 +210,7 @@
     letter-spacing: 0.03em;
     padding: 8px;
   }
-  .ph-portrait { float: right; width: 320px; height: 280px; margin: 2px 0 16px 44px; }
+  .ph-portrait { float: right; width: 244px; height: 264px; margin: 2px 0 16px 44px; }   /* ~native 214x231 ratio, a touch smaller */
   .ph-side { float: right; width: 300px; height: 244px; margin: 2px 0 16px 44px; }
   .photo-row { display: flex; gap: 22px; margin-top: 26px; flex-wrap: wrap; }
   .photo-row .ph { flex: 0 1 250px; height: 132px; }
@@ -292,7 +292,7 @@
 
   @media (max-width: 760px) {
     .nav-link { padding: 13px 13px; font-size: 10.5px; letter-spacing: 0.08em; }
-    .ph-portrait, .ph-side { float: none; width: 100%; max-width: 320px; margin: 0 0 16px; }
+    .ph-portrait, .ph-side { float: none; width: 100%; max-width: 280px; margin: 0 0 16px; }
     .page { padding-top: 52px; }
   }
 </style>
@@ -611,8 +611,8 @@
     <h2 class="page-title is-red">over mij,</h2>
     <div class="prose">
       <div class="ph ph-portrait">portretfoto &rarr; origineel van Wilma</div>
-      <p><strong>MiMa</strong><strong class="t-red">Music</strong> is mijn bedrijfsnaam sinds 2017 .</p>
-      <p>Mijn naam is <span class="t-red-strong">Wilma van der Schoot</span></p>
+      <p><strong style="font-size: 18pt;"><span style="color: #ffffff;">MiMa</span><span style="color: #ce3939;"><em>Music</em></span></strong> is mijn bedrijfsnaam sinds 2017 .</p>
+      <p>Mijn naam is <strong style="color: #9a2d2d;">Wilma van der Schoot</strong></p>
       <p>In de basisschoolleeftijd ben ik begonnen met muziek maken. Dat&nbsp; was toen een jaar
       blokfluitles in de tweede klas en natuurlijk zingen in het schoolkoor. Ik ben al vrij snel
       begonnen met dwarsfluit spelen. Met die dwarsfluit kwam ik in het plaatselijk jongerenkoor
@@ -626,10 +626,8 @@
       Nu dirigeer ik meerdere koren. En altijd met enorm veel plezier.</p>
       <p>Voor contact kun je mailen:</p>
       <p><a href="mailto:wilmavanderschoot@mimamusic.nl">wilmavanderschoot/at/mimamusic.nl</a></p>
-      <p>of bellen</p>
-      <p><a href="tel:+31627418262" style="text-decoration:none;">06-27418262</a></p>
-      <p class="pending">Origineel: 2 artikelen in Bootstrap-tabs. Herbouw als één pagina: over-mij
-      tekst + contactgegevens + formulier + kaart (adres).</p>
+      <p><span style="font-size: 10pt; color: #ffffff;">of bellen</span></p>
+      <p><a href="tel:+31627418262" style="color: #ce3939; font-size: 14pt; text-decoration: none;">06-27418262</a></p>
     </div>
   </section>
 
