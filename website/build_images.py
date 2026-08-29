@@ -165,23 +165,14 @@ def build():
     h = h.replace('<div class="ph home-fig-dwf">[home-foto: dwarsfluit]</div>',
                   ph("Wilma_fluitist_1986.jpg", "Wilma als fluitiste, 1986", "home-figure home-figure--dwf"), 1)
 
-    # koren landing — "Koordirigent" intro + 4-photo band, then cols-2 teaser grid
+    # koren landing — "Koordirigent" intro + 4-photo band only. The per-choir
+    # blocks live on their own sub-pages (KOREN dropdown), not on the landing.
     h = h.replace('<!--BAND:koren-->', band([
         ("2010-kerst__dirigent_wilma_in_de_sneeuw.jpg", "Wilma dirigeert in de sneeuw, kerst 2010", 105, 158),
         ("2015-09-23_GGK_40.png", "Gestels Gemengd Koor, 2015", 236, 157),
         ("Wilma_vleermuis_2022.jpg", "Wilma dirigeert, 2022", 160, 158),
         ("Wilma_2024.jpg", "Wilma, 2024", 212, 159),
     ]), 1)
-    h = h.replace('<!--BAND:koren-spirit-->', band([
-        ("_DSC8853.jpg", "Gospelpopkoor Spirit in concert", 408, 230),
-        ("spirit_3.jpg", "Gospelpopkoor Spirit in concert", 407, 228),
-    ]), 1)
-    h = h.replace('<!--BAND:koren-singin-->', band([
-        ("2024-05_met_kinderen.jpg", "Singin'Gestel met kinderen, 2024", 216, 162),
-        ("2024-03-20.jpg", "Singin'Gestel, 2024", 216, 162),
-    ]), 1)
-    h = h.replace('<!--IMG:miks-logo-->',
-                  ph("MIKS_logo.png", "Popkoor MIKS logo", "teaser-logo contain"), 1)
 
     # Spirit
     h = h.replace(

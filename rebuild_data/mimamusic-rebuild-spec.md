@@ -291,19 +291,18 @@ ratios preserved, no cropping). Photos:
 `2015-09-23_GGK_40.png` (236×157) · `Wilma_vleermuis_2022.jpg` (160×158) ·
 `Wilma_2024.jpg` (212×159).
 
-**Prototype (2026‑08‑29):** Koren landing = *Koordirigent* heading (`is-red`) +
-paragraph + shared `.photo-band` 4‑photo row + **`.teaser-grid`** with the
-Spirit / MIKS / Singin'Gestel teasers (real text + photos, titles link to the
-sub‑pages). Section landings **do** carry the teaser blocks (match the original).
+**Prototype (2026‑08‑29):** Koren landing = **only** *Koordirigent* heading
+(`is-red`) + paragraph + shared `.photo-band` 4‑photo row. **No choir teasers.**
+Owner checked the live rendered `/index.php/koren` (screenshot) — it shows just
+the Koordirigent block; the per‑choir content appears only on each choir's own
+page, reached via the KOREN dropdown. (Earlier the `cols-2` teaser articles were
+*in the served HTML* but don't paint on the live broken‑JS site — same as the
+Onderwijs/Bs Emmaus case. The rendered page + owner's call win.) See D14.
 
-*Teaser width — superseded:* first built as the original's `cols-2` half‑width
-columns; owner then pointed at the full‑width rendering (Spirit's **own** page,
-`page-item` = `col-sm-12`) and asked to match that. **Generic fix:** every
-content text block — leading, teaser, sub‑page — flows at the one shared
-`--measure` (menu‑bar width); `.teaser-grid` is now `flex-direction:column`
-(full‑width stacked), no `cols-2`. See D12. Sub‑pages
-`page-spirit/-singin/-miks/-voluum` still hold placeholder bodies — fill from the
-same query‑(h) text when doing those pages.
+*History:* teasers were briefly added (D12 made them full‑width) then removed
+per the owner. Sub‑pages `page-spirit/-singin/-miks/-voluum` keep placeholder
+bodies — fill from the query‑(h) text (saved) when building those pages.
+**Onderwijs/Bs Emmaus teaser is kept for now** — to be decided with the owner.
 
 ### Onderwijs  (category `Onderwijs`)
 Category blog. **Full list confirmed via §7 query (h), 2026‑08‑29** — 5 articles,
@@ -529,6 +528,7 @@ ORDER BY c.state DESC, c.ordering;
 | D10 | Transcribed copy keeps original quirks ("2017 .", "Dat  was", "Sind 2014") | Faithful until owner proofreads | Owner proofread pass |
 | D11 | **Footer stripped to just the circular MiMaMusic badge** (owner req. 2026‑08‑29): removed the "Privacy" link, the "Copyright © 2026…" line and the "Joomla! is Free Software…" line from every page. `.foot-nav`/`.copyright` CSS deleted. `#page-privacy` section still in the markup but now unlinked. | Owner wants a clean footer | Decide what (if anything) the real footer carries — Privacy link, contact, social — see §Footer |
 | D12 | **One text measure everywhere.** The original renders the same article at two widths — full (`col-sm-12`) on its own page, half (`cols-2`/`col-sm-6`) as a category‑blog teaser. Prototype drops that split: all content text (leading, teaser, sub‑page) flows at the shared `--measure` (~1170px, menu‑bar width); teaser blocks are full‑width stacked, not `cols-2`. | Owner pointed at the full‑width version; also serves "all pages breathe the same look" | Keep |
+| D14 | **Section landings = leading article only** (owner, 2026‑08‑29, from the live rendered Koren page). Koren landing shows just Koordirigent + text + 4 photos; the choir teasers were removed. Per‑choir content lives on its own sub‑page via the dropdown. Onderwijs/Bs Emmaus teaser kept pending owner review. Supersedes the earlier "match the original cols‑2 teasers". | Live rendered page shows no teasers; broken‑JS site isn't a reliable visual ref, owner's call is | Confirm Bs Emmaus with owner |
 | D13 | **Vertical rhythm matched to live `template.css`, via the shared rules** (so every page moves together): `.page { padding-bottom: 69px }` (= live `#content { padding-bottom:69px }`, was 96); `.foot-inner { padding: 49px … 40px }` + `.badge-img { margin-top:0 }` (= live `.footer-wrapper-inner { padding-top:49px }`, was 40+22); **removed `main { min-height: 76vh }`** — that was stretching `<main>` on short pages (Singin'Gestel, MIKS, Spirit, Voluum) so the footer divider sat far below the content. Live site has no such rule; footer now sits directly under the content, black fills the rest of the viewport. | Owner: match the original's footer spacing | Keep |
 
 ## 11. Open items to resolve before the Squarespace build
