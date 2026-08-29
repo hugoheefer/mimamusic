@@ -1,0 +1,293 @@
+# mimamusic.nl — Rebuild Specification (1:1 reference)
+
+Compiled 2026‑08‑29 from a live database recon of the existing Joomla site plus
+browser‑console evidence. Purpose: give a complete, source‑independent blueprint
+for rebuilding the site 1:1 in another system (static HTML prototype now →
+Squarespace later), without needing access to the compromised Joomla install.
+
+> The original site is a **compromised, end‑of‑life Joomla 3.9+ install** (see
+> `Out of scope / do not copy`). Rebuild content and structure from this doc;
+> rebuild all markup/JS clean. **Do not copy any JS, `jquery.min.js`, or inline
+> `<script>` from the live pages** — they carry the injection.
+
+---
+
+## 1. Site identity
+
+| | |
+|---|---|
+| Domain | mimamusic.nl |
+| Brand | **MiMaMusic** (stylised; logo delivered as an article/module, text “MiMaMusic”) |
+| Language | Dutch (NL) — rebuild entirely in Dutch |
+| Who | One musician operating as a small business: **choir conductor (koordirigent), flute/recorder teacher (dwarsfluit/blokfluit), music arranger (arrangeren)**, plus workshops and musical accompaniment |
+| Region hint | Eindhoven area (“Singin’Gestel” → Gestel; choirs are local) |
+| Tone | Personal, warm, community/education focused. Not corporate. |
+
+### Services / themes (from nav + categories + articles)
+- **Koren** — directing / involvement with local choirs
+- **Onderwijs** — music education generally
+- **Dwarsfluit** — flute & recorder (blokfluit) lessons, incl. history / “the flutist”
+- **Arrangeren** — music arranging service (example work: “Sound of silence”, “Arrangementen”)
+- **Workshop / les** — workshops + “muzikale ondersteuning” (musical support/accompaniment)
+- **Agenda** — public performance/event calendar
+- **Contact** — “over mij” (about) + contact
+
+---
+
+## 2. Original tech stack (for visual reference only)
+
+- Joomla 3.9+ (EOL). CMS content in DB is clean of injection.
+- Front‑end template: **Gavick / GavernWebEngine (GK5)** template.
+  - Active style: `theme3339 - Default` (id 9). Sibling working copy: `kopie-theatre` (id 10) → base template is Gavick **“Theatre”**.
+  - Real template folder + assets: `templates/theme3339/…` (`css/`, `images/`).
+  - Layout params (partial): `top_layout=normal`, `header_layout=normal`, `nav_…` — standard GK5 layout.
+- Libraries: **jQuery + Bootstrap 3 + FontAwesome 4.7** era.
+- Navigation: **mega menu**. Historic churn across `mod_jux_easy_megamenu`, IceMegaMenu, and **DJ‑MegaMenu** (`mod_djmegamenu_button` mobile toggle is the live one). Treat nav as a multi‑column mega menu with a mobile hamburger.
+- Editor: JCE.
+- Known harmless bug on the old site: `www` vs non‑`www` CORS errors on FontAwesome fonts — disappears on rebuild.
+
+---
+
+## 3. Information architecture / sitemap
+
+Top navigation (published `mainmenu`, in order). All section pages are Joomla
+category views (list/blog of that category); rebuild as a landing page per
+section.
+
+```
+Home                     → category "home"        (landing + image slider)
+Koren                    → category "Koren"
+  ├─ gospelpopkoor Spirit → article id 1
+  ├─ Singin'Gestel        → article id 2
+  └─ Popkoor MIKS         → article id 43
+Onderwijs                → category "Onderwijs"
+Dwarsfluit               → category "dwarsfluit"
+Arrangeren               → category "Arrangeren"
+workshop/les             → category "Workshops"
+  ├─ Muzikale ondersteuning → article id 9
+  └─ Workshopmogelijkheden  → article id 32
+Agenda                   → JEvents month calendar
+Contact                  → category "Contact"
+```
+
+Footer‑level / utility page:
+- **Privacy** — category “Privacy” (privacy statement; linked from footer, not main nav)
+
+### Active content categories (com_content)
+| id | path | title | in nav |
+|---|---|---|---|
+| 16 | home | Home | Home |
+| 2 | koren | Koren | Koren |
+| 8 | onderwijs | Onderwijs | Onderwijs |
+| 10 | dwarsfluit | dwarsfluit | Dwarsfluit |
+| 13 | arrangeren | Arrangeren | Arrangeren |
+| 11 | workshops | Workshops | workshop/les |
+| 15 | agenda | Agenda | Agenda |
+| 12 | contact | Contact | Contact |
+| 14 | privacy | Privacy | footer |
+
+Trashed/legacy categories (do **not** rebuild): `levenswijs`, `slider`,
+`banner-footer`, `spirit-agenda`, `koor-voluum-agenda`, `ggk-agenda`,
+`vmk-agenda`, `levenswijs-koor-agenda`, `agenda koor events`, `contact/contact`.
+
+---
+
+## 4. Page‑by‑page content inventory
+
+State: `1`=published, `2`=archived, `0`=unpublished, `-2`=trashed.
+**Rebuild state 1 and 2. Skip 0 and -2** unless noted.
+
+### Home  (category `home`)
+| id | title | alias | state | note |
+|---|---|---|---|---|
+| 15 | Homepage 3 | home-artikel | 1 | **primary home content** (hits 152 — highest on site) |
+| 16 | Homepage 2 | homepage-foto-1 | 1 | secondary home block / photo |
+| 21 | Homepage 1 | home | 1 | home block |
+| 24/25/26 | swiper homepage | swiper-homepage(-2/-3) | -2 | **image‑slider slides** — recover imagery from Wayback |
+| 23 | Home 3 | home-3 | -2 | skip |
+| 34 | Privacy | privacy | -2 | see Privacy category instead |
+
+Home layout = section landing built from the “Homepage 1/2/3” blocks, with a
+**Swiper image carousel** at the top (module `mod_swiper`, slides were articles —
+now trashed; rebuild carousel with images pulled from Wayback / live site).
+
+### Koren  (category `Koren`)
+| id | title | alias | state | note |
+|---|---|---|---|---|
+| 1 | gospelpopkoor Spirit | gospelpopkoor-spirit | 1 | nav child; hits 233 |
+| 2 | Singin'Gestel | *(row beyond first 25 — fetch body)* | 1 | nav child |
+| 43 | Popkoor MIKS | popkoor-miks | 1 | nav child; **newest content, 2024‑11‑09** |
+| 19 | Koordirigent | koordirigent | 1 | conductor bio/offer |
+| 4 | Koor Voluum | koor-voluum | 2 | archived — keep as historical page |
+| 5 | LevensWijs Koor | levenswijs-koor | -2 | skip |
+| 41 | project- mannenkoor | project-mannenkoor | -2 | skip |
+
+### Onderwijs  (category `Onderwijs`)
+- Articles are beyond the first 25 rows of the recon — **bodies still to fetch** (see §7).
+
+### Dwarsfluit  (category `dwarsfluit`)
+| id | title | alias | state |
+|---|---|---|---|
+| 10 | Blokfluitles | blokfluitles | 1 |
+| 33 | Dwarsfluitles | dwarsfluitles-categorie | 1 |
+| 11 | fluitist | dwarsfluitist | 1 |
+| 18 | Geschiedenis | dwarsfluit-geschiedenis | 1 |
+| 12 | informatie | informatie | -2 (skip) |
+
+### Arrangeren  (category `Arrangeren`)
+| id | title | alias | state | note |
+|---|---|---|---|---|
+| 36 | Arrangeren | arrangeren | 1 | main section text |
+| 14 | Arrangementen | arrangementen | 1 | portfolio/examples (2019) |
+| 42 | Sound of silence | sound-of-silence | 0 | unpublished example — include only if content is complete |
+| 20 | Arrangeren | arrangeren-2 | -2 (skip) |
+
+### Workshops  (category `Workshops`, nav “workshop/les”)
+| id | title | alias | state |
+|---|---|---|---|
+| 9 | Muzikale ondersteuning | *(fetch body)* | 1 (nav child) |
+| 32 | Workshopmogelijkheden | *(fetch body)* | 1 (nav child) |
+| *(other rows beyond first 25 — fetch)* | | | |
+
+### Contact  (category `Contact`)
+| id | title | alias | state | note |
+|---|---|---|---|---|
+| 38 | over mij, | over-mij | 1 | **About the musician** (2022) |
+| 39 | contact-foto | contact-foto | -2 | photo asset only |
+
+Contact page was rendered as **Bootstrap tabs of 2 articles** (module
+`mod_bootstraptabs` “bootstrap contactpagina 2 artikelen”). Rebuild as a single
+Contact page: about text + contact details + form + map.
+
+### Privacy  (category `Privacy`)
+- Privacy statement. Fetch body (rows beyond first 25). Link from footer.
+
+---
+
+## 5. Global / shared elements
+
+### Header
+- **Logo**: “MiMaMusic” wordmark, served via `mod_articles_single` modules
+  (“Logo”, “aside right - logo MiMaMusic”). Extract the image from live site /
+  `templates/theme3339/images/` / Wayback. Rebuild as a normal `<img>` logo
+  linking to Home.
+- **Mega menu** (`mod_menu` id 1 + DJ‑MegaMenu). Desktop: horizontal bar with
+  dropdown panels for **Koren** (3 items) and **workshop/les** (2 items).
+  Mobile: hamburger (`mod_djmegamenu_button`).
+
+### Footer
+- Previously held **choir banner images** (category `banner-footer`, module
+  “spirit en voluum Banners” — both trashed). Rebuild footer with: short
+  MiMaMusic blurb, contact essentials, link to **Privacy**, optional social
+  links. Recover any footer banner art from Wayback if still wanted.
+
+### Site‑wide widgets
+| Feature | Original | Rebuild recommendation |
+|---|---|---|
+| Live chat | Olark (`mod_tm_olark_chat`, published) | Re‑add Olark snippet, or Squarespace chat, or drop |
+| Article comments | Komento (`mod_komento_comments` / `_activities`, published) | Squarespace native comments or Disqus; or drop (low volume) |
+| Cookie banner | EU Cookie Directive Lite (currently disabled) | Squarespace cookie‑banner setting |
+| Social share / login | SocialLogin + LoginRadius | Simple share buttons only; **no social login** |
+| Newsletter | AcyMailing (integration plugin disabled) | Add only if the owner wants it |
+
+---
+
+## 6. Functional sections
+
+### Agenda / events
+- Original: **JEvents** month calendar at `index.php?option=com_jevents&view=month`.
+- Rebuild: an **Events collection** (Squarespace Events page) or a simple
+  chronological “Agenda” list: date, time, title, location, description.
+- Event data still to export (see §7) — `mm_jevents_*` tables.
+
+### Photo galleries
+- **JoomGallery** is installed (`mm_joomgallery*` tables) — the site has one or
+  more photo galleries (choirs / performances). Export gallery list + images
+  (§7) and rebuild as Squarespace gallery sections/pages.
+
+### Contact
+- Rebuild: about‑the‑musician text (article 38 “over mij”), contact details,
+  a contact **form**, and a **map** (Google Maps plugin was present but
+  disabled — add a map block with the real address).
+
+---
+
+## 7. Data still to extract (run in phpMyAdmin, prefix `mm_`)
+
+Paste results back into the cleanup thread or straight into the design thread.
+
+```sql
+-- (a) Full template branding params — colours, logo path, Google fonts, layout
+SELECT params FROM `mm_template_styles` WHERE id IN (9,10);
+
+-- (b) ALL article bodies (published + archived), in category order
+SELECT id, catid, title, alias, state, introtext, `fulltext`, images, `fulltext`='' AS intro_only, created, modified
+FROM `mm_content` WHERE state IN (1,2) ORDER BY catid, ordering;
+
+-- (c) The article rows the first recon truncated (see everything, 43 total)
+SELECT c.id, c.title, c.alias, c.state, cat.title AS category, c.created
+FROM `mm_content` c LEFT JOIN `mm_categories` cat ON cat.id=c.catid
+ORDER BY c.id;
+
+-- (d) Published module content (footer text, logo markup, sidebar, tabs) + params
+SELECT id, title, module, position, published, showtitle, content, params
+FROM `mm_modules` WHERE client_id=0 AND published=1 ORDER BY position, ordering;
+
+-- (e) Which menu item is the home page + per-item params/layout
+SELECT id, title, link, type, home, template_style_id, params
+FROM `mm_menu` WHERE client_id=0 AND published=1 ORDER BY lft;
+
+-- (f) Agenda / events content
+SELECT v.ev_id, d.summary, d.description, d.location, d.contact, d.dtstart, d.dtend, d.rrule
+FROM `mm_jevents_vevent` v
+JOIN `mm_jevents_vevdetail` d ON d.evdet_id = v.detail_id
+ORDER BY d.dtstart DESC;
+
+-- (g) Photo galleries + image counts, then image filenames per gallery
+SELECT cid, name, description, parent_id FROM `mm_joomgallery_catg` ORDER BY parent_id, ordering;
+SELECT id, catid, imgtitle, imgfilename, imgdate, published FROM `mm_joomgallery` ORDER BY catid, ordering;
+```
+
+### Non‑DB assets to capture
+- **Live site** still loads (slow): save rendered HTML + `templates/theme3339/css/*`
+  for real colours, fonts, spacing, logo. Ignore/strip all `<script>`.
+- **Wayback Machine**: `https://web.archive.org/web/2*/mimamusic.nl` — pull a
+  recent clean snapshot for layout + imagery (slider slides, footer banners,
+  gallery photos). Use an older snapshot if a recent one shows malware effects.
+- **Images**: `/images/`, `/templates/theme3339/images/` — logo, slider, choir
+  photos, portraits.
+
+---
+
+## 8. Out of scope / do not copy
+
+- **Kunena forum** — installed (`mm_kunena_*`) but **0 members / unused**. Do not rebuild a forum. `mod_menu` id 105 “Kunena Menu” — ignore.
+- **Malware** — the live site has a file‑level injection (redirect malware to `*.whitellllshop.icu`, loader functions `htg`/`gtg`, tampered `jquery.min.js` + inline scripts). Being handled separately. **Never paste live‑site JS into the rebuild.**
+- Rogue account `admin2` (Joomla id 43) — cleanup‑thread concern only, not relevant to the rebuild.
+- All `state = -2` / trashed categories and articles listed above.
+- Legacy/disabled extensions: Balbooa BA Forms/Gallery, IceMegaMenu, old Swiper module config, banner modules.
+
+---
+
+## 9. Squarespace mapping (target build)
+
+| Original | Squarespace |
+|---|---|
+| Home (category + Swiper) | Home page: image **Slideshow/Gallery** section + intro blocks from Homepage 1–3 |
+| Koren (+ 3 choir articles) | **Folder** “Koren” with a landing page + 3 sub‑pages (Spirit, Singin’Gestel, Popkoor MIKS). Keep archived “Koor Voluum” as a 4th sub‑page if wanted |
+| Onderwijs | Single page |
+| Dwarsfluit | Single page (sections: lessen, blokfluit, de fluitist, geschiedenis) |
+| Arrangeren | Single page + examples/portfolio section |
+| workshop/les (+ 2 articles) | Folder with landing + “Muzikale ondersteuning” + “Workshopmogelijkheden” |
+| Agenda (JEvents) | **Events** collection page |
+| Contact (bootstrap tabs) | Contact page: about text + details + **Form block** + **Map block** |
+| Privacy | Page, linked in footer only |
+| Comments (Komento) | Native comments / Disqus / omit |
+| Chat (Olark) | Re‑add Olark or use Squarespace chat |
+| Forum (Kunena) | **Drop** |
+
+### Still‑unknown for pixel fidelity (fill from §7 + live CSS)
+- Brand colours, heading/body typefaces (GK5 templates often load a Google font — see param `googleFont`).
+- Exact logo lockup.
+- Homepage slider image set.
+- Footer composition.
