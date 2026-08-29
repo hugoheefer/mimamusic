@@ -1,0 +1,770 @@
+<title>MimaMusic Look Reference</title>
+<meta name="description" content="Reproduction of the current mimamusic.nl design plus the full site structure from the database recon, as a build target for the Squarespace rebuild." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Berkshire+Swash&display=swap" />
+<style>
+  /*
+    SINGLE-THEME BY INTENT — reproduction of mimamusic.nl, an all-black Joomla
+    site on the Gavick GK5 "Theatre" template. No light/dark variants; every
+    colour is painted explicitly so the page holds on any host ground.
+
+    Visuals (colour, type scale, spacing) were read off the screenshots
+    (iPad Safari, ~1366px). Structure + page inventory come from the DB recon
+    (mimamusic-rebuild-spec.md). Blocks marked "nog op te halen" need the
+    article bodies from SQL query 7b/c. See the "specs" panel (lower right).
+  */
+  :root {
+    --bg: #000000;
+    --ink: #f4f4f4;
+    --ink-dim: #707070;
+    --accent: #e42a1a;
+    --accent-soft: #e2453a;
+    --strip: #2b2b2b;
+    --rule: #333333;
+    --pending: #4c4c4c;
+
+    --nav-top: #595959;
+    --nav-bot: #3a3a3a;
+    --nav-ink: #e8e8e8;
+
+    --menu-bg: #ffffff;
+    --menu-ink: #333333;
+    --menu-hover: #ececec;
+
+    --panel: #f5f5f5;
+    --panel-ink: #333333;
+    --panel-mut: #b3b3b3;
+    --panel-rule: #e4e4e4;
+    --panel-shade: #ececec;
+    --cal-red: #e8402e;
+    --cal-blue: #3e5c7a;
+
+    --indent: clamp(20px, 6.7vw, 92px);
+    --measure: 1180px;
+
+    --font-script: "Berkshire Swash", "Brush Script MT", "Segoe Script", cursive;
+    --font-body: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { color-scheme: dark; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ---------- header ---------- */
+  .site-header { padding: 30px var(--indent) 20px; background: var(--bg); }
+  .wordmark {
+    font-family: var(--font-script);
+    font-weight: 400;
+    font-size: clamp(46px, 6vw, 74px);
+    line-height: 1;
+    color: var(--ink);
+    margin: 0;
+    /* NOTE: the live site uses a custom logo image (module "Logo") — drop the PNG in. */
+  }
+
+  /* ---------- primary nav ---------- */
+  .nav { display: flex; background: var(--strip); border-bottom: 1px solid #000; }
+  .nav-inner {
+    flex: 0 0 auto;
+    max-width: 100%;
+    margin-left: calc(var(--indent) - 6px);
+    background: linear-gradient(var(--nav-top), var(--nav-bot));
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+  }
+  .menu { list-style: none; margin: 0; padding: 0 0 0 6px; display: flex; flex-wrap: wrap; }
+  .menu > li { position: relative; }
+
+  .nav-link {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    border-left: 1px solid rgba(255, 255, 255, 0.07);
+    border-right: 1px solid rgba(0, 0, 0, 0.32);
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--nav-ink);
+    text-decoration: none;
+    padding: 15px 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: background 120ms linear, color 120ms linear;
+  }
+  .menu > li:first-child .nav-link { border-left: 0; }
+  .nav-link:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+  .is-current > .nav-link {
+    background: rgba(0, 0, 0, 0.18);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.45);
+    color: #fff;
+  }
+
+  .caret {
+    width: 6px; height: 6px;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
+    opacity: 0.85;
+  }
+
+  .submenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 40;
+    min-width: 250px;
+    background: var(--menu-bg);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+  }
+  .has-sub:hover .submenu,
+  .has-sub:focus-within .submenu,
+  .has-sub.open .submenu { display: block; }
+  .submenu a {
+    display: block;
+    padding: 15px 22px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--menu-ink);
+    text-decoration: none;
+  }
+  .submenu a:hover { background: var(--menu-hover); }
+  .submenu .lead { border-bottom: 1px solid #e2e2e2; color: #111; }
+  .submenu .arch { color: #8a8a8a; font-weight: 400; }
+
+  /* ---------- content ---------- */
+  main { min-height: 76vh; }
+  .page { padding: 88px var(--indent) 96px; max-width: calc(var(--measure) + 2 * var(--indent)); }
+
+  .art + .art { margin-top: 62px; }
+
+  .page-title {
+    font-family: var(--font-script);
+    font-weight: 400;
+    font-size: clamp(28px, 3.4vw, 36px);
+    line-height: 1.15;
+    margin: 0 0 30px;
+    text-wrap: balance;
+  }
+  .page-title.is-red { color: var(--accent); }
+  .page-title.is-dim { color: var(--ink-dim); }
+
+  .prose { max-width: var(--measure); }
+  .prose p { margin: 0 0 1.15em; }
+  .prose p.tight { margin-bottom: 0.2em; }
+  .prose strong { font-weight: 700; }
+  .t-red { color: var(--accent-soft); }
+  .t-red-strong { color: var(--accent-soft); font-weight: 700; }
+  .prose ul { margin: 0 0 1.15em; padding-left: 1.1em; }
+  .prose li { margin: 0.1em 0; }
+  .addr span { display: block; }
+
+  .pending {
+    color: var(--pending);
+    font-size: 12px;
+    font-style: italic;
+    border-left: 2px solid #262626;
+    padding-left: 12px;
+    margin: 0 0 1.15em;
+  }
+
+  .choir-list { list-style: none; margin: 8px 0 0; padding: 0; }
+  .choir-list li { margin: 0 0 10px; }
+  .choir-list a { font-weight: 700; text-decoration: none; letter-spacing: 0.02em; }
+  .choir-list .arch { color: var(--ink-dim); font-weight: 400; }
+
+  /* image placeholders — swap for Wilma's originals */
+  .ph {
+    border: 1px dashed #454545;
+    background: repeating-linear-gradient(45deg, #0d0d0d, #0d0d0d 10px, #131313 10px, #131313 20px);
+    color: #6b6b6b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    padding: 8px;
+  }
+  .ph-slider { width: 100%; max-width: var(--measure); aspect-ratio: 1180 / 380; margin-bottom: 40px; }
+  .ph-portrait { float: right; width: 320px; height: 280px; margin: 2px 0 16px 44px; }
+  .ph-side { float: right; width: 300px; height: 244px; margin: 2px 0 16px 44px; }
+  .photo-row { display: flex; gap: 22px; margin-top: 26px; flex-wrap: wrap; }
+  .photo-row .ph { flex: 0 1 250px; height: 132px; }
+  .photo-stack { display: flex; flex-direction: column; gap: 20px; margin-top: 24px; }
+  .photo-stack .ph { width: min(400px, 100%); height: 208px; }
+  .photo-pair { display: flex; gap: 16px; margin-top: 24px; flex-wrap: wrap; }
+  .photo-pair .ph { flex: 0 1 212px; height: 152px; }
+  .ph-logo { width: 170px; height: 82px; margin-top: 20px; background: #f2f2f2; border-style: solid; border-color: #d9d9d9; color: #8a8a8a; }
+  .clearfix::after { content: ""; display: block; clear: both; }
+
+  /* ---------- events calendar (Agenda) ---------- */
+  .cal-scroll { overflow-x: auto; margin-top: 4px; }
+  .cal { min-width: 720px; background: var(--panel); color: var(--panel-ink); border-radius: 12px; padding: 20px 22px 24px; }
+  .cal-top { display: flex; align-items: baseline; justify-content: space-between; }
+  .cal-month { font-family: Georgia, "Times New Roman", serif; font-size: 28px; color: #7c7c7c; }
+  .cal-month small { font-size: 0.6em; }
+  .cal-search { color: #bdbdbd; font-size: 17px; }
+  .cal-modes {
+    display: flex; border: 1px solid #e6837a; border-radius: 6px; overflow: hidden;
+    width: max-content; margin: 14px auto 16px; font-size: 12.5px;
+  }
+  .cal-modes span { padding: 6px 14px; color: #444; background: #fdfdfd; border-right: 1px solid #eee; }
+  .cal-modes span:last-child { border-right: 0; }
+  .cal-modes span.on { background: var(--cal-red); color: #fff; }
+  .cal-nav { display: flex; text-align: center; font-weight: 700; font-size: 12.5px; border-radius: 3px; overflow: hidden; }
+  .cal-nav div { padding: 9px 12px; }
+  .cal-nav .prev, .cal-nav .next { background: var(--cal-red); color: #fff; flex: 1 1 18%; }
+  .cal-nav .cur { background: #fff; color: var(--cal-blue); flex: 1 1 64%; }
+  table.cal-grid { width: 100%; border-collapse: collapse; margin-top: 4px; }
+  table.cal-grid th { text-align: left; font-size: 11.5px; font-weight: 700; color: #555; padding: 9px 8px; border-bottom: 1px solid var(--panel-rule); }
+  table.cal-grid th.we { color: var(--panel-mut); }
+  table.cal-grid td {
+    height: 74px; width: 14.28%; vertical-align: top; padding: 5px 8px; font-size: 11.5px;
+    border: 1px solid var(--panel-rule); color: #333; font-variant-numeric: tabular-nums;
+  }
+  table.cal-grid td.mute { background: var(--panel-shade); color: #bcbcbc; }
+  .today { display: inline-flex; align-items: center; justify-content: center; width: 21px; height: 21px; background: var(--cal-red); color: #fff; border-radius: 50%; font-weight: 700; }
+  .cal-legend { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-top: 14px; font-size: 11.5px; font-weight: 700; color: #444; }
+  .cal-legend i { display: inline-block; width: 5px; height: 13px; margin-right: 7px; vertical-align: -2px; }
+
+  /* ---------- footer ---------- */
+  .site-footer { margin: 0 var(--indent); border-top: 1px solid var(--rule); padding: 22px 0 64px; }
+  .foot-nav { margin: 0 0 12px; }
+  .foot-nav a { font-size: 12px; text-decoration: none; }
+  .copyright { color: #8f8f8f; font-size: 12px; line-height: 1.7; }
+  .copyright .r { color: var(--accent); }
+  .badge {
+    width: 80px; height: 80px; border-radius: 50%;
+    border: 2px solid var(--accent);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    line-height: 1; margin-top: 22px;
+  }
+  .badge b { font-size: 17px; font-weight: 800; letter-spacing: 0.03em; color: #fff; }
+  .badge span { font-family: var(--font-script); font-size: 12px; color: var(--accent); margin-top: 3px; }
+
+  /* ---------- specs panel ---------- */
+  .specs-btn {
+    position: fixed; right: 16px; bottom: 16px; z-index: 90;
+    appearance: none; border: 1px solid #333; background: #101010; color: #cfcfcf;
+    font: 500 12px/1 var(--font-body); letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 10px 14px; border-radius: 999px; cursor: pointer;
+  }
+  .specs-btn:hover { color: #fff; border-color: #555; }
+  .specs {
+    position: fixed; right: 16px; bottom: 62px; z-index: 90;
+    width: min(380px, calc(100vw - 32px));
+    max-height: min(74vh, 620px); overflow-y: auto;
+    background: #0c0c0c; border: 1px solid #333; border-radius: 12px;
+    padding: 18px; color: #c9c9c9; font-size: 12.5px; line-height: 1.6;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  }
+  .specs h2 { margin: 0 0 8px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.14em; color: #8a8a8a; }
+  .specs h3 { margin: 15px 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent-soft); }
+  .specs dl { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 0; }
+  .specs dt { color: #8a8a8a; }
+  .specs dd { margin: 0; font-variant-numeric: tabular-nums; }
+  .specs .sw { display: inline-block; width: 11px; height: 11px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; border: 1px solid rgba(255, 255, 255, 0.2); }
+  .specs ul { margin: 6px 0 0; padding-left: 1.1em; }
+  .specs li { margin: 3px 0; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+  @media (max-width: 760px) {
+    body { font-size: 15px; }
+    .nav { flex-wrap: wrap; }
+    .nav-inner { margin-left: 0; width: 100%; }
+    .menu { padding-left: 0; }
+    .nav-link { padding: 13px 15px; }
+    .ph-portrait, .ph-side { float: none; width: 100%; max-width: 320px; margin: 0 0 16px; }
+    .page { padding-top: 60px; }
+  }
+</style>
+
+<header class="site-header">
+  <h1 class="wordmark">MiMaMusic</h1>
+</header>
+
+<nav class="nav" aria-label="Hoofdmenu">
+  <div class="nav-inner">
+    <ul class="menu">
+      <li class="is-current" data-nav="home"><a class="nav-link" href="#" data-page="home" aria-current="page">Home</a></li>
+      <li class="has-sub" data-nav="koren">
+        <button class="nav-link" type="button" aria-expanded="false" aria-haspopup="true">Koren <span class="caret" aria-hidden="true"></span></button>
+        <ul class="submenu">
+          <li><a class="lead" href="#" data-page="koren">Koren</a></li>
+          <li><a href="#" data-page="spirit">Gospelpopkoor Spirit</a></li>
+          <li><a href="#" data-page="singin">Singin'Gestel</a></li>
+          <li><a href="#" data-page="miks">Popkoor MIKS</a></li>
+          <li><a class="arch" href="#" data-page="voluum">Koor Voluum (archief)</a></li>
+        </ul>
+      </li>
+      <li data-nav="onderwijs"><a class="nav-link" href="#" data-page="onderwijs">Onderwijs</a></li>
+      <li data-nav="dwarsfluit"><a class="nav-link" href="#" data-page="dwarsfluit">Dwarsfluit</a></li>
+      <li data-nav="arrangeren"><a class="nav-link" href="#" data-page="arrangeren">Arrangeren</a></li>
+      <li class="has-sub" data-nav="workshop">
+        <button class="nav-link" type="button" aria-expanded="false" aria-haspopup="true">Workshop/les <span class="caret" aria-hidden="true"></span></button>
+        <ul class="submenu">
+          <li><a class="lead" href="#" data-page="workshop">workshop/les</a></li>
+          <li><a href="#" data-page="ondersteuning">Muzikale ondersteuning</a></li>
+          <li><a href="#" data-page="workshopmog">Workshopmogelijkheden</a></li>
+        </ul>
+      </li>
+      <li data-nav="agenda"><a class="nav-link" href="#" data-page="agenda">Agenda</a></li>
+      <li data-nav="contact"><a class="nav-link" href="#" data-page="contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <!-- HOME -->
+  <section class="page" id="page-home" data-owner="home">
+    <div class="ph ph-slider">afbeeldingen-carrousel (Swiper) &rarr; slides uit Wayback / origineel</div>
+    <div class="prose">
+      <article class="art">
+        <h2 class="page-title is-red">Dirigeren</h2>
+        <p class="pending">Homepageblok 1 (artikel-id&nbsp;21 &ldquo;Homepage 1&rdquo;). Tekst nog
+        op te halen uit de database &mdash; SQL 7b.</p>
+      </article>
+      <article class="art">
+        <h2 class="page-title is-red">Onderwijs</h2>
+        <p class="pending">Homepageblok 2 (artikel-id&nbsp;16 &ldquo;Homepage 2&rdquo;, met foto).
+        Tekst + afbeelding nog op te halen.</p>
+      </article>
+      <article class="art">
+        <h2 class="page-title is-red">Dwarsfluit</h2>
+        <p class="pending">Homepageblok 3 (artikel-id&nbsp;15 &ldquo;Homepage 3&rdquo; &mdash;
+        meest bekeken pagina van de site). Tekst nog op te halen.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- KOREN (section landing) -->
+  <section class="page" id="page-koren" data-owner="koren" hidden>
+    <h2 class="page-title is-dim">Koren</h2>
+    <div class="prose">
+      <p class="pending">Sectie-intro / &ldquo;Koordirigent&rdquo; (artikel-id&nbsp;19). Tekst nog
+      op te halen uit de database &mdash; SQL 7b.</p>
+      <p>Wilma dirigeert meerdere lokale koren:</p>
+      <ul class="choir-list">
+        <li><a href="#" data-page="spirit">gospelpopkoor Spirit</a></li>
+        <li><a href="#" data-page="singin">Singin'Gestel</a></li>
+        <li><a href="#" data-page="miks">Popkoor MIKS</a></li>
+        <li><a href="#" data-page="voluum">Koor Voluum</a> <span class="arch">&mdash; archiefpagina</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- GOSPELPOPKOOR SPIRIT -->
+  <section class="page" id="page-spirit" data-owner="koren" hidden>
+    <h2 class="page-title is-dim">gospelpopkoor Spirit</h2>
+    <div class="prose">
+      <p>In 2002 heb ik Gospelpopkoor Spirit opgericht. Het is een zeer enthousiast koor. De
+      energie spat ervan af als dit 60 koppige koor staat te zingen. Het koor wordt altijd
+      begeleid door hun vaste band. Zoals de naam aangeeft zingt het koor zowel pop- als
+      gospelsongs. Een gospeloptreden verzorgden ze in het verleden vaak in gospeljurk wat een
+      prachtige uitstraling heeft. Dat gebeurt nu niet meer, maar op verzoek kan het altijd
+      geregeld worden. Er is nog ruimte voor mannen in dit koor. Voor meer info over dit koor ga
+      naar hun website: <a href="https://www.spiritgospelpop.nl">www.spiritgospelpop.nl</a></p>
+      <div class="photo-stack">
+        <div class="ph">concertfoto &rarr; origineel van Wilma</div>
+        <div class="ph">concertfoto &rarr; origineel van Wilma</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SINGIN'GESTEL -->
+  <section class="page" id="page-singin" data-owner="koren" hidden>
+    <h2 class="page-title is-dim">Singin'Gestel</h2>
+    <div class="prose">
+      <p>Het GGK heeft haar naam veranderd: het koor heet voortaan
+      <span class="t-red-strong">Singin'Gestel</span>. Elke woensdagavond wordt er gerepeteerd in
+      de 'Blaula' van Beekvliet in Sint-Michielsgestel. Sind 2014 ben ik daar dirigent. Het koor
+      heeft de overstap naar moderner repertoire gemaakt, én naar moderne kleding. Ze komen
+      tegenwoordig met een frisgroene uitstraling. Het repertoire gaat van 'Dancing Queen' van
+      ABBA tot 'Tonight' van Son Mieux. In augustus gaat er o.a. gestart worden met 'Mijn houten
+      Hart' van De Poema's en 'All I want for Christmas' van Mariah Carey.</p>
+      <p>Voor meer informatie kun je naar hun website:
+      <a href="https://www.singingestel.nl">www.singingestel.nl</a></p>
+      <div class="photo-pair">
+        <div class="ph">koorfoto &rarr; origineel van Wilma</div>
+        <div class="ph">koorfoto &rarr; origineel van Wilma</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POPKOOR MIKS -->
+  <section class="page" id="page-miks" data-owner="koren" hidden>
+    <h2 class="page-title is-dim">Popkoor MIKS</h2>
+    <div class="prose">
+      <p>Per 1 januari 2025 ga ik popkoor MIKS dirigeren. Het koor bestaat nog niet zo lang en ik
+      heb er veel zin in om met hen aan de slag te gaan. Er worden voornamelijk popsongs
+      gezongen. De leden zijn van alle leeftijden.<br />
+      De repetities zijn op maandagochtend van 10.00 tot 12.00. Het koor is gesitueerd in
+      Sint.Michielsgestel.</p>
+      <p class="addr"><span>Meander</span><span>Meanderplein 3</span><span>5271 GC, Sint Michielsgestel</span></p>
+      <div class="ph ph-logo">logo Popkoor MIKS &rarr; origineel</div>
+    </div>
+  </section>
+
+  <!-- KOOR VOLUUM (archived) -->
+  <section class="page" id="page-voluum" data-owner="koren" hidden>
+    <h2 class="page-title is-dim">Koor Voluum</h2>
+    <div class="prose">
+      <p class="pending">Gearchiveerde pagina (artikel-id&nbsp;4, state = archived). Behouden als
+      historische pagina. Tekst nog op te halen uit de database &mdash; SQL 7b.</p>
+    </div>
+  </section>
+
+  <!-- ONDERWIJS -->
+  <section class="page clearfix" id="page-onderwijs" data-owner="onderwijs" hidden>
+    <h2 class="page-title is-red">Onderwijs</h2>
+    <div class="prose">
+      <p>De studie Docent Muziek heb ik aan de Fontys in Tilburg gedaan. Sindsdien geef ik op
+      allerlei scholen les. Momenteel werk ik via Muzelinck in Oss op bs. De Emmaus in Heesch.
+      Een belangrijkste doel is de kinderen plezier in muziek maken mee te geven. Als je dat
+      plezier kunt ervaren dan brengt dat je veel rijkdom.</p>
+      <p class="pending">De categorie &ldquo;Onderwijs&rdquo; kan meer artikelen bevatten dan dit
+      ene &mdash; volledige lijst + bodies via SQL 7b/7c.</p>
+      <div class="photo-row">
+        <div class="ph">foto &rarr; origineel van Wilma</div>
+        <div class="ph">foto &rarr; origineel van Wilma</div>
+        <div class="ph">foto &rarr; origineel van Wilma</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DWARSFLUIT (4 articles in the category) -->
+  <section class="page" id="page-dwarsfluit" data-owner="dwarsfluit" hidden>
+    <article class="art">
+      <h2 class="page-title is-red">Dwarsfluitles</h2>
+      <p class="pending">Artikel-id&nbsp;33. Tekst nog op te halen uit de database &mdash; SQL 7b.</p>
+    </article>
+    <article class="art">
+      <h2 class="page-title is-red">Blokfluitles</h2>
+      <p class="pending">Artikel-id&nbsp;10. Tekst nog op te halen uit de database &mdash; SQL 7b.</p>
+    </article>
+    <article class="art">
+      <h2 class="page-title is-red">fluitist</h2>
+      <p class="pending">Artikel-id&nbsp;11 (&ldquo;de fluitist&rdquo;). Tekst nog op te halen.</p>
+    </article>
+    <article class="art">
+      <h2 class="page-title is-red">Geschiedenis</h2>
+      <div class="prose">
+        <p>Ik ben begonnen met dwarsfluit spelen toen ik 10 jaar was. Al vrij snel ben ik met veel
+        plezier gaan spelen bij plaatselijke symphonie- en harmonieorkesten. Daarna heeft heb ik
+        dwarsfluit gestudeerd aan het Sweelinck Conservatorium Amsterdam bij Koos Verheul en
+        Harrie Starreveld. Na het conservatorium volgden nog enkele jaren studie bij Raymond
+        Delnoye.</p>
+        <p>Naast het spelen in diverse samenstellingen heb ik lange tijd dwarsfluitles gegeven aan
+        muziekscholen. Uiteindelijk besloot ik om zelfstandig verder te gaan. Dat betekende dat ik
+        vooral thuis les ben gaan geven en veel andere dingen erbij ben gaan doen.</p>
+      </div>
+    </article>
+  </section>
+
+  <!-- ARRANGEREN (2 articles in the category) -->
+  <section class="page" id="page-arrangeren" data-owner="arrangeren" hidden>
+    <article class="art">
+      <h2 class="page-title is-red">Arrangeren</h2>
+      <div class="prose">
+        <p>Soms zou je een lied of een muziekstuk wel eens willen gebruiken voor een koor, of voor
+        andere instrumenten dan waarvoor het geschreven is. Denk maar eens aan dat huwelijksfeest
+        waar je met je vrienden een speciaal muziekstuk wil spelen. Het is echter een stuk voor
+        trompet en jij speelt toevallig tuba. Dan is het handig als iemand het stuk geschikt maakt
+        voor tuba. Of je wil met je koor een lied zingen dat eigenlijk door een enkele zangeres
+        gezongen wordt. Dan moet er heel wat bij bedacht worden om het door een hele koor te laten
+        zingen.</p>
+        <p>De arrangementen voor mijn koren en ensembles maak ik meestal zelf. Mocht je een vraag
+        hebben, hulp willen hierbij dan neem even contact op via
+        <a href="mailto:info@mimamusic.nl">info@mimamusic.nl</a></p>
+      </div>
+    </article>
+    <article class="art">
+      <h2 class="page-title is-red">Arrangementen</h2>
+      <p class="pending">Artikel-id&nbsp;14 (2019) &mdash; portfolio / voorbeelden van arrangementen
+      (o.a. &ldquo;Sound of silence&rdquo;). Tekst + eventuele lijst nog op te halen &mdash; SQL 7b.</p>
+    </article>
+  </section>
+
+  <!-- WORKSHOP/LES (section landing) -->
+  <section class="page" id="page-workshop" data-owner="workshop" hidden>
+    <h2 class="page-title is-dim">workshop/les</h2>
+    <div class="prose">
+      <p class="pending">Sectie-intro. Tekst nog op te halen uit de database &mdash; SQL 7b.</p>
+      <ul class="choir-list">
+        <li><a href="#" data-page="ondersteuning">Muzikale ondersteuning</a></li>
+        <li><a href="#" data-page="workshopmog">Workshopmogelijkheden</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- MUZIKALE ONDERSTEUNING -->
+  <section class="page" id="page-ondersteuning" data-owner="workshop" hidden>
+    <h2 class="page-title is-dim">Muzikale ondersteuning</h2>
+    <div class="prose">
+      <p>Sinds 1988 ben ik al bezig met muziekonderwijs, in allerlei vormen, zowel aan
+      muziekscholen als thuis als op locatie. Muzikale ondersteuning kan dan over alles gaan:
+      dwarsfluitles, blokfluitles, spelen in een ensemble, AMV, ademtechniek, noten opschrijven,
+      instrumentkeuze, een liedje schrijven noem het maar op. Tegenwoordig, kan het ook gaan over
+      werken met jamulus en zoom. Heb je een vraag? neem even contact op met
+      <a href="mailto:info@mimamusic.nl">info@mimamusic.nl</a></p>
+    </div>
+  </section>
+
+  <!-- WORKSHOPMOGELIJKHEDEN -->
+  <section class="page clearfix" id="page-workshopmog" data-owner="workshop" hidden>
+    <h2 class="page-title is-dim">Workshopmogelijkheden</h2>
+    <div class="prose">
+      <div class="ph ph-side">foto (gekleurde stiften) &rarr; origineel van Wilma</div>
+      <p>Wil je iets leuks organiseren als bedrijfsactiviteit of als familieworkshop dan is er van
+      alles mogelijk.</p>
+      <p class="tight">Bijvoorbeeld op het gebied van zang:</p>
+      <ul>
+        <li>workshop samen zingen. Dat kan in allerlei genres zoals 'popsongs uit the 80's',
+          gospelsongs, klassieke liederen</li>
+        <li>de posongs van vandaag zingen voor tieners</li>
+        <li>workshop ontspanning dmv zang . kom thuis bij jezelf door op een rustige manier je
+          stem te gebruiken</li>
+        <li>vraag me om mee te helpen bij het organiseren van een sing-a-long event</li>
+      </ul>
+      <p class="tight">of op instrumentaal gebied:</p>
+      <ul>
+        <li>workshop djembé spelen. Jullie zorgen voor de djembé's, ik zorg voor de swingende
+          ritmische uurtjes</li>
+        <li>workshop boomwhackers, je weet wel, die gekleurde buizen waar je mee kunt muziek
+          maken</li>
+        <li>kennis maken met instrumenten. Leuk voor kinderen in de basisschool leeftijd</li>
+        <li>een muzikaal uurtje tijdens een kinderfeestje</li>
+      </ul>
+      <p>Er is vanalles mogelijk. Vraag het maar gewoon.</p>
+    </div>
+  </section>
+
+  <!-- AGENDA -->
+  <section class="page" id="page-agenda" data-owner="agenda" hidden>
+    <h2 class="page-title is-dim">Events Calendar</h2>
+    <div class="cal-scroll">
+      <div class="cal">
+        <div class="cal-top">
+          <div class="cal-month">August, <small>2026</small></div>
+          <div class="cal-search" aria-hidden="true">&#9906;</div>
+        </div>
+        <div class="cal-modes">
+          <span>By Year</span><span class="on">By Month</span><span>By Week</span><span>Today</span><span>Jump to month</span>
+        </div>
+        <div class="cal-nav">
+          <div class="prev">&#9664; July</div>
+          <div class="cur">29 August 2026</div>
+          <div class="next">September &#9654;</div>
+        </div>
+        <table class="cal-grid">
+          <thead>
+            <tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th class="we">Sat</th><th class="we">Sun</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="mute">27</td><td class="mute">28</td><td class="mute">29</td><td class="mute">30</td><td class="mute">31</td><td>1</td><td>2</td></tr>
+            <tr><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td></tr>
+            <tr><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td></tr>
+            <tr><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td></tr>
+            <tr><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td><td><span class="today">29</span></td><td>30</td></tr>
+            <tr><td>31</td><td class="mute">1</td><td class="mute">2</td><td class="mute">3</td><td class="mute">4</td><td class="mute">5</td><td class="mute">6</td></tr>
+          </tbody>
+        </table>
+        <div class="cal-legend">
+          <span><i style="background:#4a77b5;"></i>concert</span>
+          <span><i style="background:#5aa469;"></i>dienst</span>
+          <span><i style="background:#d98b3a;"></i>evenement</span>
+          <span><i style="background:#bbbbbb;"></i>All Categories ...</span>
+        </div>
+      </div>
+    </div>
+    <p class="pending" style="margin-top:20px;">Origineel: JEvents maandkalender. Gebeurtenissen nog
+    te exporteren &mdash; SQL 7f (<code>mm_jevents_*</code>).</p>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="page clearfix" id="page-contact" data-owner="contact" hidden>
+    <h2 class="page-title is-red">over mij,</h2>
+    <div class="prose">
+      <div class="ph ph-portrait">portretfoto &rarr; origineel van Wilma</div>
+      <p><strong>MiMa</strong><strong class="t-red">Music</strong> is mijn bedrijfsnaam sinds 2017 .</p>
+      <p>Mijn naam is <span class="t-red-strong">Wilma van der Schoot</span></p>
+      <p>In de basisschoolleeftijd ben ik begonnen met muziek maken. Dat&nbsp; was toen een jaar
+      blokfluitles in de tweede klas en natuurlijk zingen in het schoolkoor. Ik ben al vrij snel
+      begonnen met dwarsfluit spelen. Met die dwarsfluit kwam ik in het plaatselijk jongerenkoor
+      terecht, en toen ik 17 was ging ik dat jongerenkoor zelf maar dirigeren.<br />
+      Tijdens mijn studie dwarsfluit&nbsp; aan het Sweelinck Conservatorium in Amsterdam ben ik
+      een tijdje gestopt met dirigeren. Ik ben dwarsfluitles gaan geven en heb dat 20 jaar bij
+      verschillende muziekscholen gedaan. Het langst aan de muziekschool in Dongen.<br />
+      Maar het jongerenkoor kwam weer om de hoek kijken, en toen is mijn liefde voor dirigeren
+      ontstaan.&nbsp; In 2002 heb ik gospelpopkoor Spirit opgericht. Dat koor bestaat nog steeds,
+      zie mijn korenpagina.<br />
+      Nu dirigeer ik meerdere koren. En altijd met enorm veel plezier.</p>
+      <p>Voor contact kun je mailen:</p>
+      <p><a href="mailto:wilmavanderschoot@mimamusic.nl">wilmavanderschoot/at/mimamusic.nl</a></p>
+      <p>of bellen</p>
+      <p><a href="tel:+31627418262" style="text-decoration:none;">06-27418262</a></p>
+      <p class="pending">Origineel: 2 artikelen in Bootstrap-tabs. Herbouw als één pagina: over-mij
+      tekst + contactgegevens + formulier + kaart (adres).</p>
+    </div>
+  </section>
+
+  <!-- PRIVACY (footer-linked) -->
+  <section class="page" id="page-privacy" data-owner="" hidden>
+    <h2 class="page-title is-dim">Privacy</h2>
+    <div class="prose">
+      <p class="pending">Privacyverklaring (categorie &ldquo;Privacy&rdquo;, artikel-id&nbsp;34 /
+      categorie 14). Tekst nog op te halen uit de database &mdash; SQL 7b. Alleen in de footer
+      gelinkt, niet in het hoofdmenu.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="foot-nav"><a href="#" data-page="privacy">Privacy</a></div>
+  <div class="copyright">
+    Copyright &copy; 2026 MimaMusic. All Rights Reserved.<br />
+    <span class="r">Joomla!</span> is Free Software released under the
+    <span class="r">GNU General Public License.</span>
+  </div>
+  <div class="badge" aria-hidden="true"><b>MIMA</b><span>Music</span></div>
+</footer>
+
+<button class="specs-btn" type="button" id="specsBtn" aria-expanded="false" aria-controls="specsPanel">specs</button>
+<aside class="specs" id="specsPanel" hidden>
+  <h2>Build reference &mdash; MiMaMusic</h2>
+  <p style="margin:0 0 4px;color:#9a9a9a;">Look reproduced from the screenshots; structure from the
+  DB recon (<code>mimamusic-rebuild-spec.md</code>). Colours + display font are close
+  approximations &mdash; <strong>confirm against the live site / SQL 7a</strong>.</p>
+
+  <h3>Colour</h3>
+  <dl>
+    <dt><span class="sw" style="background:#000;"></span>page bg</dt><dd>#000000</dd>
+    <dt><span class="sw" style="background:#f4f4f4;"></span>body text</dt><dd>#f4f4f4</dd>
+    <dt><span class="sw" style="background:#707070;"></span>dim heading</dt><dd>#707070</dd>
+    <dt><span class="sw" style="background:#e42a1a;"></span>accent red</dt><dd>#e42a1a</dd>
+    <dt><span class="sw" style="background:#2b2b2b;"></span>header strip</dt><dd>#2b2b2b</dd>
+    <dt><span class="sw" style="background:#4b4b4b;"></span>menu bar</dt><dd>#595959 &rarr; #3a3a3a</dd>
+  </dl>
+
+  <h3>Type</h3>
+  <dl>
+    <dt>logo + headings</dt><dd>ornamental script &mdash; mock uses "Berkshire Swash". Real face = GK5 <code>googleFont</code> param (SQL 7a), or use the logo PNG</dd>
+    <dt>body / nav</dt><dd>Arial / Helvetica sans</dd>
+    <dt>logo / heading / body / nav</dt><dd>~72 / ~34 / ~15 / 11px</dd>
+    <dt>heading colour</dt><dd>red on top-level pages, grey on sub-pages &amp; Agenda</dd>
+  </dl>
+
+  <h3>Layout</h3>
+  <dl>
+    <dt>left indent</dt><dd>~92px (desktop)</dd>
+    <dt>text column</dt><dd>~1180px max</dd>
+    <dt>nav</dt><dd>black gutter &rarr; grey menu (content width) &rarr; dark strip to the edge. Original = DJ-MegaMenu, multi-column panels + mobile hamburger</dd>
+  </dl>
+
+  <h3>From the DB recon</h3>
+  <ul>
+    <li>Template: Gavick GK5 &ldquo;Theatre&rdquo; (dark cinematic &mdash; the black ground is the template)</li>
+    <li>Nav order fixed: Home / Koren / Onderwijs / Dwarsfluit / Arrangeren / workshop&#8202;/&#8202;les / Agenda / Contact; Privacy in footer</li>
+    <li>Koren also has &ldquo;Koordirigent&rdquo; text + archived &ldquo;Koor Voluum&rdquo;</li>
+    <li>Dwarsfluit = 4 articles (Dwarsfluitles, Blokfluitles, de fluitist, Geschiedenis)</li>
+    <li>Arrangeren = main text + &ldquo;Arrangementen&rdquo; examples (2019)</li>
+    <li>Home = Swiper carousel + Homepage 1/2/3 blocks (Dirigeren / Onderwijs / Dwarsfluit)</li>
+    <li>Photo galleries (JoomGallery) to rebuild &mdash; SQL 7g</li>
+    <li>Site-wide on original: Olark chat, Komento comments, cookie banner &mdash; decide per feature</li>
+  </ul>
+
+  <h3>Still to supply</h3>
+  <ul>
+    <li>SQL 7a &mdash; brand colours, fonts, logo path</li>
+    <li>SQL 7b/7c &mdash; all article bodies (blocks marked &ldquo;nog op te halen&rdquo;)</li>
+    <li>SQL 7f/7g &mdash; events + gallery images</li>
+    <li>Logo files, all photos (scan first), homepage slider set</li>
+    <li>Drop the &ldquo;Joomla!&rdquo; footer line on the new build; replace the &ldquo;/at/&rdquo; email with a form</li>
+  </ul>
+</aside>
+
+<script>
+  (function () {
+    var pages = Array.prototype.slice.call(document.querySelectorAll('.page'));
+    var navItems = Array.prototype.slice.call(document.querySelectorAll('.nav li[data-nav]'));
+    var subs = Array.prototype.slice.call(document.querySelectorAll('.has-sub'));
+
+    function closeMenus() {
+      subs.forEach(function (s) {
+        s.classList.remove('open');
+        var b = s.querySelector('button.nav-link');
+        if (b) { b.setAttribute('aria-expanded', 'false'); }
+      });
+    }
+
+    function show(pageId) {
+      pages.forEach(function (p) { p.hidden = (p.id !== 'page-' + pageId); });
+      var target = document.getElementById('page-' + pageId);
+      var owner = target ? target.getAttribute('data-owner') : '';
+      navItems.forEach(function (li) {
+        var on = owner && li.getAttribute('data-nav') === owner;
+        li.classList.toggle('is-current', !!on);
+        var link = li.querySelector('a.nav-link');
+        if (link) {
+          if (on) { link.setAttribute('aria-current', 'page'); }
+          else { link.removeAttribute('aria-current'); }
+        }
+      });
+      closeMenus();
+      window.scrollTo(0, 0);
+    }
+
+    document.querySelectorAll('[data-page]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        show(a.getAttribute('data-page'));
+      });
+    });
+
+    subs.forEach(function (s) {
+      var btn = s.querySelector('button.nav-link');
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var isOpen = s.classList.contains('open');
+        closeMenus();
+        if (!isOpen) { s.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+      });
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.has-sub')) { closeMenus(); }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { closeMenus(); }
+    });
+
+    var sBtn = document.getElementById('specsBtn');
+    var sPanel = document.getElementById('specsPanel');
+    sBtn.addEventListener('click', function () {
+      var open = !sPanel.hidden;
+      sPanel.hidden = open;
+      sBtn.setAttribute('aria-expanded', String(!open));
+    });
+
+    show('home');
+  })();
+</script>
