@@ -139,6 +139,19 @@ def build():
   @media (max-width: 620px) {
     .photo-band .band-photo { flex: 1 1 calc(50% - 5px) !important; }
   }
+
+  /* section-landing teaser grid — the original's cols-2 blocks below the leading article */
+  .teaser-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px 34px; margin-top: 54px; }
+  .teaser { min-width: 0; }
+  .teaser-title { font-family: var(--font-title); color: var(--title-red); font-size: 19px; font-weight: 400; line-height: 1.3; margin: 0 0 12px; }
+  .teaser-title a { color: inherit; text-decoration: none; }
+  .teaser-title a:hover { text-decoration: underline; }
+  .teaser p { margin: 0 0 10px; }
+  .teaser .photo-band { margin-top: 16px; }
+  .teaser-logo.has-img { width: 175px; height: 52px; padding: 0; border: 0; margin-top: 14px; }
+  .teaser-logo.contain.has-img { background: #fff; }
+  .teaser-img.has-img { width: 100%; max-width: 275px; margin-top: 14px; aspect-ratio: 275 / 183; border: 0; }
+  @media (max-width: 760px) { .teaser-grid { grid-template-columns: 1fr; gap: 38px; } }
 """
     h = h.replace(
         "\n  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }",
@@ -152,13 +165,23 @@ def build():
     h = h.replace('<div class="ph home-fig-dwf">[home-foto: dwarsfluit]</div>',
                   ph("Wilma_fluitist_1986.jpg", "Wilma als fluitiste, 1986", "home-figure home-figure--dwf"), 1)
 
-    # koren landing — "Koordirigent" intro + 4-photo band
+    # koren landing — "Koordirigent" intro + 4-photo band, then cols-2 teaser grid
     h = h.replace('<!--BAND:koren-->', band([
         ("2010-kerst__dirigent_wilma_in_de_sneeuw.jpg", "Wilma dirigeert in de sneeuw, kerst 2010", 105, 158),
         ("2015-09-23_GGK_40.png", "Gestels Gemengd Koor, 2015", 236, 157),
         ("Wilma_vleermuis_2022.jpg", "Wilma dirigeert, 2022", 160, 158),
         ("Wilma_2024.jpg", "Wilma, 2024", 212, 159),
     ]), 1)
+    h = h.replace('<!--BAND:koren-spirit-->', band([
+        ("_DSC8853.jpg", "Gospelpopkoor Spirit in concert", 408, 230),
+        ("spirit_3.jpg", "Gospelpopkoor Spirit in concert", 407, 228),
+    ]), 1)
+    h = h.replace('<!--BAND:koren-singin-->', band([
+        ("2024-05_met_kinderen.jpg", "Singin'Gestel met kinderen, 2024", 216, 162),
+        ("2024-03-20.jpg", "Singin'Gestel, 2024", 216, 162),
+    ]), 1)
+    h = h.replace('<!--IMG:miks-logo-->',
+                  ph("MIKS_logo.png", "Popkoor MIKS logo", "teaser-logo contain"), 1)
 
     # Spirit
     h = h.replace(
@@ -182,6 +205,8 @@ def build():
         ("2012-11-06__De_Bron_leslokaal.jpg", "Leslokaal met keyboards, De Bron", 274, 155),
         ("djembe_60.jpg", "Djembeworkshop op het schoolplein", 233, 156),
     ]), 1)
+    h = h.replace('<!--IMG:emmaus-->',
+                  ph("Emmaus1.jpg", "Basisschool Emmaus", "teaser-img"), 1)
 
     # Dwarsfluit / de fluitist
     h = h.replace(

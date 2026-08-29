@@ -255,20 +255,29 @@ Open points still to resolve:
   (kept intentionally; better structure, same look).
 
 ### Koren  (category `Koren`)
-| id | title | alias | state | note |
-|---|---|---|---|---|
-| 1 | gospelpopkoor Spirit | gospelpopkoor-spirit | 1 | nav child; hits 233 |
-| 2 | Singin'Gestel | *(row beyond first 25 — fetch body)* | 1 | nav child |
-| 43 | Popkoor MIKS | popkoor-miks | 1 | nav child; **newest content, 2024‑11‑09** |
-| 19 | Koordirigent | koordirigent | 1 | conductor bio/offer |
-| 4 | Koor Voluum | koor-voluum | 2 | archived — keep as historical page |
-| 5 | LevensWijs Koor | levenswijs-koor | -2 | skip |
-| 41 | project- mannenkoor | project-mannenkoor | -2 | skip |
+**Full list confirmed via §7 query (h), 2026‑08‑29** — 8 articles, ordered:
+| ord | id | title | alias | state | on landing? |
+|---|---|---|---|---|---|
+| 1 | 19 | Koordirigent | koordirigent | 1 (featured) | **leading** |
+| 2 | 41 | project- mannenkoor | project-mannenkoor | −2 trashed | no — skip |
+| 3 | 1 | gospelpopkoor Spirit | gospelpopkoor-spirit | 1 | **teaser + sub‑page** |
+| 4 | 2 | Singin'Gestel | singin-gestel | 1 | **teaser + sub‑page** |
+| 5 | 3 | Vughts Mannenkoor – VMK | vughts-mannenkoor-vmk | **0 unpublished** | no — paused (was live incl. Apr‑2025 Wayback); has body + `VMK_2022_.jpg` 274×121 · `VMK__projectkoor2_2022.jpg` 198×119 if she re‑enables |
+| 6 | 43 | Popkoor MIKS | popkoor-miks | 1 | **teaser + sub‑page** |
+| 7 | 4 | Koor Voluum | koor-voluum | **2 archived** | no on blog — keep as standalone historical page (dirigent 2018–jul 2024); `WhatsApp_Image_2019-01-26_at_191543.jpeg` 216×144 · `koororkest2.png` 250×140 · `kerst2.png` 506×223 |
+| 8 | 5 | LevensWijs Koor | levenswijs-koor | −2 trashed | no — skip |
 
-**Koren landing = Joomla category blog** (pulled from live `/index.php/koren`
-2026‑08‑29): a **leading** article (id 19 *Koordirigent* — full paragraph +
-4‑photo row) followed by **cols‑2** teaser blocks for each choir (Spirit id 1,
-Popkoor MIKS id 43, Singin'Gestel id 2, …), each with its own 1–2 photos.
+All rows: `images` JSON empty → every photo is an inline `<img>` in the body.
+Articles are **introtext‑only** (no `fulltext`), so each teaser text == its
+sub‑page text.
+
+**Koren landing = Joomla category blog** (live `/index.php/koren`): **leading**
+article (id 19 *Koordirigent* — paragraph + 4‑photo row) then a **cols‑2** teaser
+grid, live display order **Spirit → MIKS → Singin'Gestel**, each: title (links to
+sub‑page) + intro text + photos:
+- **Spirit** — `_DSC8853.jpg` 408×230 + `spirit_3.jpg` 407×228; link `www.spiritgospelpop.nl`
+- **MIKS** — `MIKS_logo.png` 175×52; address block Meander / Meanderplein 3 / 5271 GC
+- **Singin'Gestel** — `2024-05_met_kinderen.jpg` + `2024-03-20.jpg` (both 216×162); link `www.singingestel.nl`
 
 *Koordirigent body:* "Wat is er nou heerlijker dan het dirigeren van een koor…
 Elk concert wordt daardoor een vreugdevolle uiting van positieve energie."
@@ -282,17 +291,25 @@ ratios preserved, no cropping). Photos:
 `2015-09-23_GGK_40.png` (236×157) · `Wilma_vleermuis_2022.jpg` (160×158) ·
 `Wilma_2024.jpg` (212×159).
 
-**Prototype (2026‑08‑29):** Koren landing rebuilt as *Koordirigent* heading
-(`is-red`) + paragraph + `.koren-band` 4‑photo row. Choir‑teaser blocks below
-**not yet added** — sub‑pages reachable via the KOREN dropdown. The old
-placeholder choir‑list `<ul>` was removed.
+**Prototype (2026‑08‑29):** Koren landing = *Koordirigent* heading (`is-red`) +
+paragraph + shared `.photo-band` 4‑photo row + **`.teaser-grid` (cols‑2)** with
+the Spirit / MIKS / Singin'Gestel teasers (real text + photos, titles link to
+the sub‑pages). Owner decision: section landings **do** carry the teaser grid
+(match the original). Sub‑pages `page-spirit/-singin/-miks/-voluum` still hold
+placeholder bodies — fill from the same query‑(h) text when doing those pages.
 
 ### Onderwijs  (category `Onderwijs`)
-Category blog, pulled from live `/index.php/onderwijs` 2026‑08‑29:
-| id | title | alias | role |
-|---|---|---|---|
-| 17 | Onderwijs | 17-onderwijs | **leading** — intro + 3‑photo row |
-| 7 | Bs Emmaus | 7-bs-emmaus | cols‑2 teaser (text + `Emmaus1.jpg` float‑left, link to school site) |
+Category blog. **Full list confirmed via §7 query (h), 2026‑08‑29** — 5 articles,
+only 2 live:
+| id | title | alias | state | role |
+|---|---|---|---|---|
+| 17 | Onderwijs | onderwijs | 1 (featured) | **leading** — intro + 3‑photo row |
+| 7 | Bs Emmaus | bs-emmaus | 1 | cols‑2 teaser (text + `Emmaus1.jpg` float‑left, link to school site) |
+| 6 | KC Het Bossche Broek | kc-het-bossche-broek | −2 | trashed stub — skip |
+| 13 | Bs De Fonkeling | basisschool-de-fonkeling | −2 | trashed (has body + `Fonkeling.jpg`) — skip |
+| 8 | informatie | info | −2 | trashed stub — skip |
+
+All rows: `images` JSON empty → every photo is an inline `<img>` in the body.
 
 *Leading body:* "De studie Docent Muziek heb ik aan de Fontys in Tilburg gedaan…
 Als je dat plezier kunt ervaren dan brengt dat je veel rijkdom."
@@ -300,10 +317,13 @@ Als je dat plezier kunt ervaren dan brengt dat je veel rijkdom."
 *3‑photo row* (live dims): `2014-10-08_Bieb_Heyhoef3.jpg` (203×154) ·
 `2012-11-06__De_Bron_leslokaal.jpg` (274×155) · `djembe_60.jpg` (233×156 native).
 
+*Bs Emmaus body:* "Sinds enkele jaren werk ik op basisschool Emmaus in Heesch…
+we hebben samen wel veel plezier gehad." + link to
+`sites.google.com/filiosscholengroep.nl/bsemmaus` + `Emmaus1.jpg` (275×183).
+
 **Prototype (2026‑08‑29):** landing = `Onderwijs` heading (`is-red`) + paragraph
-+ shared `.photo-band` row (same equal‑height / full‑menu‑bar‑width treatment as
-Koren). Bs Emmaus teaser **not yet added**. Whether the category holds more than
-these two (trashed/unpublished) is still open — see §7 query (h).
++ shared `.photo-band` row + **`.teaser-grid`** with the Bs Emmaus teaser
+(text + `Emmaus1.jpg` 275×183, link to the school site). Matches the original.
 
 ### Dwarsfluit  (category `dwarsfluit`)
 | id | title | alias | state |
