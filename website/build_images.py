@@ -77,7 +77,7 @@ def build():
   .ph.contain.has-img img { object-fit: contain; }
   .ph-lead { float: right; width: 340px; height: 232px; margin: 2px 0 16px 44px; }
 
-  .slider { position: relative; width: 100%; max-width: var(--measure); aspect-ratio: 16 / 10; margin-bottom: 40px; background: #000; overflow: hidden; }
+  .slider { position: relative; width: 100%; max-width: calc(var(--measure) / 2); aspect-ratio: 16 / 10; margin-bottom: 40px; background: #000; overflow: hidden; }
   .slider .slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity 700ms ease; }
   .slider .slide.is-on { opacity: 1; }
   .slider .dots { position: absolute; left: 0; right: 0; bottom: 12px; display: flex; gap: 8px; justify-content: center; }

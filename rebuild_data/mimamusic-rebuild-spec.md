@@ -365,7 +365,7 @@ SELECT id, catid, imgtitle, imgfilename, imgdate, published FROM `mm_joomgallery
 | D4 | Heading colour = red on top‑level pages, grey on sub‑pages & Agenda | Observed pattern in screenshots | Keep unless owner objects |
 | D5 | ~92px left indent, ~1180px left‑aligned text column | Matches screenshots | Keep |
 | D6 | Nav = single‑column dropdowns | Simplifies the original DJ‑MegaMenu; menus are tiny | Fine → Squarespace Folders |
-| D7 | Home slider = `object-fit: contain` on black, 16:10 box, 3 slides, 5 s fade | Show full frames; real slide set/shape unknown | Replace with real Wayback slides |
+| D7 | Home slider = `object-fit: contain` on black, 16:10 box at **half column width** (~590px), 3 slides, 5 s fade | Show full frames, kept small; real slide set/shape unknown | Replace with real Wayback slides |
 | D8 | Footer badge = real `MIMAmusic_LOGO2-4.png` | Actual asset | Keep |
 | D9 | Dropped the "Joomla!" footer line | No Joomla cruft on the rebuild | — |
 | D10 | Transcribed copy keeps original quirks ("2017 .", "Dat  was", "Sind 2014") | Faithful until owner proofreads | Owner proofread pass |
