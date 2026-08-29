@@ -201,7 +201,6 @@
     letter-spacing: 0.03em;
     padding: 8px;
   }
-  .ph-slider { width: 100%; max-width: var(--measure); aspect-ratio: 1180 / 380; margin-bottom: 40px; }
   .ph-portrait { float: right; width: 320px; height: 280px; margin: 2px 0 16px 44px; }
   .ph-side { float: right; width: 300px; height: 244px; margin: 2px 0 16px 44px; }
   .photo-row { display: flex; gap: 22px; margin-top: 26px; flex-wrap: wrap; }
@@ -329,22 +328,23 @@
 <main>
   <!-- HOME -->
   <section class="page" id="page-home" data-owner="home">
-    <div class="ph ph-slider">afbeeldingen-carrousel (Swiper) &rarr; slides uit Wayback / origineel</div>
     <div class="prose">
-      <article class="art">
+      <article class="art clearfix">
         <h2 class="page-title is-red">Dirigeren</h2>
-        <p class="pending">Homepageblok 1 (artikel-id&nbsp;21 &ldquo;Homepage 1&rdquo;). Tekst nog
-        op te halen uit de database &mdash; SQL 7b.</p>
+        <div class="ph home-fig-dir">[home-foto: dirigeren]</div>
+        <p>Een intensieve verbinding aangaan met je musici en samen hoorbaar maken
+        wat er in je hoofd klinkt.</p>
       </article>
-      <article class="art">
+      <article class="art clearfix">
         <h2 class="page-title is-red">Onderwijs</h2>
-        <p class="pending">Homepageblok 2 (artikel-id&nbsp;16 &ldquo;Homepage 2&rdquo;, met foto).
-        Tekst + afbeelding nog op te halen.</p>
+        <p>Leerlingen meenemen in jouw liefde voor muziek en mogelijkheden aanbieden
+        om hier aan mee te doen.</p>
+        <div class="ph home-fig-ond">[home-foto: onderwijs]</div>
       </article>
-      <article class="art">
+      <article class="art clearfix">
         <h2 class="page-title is-red">Dwarsfluit</h2>
-        <p class="pending">Homepageblok 3 (artikel-id&nbsp;15 &ldquo;Homepage 3&rdquo; &mdash;
-        meest bekeken pagina van de site). Tekst nog op te halen.</p>
+        <p>Muziek zonder woorden.<br>Het instrument als spreekbuis.</p>
+        <div class="ph home-fig-dwf">[home-foto: dwarsfluit]</div>
       </article>
     </div>
   </section>
@@ -684,7 +684,7 @@
     <li>Koren also has &ldquo;Koordirigent&rdquo; text + archived &ldquo;Koor Voluum&rdquo;</li>
     <li>Dwarsfluit = 4 articles (Dwarsfluitles, Blokfluitles, de fluitist, Geschiedenis)</li>
     <li>Arrangeren = main text + &ldquo;Arrangementen&rdquo; examples (2019)</li>
-    <li>Home = Swiper carousel + Homepage 1/2/3 blocks (Dirigeren / Onderwijs / Dwarsfluit)</li>
+    <li>Home = 3 blocks (Dirigeren / Onderwijs / Dwarsfluit), each 2 regels + &eacute;&eacute;n foto &mdash; g&eacute;&eacute;n carousel (DB-bevestigd)</li>
     <li>Photo galleries (JoomGallery) to rebuild &mdash; SQL 7g</li>
     <li>Site-wide on original: Olark chat, Komento comments, cookie banner &mdash; decide per feature</li>
   </ul>
@@ -694,7 +694,7 @@
     <li>SQL 7b/7c &mdash; all article bodies (blocks marked &ldquo;nog op te halen&rdquo;)</li>
     <li>SQL 7f/7g &mdash; events + gallery images</li>
     <li>Mega-menu skin CSS (<code>custom-124.css</code>) + heading font-sizes</li>
-    <li>Real homepage slider image set + banner shape (Wayback)</li>
+    <li>Module <code>92</code> (<code>{loadmoduleid 92}</code> in elke home-kop) &mdash; wat is dit? SQL 7d</li>
     <li>Drop the &ldquo;Joomla!&rdquo; footer line on the new build; replace the &ldquo;/at/&rdquo; email with a form</li>
   </ul>
 </aside>

@@ -79,13 +79,14 @@ def build():
   .ph.contain.has-img img { object-fit: contain; }
   .ph-lead { float: right; width: 340px; height: 232px; margin: 2px 0 16px 44px; }
 
-  .slider { position: relative; width: 100%; max-width: calc(var(--measure) / 2); aspect-ratio: 16 / 10; margin-bottom: 40px; background: #000; overflow: hidden; }
-  .slider .slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; opacity: 0; transition: opacity 700ms ease; }
-  .slider .slide.is-on { opacity: 1; }
-  .slider .dots { position: absolute; left: 0; right: 0; bottom: 12px; display: flex; gap: 8px; justify-content: center; }
-  .slider .dots button { width: 9px; height: 9px; padding: 0; border: 0; border-radius: 50%; background: rgba(255,255,255,.45); cursor: pointer; }
-  .slider .dots button.on { background: #fff; }
-  @media (prefers-reduced-motion: reduce) { .slider .slide { transition: none; } }
+  /* homepage block photos (one per block, from articles 21/16/15) */
+  .home-figure--dir { float: left; width: 249px; height: 275px; margin: 4px 26px 8px 0; }
+  .home-figure--ond { width: 321px; height: 180px; margin: 12px 0 6px; }
+  .home-figure--dwf { width: 222px; height: 290px; margin: 6px 0 4px; }
+  @media (max-width: 620px) {
+    .home-figure--dir { float: none; }
+    .home-figure--dir, .home-figure--ond, .home-figure--dwf { width: 100%; max-width: 321px; height: auto; aspect-ratio: 4 / 3; }
+  }
 
   .badge-img { width: 84px; height: 84px; margin-top: 22px; display: block; }
   @media (max-width: 760px) { .ph-lead { float: none; width: 100%; max-width: 340px; margin: 0 0 16px; } }
@@ -94,21 +95,13 @@ def build():
         "\n  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }",
         css + "\n  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }", 1)
 
-    # home slider
-    slides = [("2017-12b.jpg", "Wilma dirigeert"),
-              ("Wilma_fluitist_1986.jpg", "Wilma als fluitiste, 1986"),
-              ("2012-11-06__De_Bron_leslokaal_4.jpg", "Muzieklokaal De Bron")]
-    sl = ['<div class="slider" role="group" aria-label="afbeeldingen">']
-    for i, (s, a) in enumerate(slides):
-        sl.append('    <img class="slide%s" src="%s" alt="%s" />'
-                  % (" is-on" if i == 0 else "", datauri(s), a))
-    sl.append('    <div class="dots">' + "".join(
-        '<button type="button" class="%s" aria-label="afbeelding %d"></button>'
-        % ("on" if i == 0 else "", i + 1) for i in range(len(slides))) + '</div>')
-    sl.append('  </div>')
-    h = h.replace(
-        '<div class="ph ph-slider">afbeeldingen-carrousel (Swiper) &rarr; slides uit Wayback / origineel</div>',
-        "\n".join(sl), 1)
+    # homepage block photos — one still per block (articles 21 / 16 / 15), no carousel
+    h = h.replace('<div class="ph home-fig-dir">[home-foto: dirigeren]</div>',
+                  ph("2017-12b.jpg", "Wilma dirigeert, 2017", "home-figure home-figure--dir"), 1)
+    h = h.replace('<div class="ph home-fig-ond">[home-foto: onderwijs]</div>',
+                  ph("2012-11-06__De_Bron_leslokaal_4.jpg", "Muzieklokaal De Bron, 2012", "home-figure home-figure--ond"), 1)
+    h = h.replace('<div class="ph home-fig-dwf">[home-foto: dwarsfluit]</div>',
+                  ph("Wilma_fluitist_1986.jpg", "Wilma als fluitiste, 1986", "home-figure home-figure--dwf"), 1)
 
     # koren landing lead image
     h = h.replace('<section class="page" id="page-koren" data-owner="koren" hidden>',
@@ -168,25 +161,6 @@ def build():
     # Footer badge
     h = h.replace('<div class="badge" aria-hidden="true"><b>MIMA</b><span>Music</span></div>',
                   '<img class="badge-img" src="%s" alt="MiMaMusic" />' % datauri("MIMAmusic_LOGO2-4.png"), 1)
-
-    # slider JS
-    js = """
-    document.querySelectorAll('.slider').forEach(function (sl) {
-      var slides = sl.querySelectorAll('.slide'), dots = sl.querySelectorAll('.dots button'), i = 0, t;
-      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      function go(n) {
-        slides[i].classList.remove('is-on'); if (dots[i]) dots[i].classList.remove('on');
-        i = (n + slides.length) % slides.length;
-        slides[i].classList.add('is-on'); if (dots[i]) dots[i].classList.add('on');
-      }
-      function reset() { clearInterval(t); if (!reduce && slides.length > 1) t = setInterval(function () { go(i + 1); }, 5000); }
-      dots.forEach(function (d, n) { d.addEventListener('click', function () { go(n); reset(); }); });
-      reset();
-    });
-
-    show('home');
-"""
-    h = h.replace("\n    show('home');\n", js, 1)
 
     if h == orig:
         sys.exit("NO CHANGES MADE - marker strings out of sync with the .src.html")

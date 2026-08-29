@@ -31,9 +31,9 @@ Reference inputs (this spec + `screenshots old site/`) live in `rebuild_data/`.
   pages, **Dwarsfluit** as 4 articles, **Arrangeren** + "Arrangementen" block,
   archived **Koor Voluum**, **Privacy** page (footer‑linked only). Parent menu
   items link to their landing; dropdowns list only the children.
-- **Home** = fading 3‑slide carousel (full‑frame, `object-fit: contain` on black —
-  no cropping) + Homepage 1/2/3 blocks (bodies still placeholder). Real slide set
-  + banner shape still unknown (trashed articles → check Wayback).
+- **Home** = 3 blocks (Dirigeren / Onderwijs / Dwarsfluit), each heading + 2 lines
+  + one still photo. **No carousel** (SQL 7b confirmed: the Swiper is old/trashed).
+  Text + photos + placement all from `mm_content` ids 21/16/15 — see §4 Home. Done.
 - **Agenda** = static repro of the JEvents month grid (Aug 2026).
 - **Photos:** all 20 images from `mimamusic.nl/images/` downloaded to
   `website/images/` (full‑res) + `website/images/web/` (shrunk, ≤1000px q72),
@@ -54,9 +54,9 @@ Reference inputs (this spec + `screenshots old site/`) live in `rebuild_data/`.
 | file | used on |
 |---|---|
 | `MIMAmusic_LOGO2-4.png` | footer badge (circular MIMA·Music) |
-| `2017-12b.jpg` | home slider — Wilma conducting, 2017 |
-| `Wilma_fluitist_1986.jpg` | home slider + Dwarsfluit "de fluitist" (B&W, flute, 1986) |
-| `2012-11-06__De_Bron_leslokaal_4.jpg` | home slider — wide music‑room |
+| `2017-12b.jpg` | **home block "Dirigeren"** (id 21, float left 249×275) — Wilma conducting, 2017 |
+| `Wilma_fluitist_1986.jpg` | **home block "Dwarsfluit"** (id 15, 222×290) + Dwarsfluit page "de fluitist" (B&W, flute, 1986) |
+| `2012-11-06__De_Bron_leslokaal_4.jpg` | **home block "Onderwijs"** (id 16, 321×180) — wide music‑room |
 | `2012-11-06__De_Bron_leslokaal.jpg` | Onderwijs row — keyboard classroom |
 | `2014-10-08_Bieb_Heyhoef3.jpg` | Onderwijs row — library workshop |
 | `djembe_60.jpg` | Onderwijs row — djembé circle |
@@ -137,7 +137,7 @@ category views (list/blog of that category); rebuild as a landing page per
 section.
 
 ```
-Home                     → category "home"        (landing + image slider)
+Home                     → category "home"        (3 blocks, 1 photo each; no slider)
 Koren                    → category "Koren"
   ├─ gospelpopkoor Spirit → article id 1
   ├─ Singin'Gestel        → article id 2
@@ -189,9 +189,38 @@ State: `1`=published, `2`=archived, `0`=unpublished, `-2`=trashed.
 | 23 | Home 3 | home-3 | -2 | skip |
 | 34 | Privacy | privacy | -2 | see Privacy category instead |
 
-Home layout = section landing built from the “Homepage 1/2/3” blocks, with a
-**Swiper image carousel** at the top (module `mod_swiper`, slides were articles —
-now trashed; rebuild carousel with images pulled from Wayback / live site).
+Home layout = section landing built from the three “Homepage 1/2/3” blocks, each
+with its own inline photo (details below). An older design had a `mod_swiper`
+carousel (articles 24/25/26, now trashed, state −2) — **do not rebuild it**; the
+current published homepage has no carousel.
+
+**Content status — DONE (2026‑08‑29), SQL 7b run + reconciled with live site & Wayback.**
+
+Query `SELECT ... FROM mm_content WHERE id IN (15,16,21)` returned the full
+`introtext` of each block; **`fulltext` is empty** for all three — nothing hidden,
+nothing to "restore". The homepage is genuinely just three short blocks, each
+**heading + 2 lines + one still photo** (NOT a carousel — the Swiper was an old,
+trashed design; ids 24/25/26).
+
+| id | block (heading) | text | photo (per `introtext`) | size | placement |
+|---|---|---|---|---|---|
+| 21 | **Dirigeren** | “Een intensieve verbinding aangaan met je musici en samen hoorbaar maken wat er in je hoofd klinkt.” | `images/home/2017-12b.jpg` (alt “homepage 1”, title “dirigeren”) | 249×275 | `class="pull-left"` — float left, text wraps |
+| 16 | **Onderwijs** | “Leerlingen meenemen in jouw liefde voor muziek en mogelijkheden aanbieden om hier aan mee te doen.” | `images/2012-11-06__De_Bron_leslokaal_4.jpg` | 321×180 | block, below text (was wrapped in its own `<h1>`) |
+| 15 | **Dwarsfluit** | “Muziek zonder woorden. / Het instrument als spreekbuis.” | `images/home/Wilma_fluitist_1986.jpg` (alt “home 3”, title “fluitist”) | 222×290 | block, below text |
+
+Prototype now matches this (fake carousel + its CSS/JS removed from
+`build_images.py`; `.home-figure--dir/ond/dwf` classes added).
+
+Open points still to resolve:
+- **`{loadmoduleid 92}`** sits inside every home `<h1>`, before the coloured word.
+  Unknown module — run **SQL 7d** (`mm_modules` id 92) to see if it's a divider,
+  an icon, or empty. Prototype ignores it for now.
+- **Heading colour**: these `<h1>`s use an **inline** `color:#9a2d2d` (muted brick
+  red), vs the prototype's `--title-red #cb4752` (guessed) / the brighter
+  `#e8342a` seen on other pages. Confirm the real template `--red` via SQL 7a and
+  reconcile site‑wide.
+- Original markup is 3× `<h1>` on one page — prototype uses `<h2 class="page-title">`
+  (kept intentionally; better structure, same look).
 
 ### Koren  (category `Koren`)
 | id | title | alias | state | note |
@@ -356,7 +385,7 @@ SELECT id, catid, imgtitle, imgfilename, imgdate, published FROM `mm_joomgallery
 
 | Original | Squarespace |
 |---|---|
-| Home (category + Swiper) | Home page: image **Slideshow/Gallery** section + intro blocks from Homepage 1–3 |
+| Home (3 blocks, 1 photo each) | Home page: three text sections, each a short heading + 2 lines + one image block (no slideshow) |
 | Koren (+ 3 choir articles) | **Folder** “Koren” with a landing page + 3 sub‑pages (Spirit, Singin’Gestel, Popkoor MIKS). Keep archived “Koor Voluum” as a 4th sub‑page if wanted |
 | Onderwijs | Single page |
 | Dwarsfluit | Single page (sections: lessen, blokfluit, de fluitist, geschiedenis) |
@@ -372,7 +401,6 @@ SELECT id, catid, imgtitle, imgfilename, imgdate, published FROM `mm_joomgallery
 ### Still‑unknown for pixel fidelity (fill from §7 + live CSS)
 - Brand colours, heading/body typefaces (GK5 templates often load a Google font — see param `googleFont`).
 - Exact logo lockup.
-- Homepage slider image set.
 - Footer composition.
 
 ---
@@ -387,7 +415,7 @@ SELECT id, catid, imgtitle, imgfilename, imgdate, published FROM `mm_joomgallery
 | D4 | Heading colour = red on top‑level pages, grey on sub‑pages & Agenda | CSS: `.title` (red) vs `.heading-style-1` (grey) | Keep |
 | D5 | **1200px centred container** (`margin: 0 auto`); ~1170px text column | Matches live `template.css` `.container` | Keep |
 | D6 | Nav = single‑column dropdowns; **parent items (Koren, workshop/les) are links** → click = go to landing page, hover/focus = open dropdown; dropdown lists **only the children** (no repeated parent) | Standard mega‑menu behaviour; simplifies the original DJ‑MegaMenu; menus are tiny | Fine → Squarespace Folders (folder landing page + child pages) |
-| D7 | Home slider = `object-fit: contain` on black, 16:10 box at **half column width** (~590px), 3 slides, 5 s fade | Show full frames, kept small; real slide set/shape unknown | Replace with real Wayback slides |
+| D7 | ~~Home slider~~ → **removed**. Home is 3 blocks, each with one inline photo (`2017-12b.jpg` float‑left 249×275 / `De_Bron_leslokaal_4.jpg` 321×180 / `Wilma_fluitist_1986.jpg` 222×290) per `mm_content` 21/16/15 | SQL 7b confirmed no carousel | Confirm float/placement nuance with owner |
 | D8 | Footer badge = real `MIMAmusic_LOGO2-4.png` | Actual asset | Keep |
 | D9 | Dropped the "Joomla!" footer line | No Joomla cruft on the rebuild | — |
 | D10 | Transcribed copy keeps original quirks ("2017 .", "Dat  was", "Sind 2014") | Faithful until owner proofreads | Owner proofread pass |
@@ -399,14 +427,16 @@ SELECT id, catid, imgtitle, imgfilename, imgdate, published FROM `mm_joomgallery
   container, fonts (Henny Penny / Fredericka the Great / Gabriela), red `#cb4752`,
   grey `#7e7e7e`. Still want: mega‑menu skin CSS `custom-124.css`, heading sizes.
 - [ ] 7b / 7c all article bodies (every block still marked *"nog op te halen"*)
-- [ ] 7d published module content (footer text, logo markup, sidebar)
+      — **Home (21/16/15) DONE 2026‑08‑29**, see §4 Home
+- [ ] 7d published module content (footer text, logo markup, sidebar) — **incl. module 92**
+      (`{loadmoduleid 92}` appears inside every homepage heading)
 - [ ] 7e Home menu item + per‑item params
 - [ ] 7f events (JEvents) → Agenda
 - [ ] 7g JoomGallery categories + image filenames
 
 **Assets:**
 - [ ] Header wordmark asset (`/templates/theme3339/images/`) or confirm font‑only
-- [ ] Real homepage slider images + intended size (Wayback)
+- [x] Homepage photos — 3 stills, all already in `website/images/` (see §4 Home)
 - [ ] Footer‑banner art if wanted (`banner-footer` category; Wayback)
 - [ ] Koor Voluum photo (or accept none)
 - [ ] Gallery photos per 7g
@@ -526,7 +556,7 @@ the markup, so don't over‑polish before it, and get the owner's input before i
 - [ ] Keep Henny Penny / Fredericka the Great, or swap for cleaner faces?
 - [ ] Structure: nav right? Keep the Agenda (was empty)? Keep archived choirs?
       Want photo galleries?
-- [ ] Owner proofreads every text; hands over missing article bodies + slider photos.
+- [ ] Owner proofreads every text; hands over any missing article bodies + photos.
 - [ ] How hands‑on does she want to be, and how often will she update? (drives the
       CMS choice)
 - Show her the GitHub Pages preview: https://hugoheefer.github.io/mimamusic/
