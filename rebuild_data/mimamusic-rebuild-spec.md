@@ -20,10 +20,13 @@ https://claude.ai/code/artifact/fcf1a98b-ad3e-460c-9f94-3b4a51c561fd).
 Reference inputs (this spec + `screenshots old site/`) live in `rebuild_data/`.
 
 ### Done
-- Visual shell reproduced from the screenshots: all‑black GK5 "Theatre" look,
-  grey mega‑menu bar, script headings (**red** = top‑level page, **grey** =
-  sub‑page / Agenda), ~92px left indent, ~1180px text column, circular MIMA
-  footer badge (real logo image).
+- Visual shell matched to the live `template.css`: all‑black GK5 "Theatre" look,
+  **1200px centred container** (menu / page titles / footer all align to its
+  left edge), grey mega‑menu bar, **two full‑width divider rules** (above the
+  menu, above the footer), circular MIMA footer badge (real logo image).
+- **Real fonts** wired in: logo + grey headings = **Henny Penny**; red headings =
+  **Fredericka the Great** (`#cb4752`); body = **Gabriela** serif. (Prototype had
+  a single "Berkshire Swash" stand‑in before — now replaced.)
 - Full nav + every section built, incl. **Koren** and **workshop/les** landing
   pages, **Dwarsfluit** as 4 articles, **Arrangeren** + "Arrangementen" block,
   archived **Koor Voluum**, **Privacy** page (footer‑linked only).
@@ -102,6 +105,24 @@ Reference inputs (this spec + `screenshots old site/`) live in `rebuild_data/`.
   - Real template folder + assets: `templates/theme3339/…` (`css/`, `images/`).
   - Layout params (partial): `top_layout=normal`, `header_layout=normal`, `nav_…` — standard GK5 layout.
 - Libraries: **jQuery + Bootstrap 3 + FontAwesome 4.7** era.
+
+### Live CSS facts (from `templates/theme3339/css/template.css`, fetched 2026‑08‑29)
+- Layout container: `.container { width:100%; max-width:1200px; margin:0 auto; padding:0 15px }`
+  — the whole site is a **1200px centred column**; nav, page titles, footer all
+  align to its left edge (this is why the menu looks "centred").
+- Body background `#000000`.
+- **Fonts** (Google, loaded in `<head>`): `Henny Penny`, `Fredericka the Great`,
+  `Gabriela` (+ `Open Sans` via the mega‑menu module).
+  - Logo: `#logo a { font: 60px/100px 'Henny Penny', cursive; color:#fff }`
+  - Red page headings: `h*.title { font-family:'Fredericka the Great',cursive; color:#cb4752 }`
+  - Grey page headings: `h*.heading-style-1 { font-family:'Henny Penny',cursive; color:#7e7e7e }`
+  - Base headings + body + `.copyright`: `'Gabriela', serif` (base heading color `#333`)
+- Two horizontal rules: `#header { border-top:1px solid #1c1c1c }` (above the menu)
+  and `#footer-wrapper .footer-wrapper-inner { border-top:1px solid #1c1c1c;
+  padding:49px 0 25px }` (above the footer). `.copyright { color:#2b2b2b }`.
+- Still to fetch for full fidelity: mega‑menu skin
+  `modules/mod_jux_easy_megamenu/assets/css/style/custom-124.css` (menu bar
+  gradient/colours), and heading font‑sizes.
 - Navigation: **mega menu**. Historic churn across `mod_jux_easy_megamenu`, IceMegaMenu, and **DJ‑MegaMenu** (`mod_djmegamenu_button` mobile toggle is the live one). Treat nav as a multi‑column mega menu with a mobile hamburger.
 - Editor: JCE.
 - Known harmless bug on the old site: `www` vs non‑`www` CORS errors on FontAwesome fonts — disappears on rebuild.
@@ -360,10 +381,10 @@ SELECT id, catid, imgtitle, imgfilename, imgdate, published FROM `mm_joomgallery
 | # | Decision | Why | Revisit? |
 |---|---|---|---|
 | D1 | All‑black ground | It's the GK5 "Theatre" template default, not a chosen identity | Ask owner if she wants it lighter |
-| D2 | Script face (logo + headings) = `Berkshire Swash` stand‑in | Real face = template `googleFont` (SQL 7a) | Yes — needs 7a; match via Adobe Fonts or use logo image |
-| D3 | `--accent #e42a1a`, dim heading `#707070`, body `#f4f4f4` | Sampled by eye from screenshots | Confirm vs 7a |
-| D4 | Heading colour = red on top‑level pages, grey on sub‑pages & Agenda | Observed pattern in screenshots | Keep unless owner objects |
-| D5 | ~92px left indent, ~1180px left‑aligned text column | Matches screenshots | Keep |
+| D2 | Fonts from live `template.css`: logo + grey headings **Henny Penny**, red headings **Fredericka the Great**, body **Gabriela** serif | Confirmed in CSS, not a guess | Keep; owner may dislike the quirky display faces → then pick alternatives |
+| D3 | Red `#cb4752`, grey heading `#7e7e7e`, body `#f4f4f4` | `#cb4752`/`#7e7e7e` from CSS; body lightened from CSS `#f4f4f4`‑ish for legibility (real `.copyright` is `#2b2b2b`, near‑invisible) | Keep; revisit copyright colour |
+| D4 | Heading colour = red on top‑level pages, grey on sub‑pages & Agenda | CSS: `.title` (red) vs `.heading-style-1` (grey) | Keep |
+| D5 | **1200px centred container** (`margin: 0 auto`); ~1170px text column | Matches live `template.css` `.container` | Keep |
 | D6 | Nav = single‑column dropdowns | Simplifies the original DJ‑MegaMenu; menus are tiny | Fine → Squarespace Folders |
 | D7 | Home slider = `object-fit: contain` on black, 16:10 box at **half column width** (~590px), 3 slides, 5 s fade | Show full frames, kept small; real slide set/shape unknown | Replace with real Wayback slides |
 | D8 | Footer badge = real `MIMAmusic_LOGO2-4.png` | Actual asset | Keep |
@@ -373,7 +394,9 @@ SELECT id, catid, imgtitle, imgfilename, imgdate, published FROM `mm_joomgallery
 ## 11. Open items to resolve before the Squarespace build
 
 **Data — phpMyAdmin, prefix `mm_` (full queries in §7):**
-- [ ] 7a template branding (colours, `googleFont`, logo path, layout)
+- [x] 7a template branding — **got it from `template.css` instead**: 1200px centred
+  container, fonts (Henny Penny / Fredericka the Great / Gabriela), red `#cb4752`,
+  grey `#7e7e7e`. Still want: mega‑menu skin CSS `custom-124.css`, heading sizes.
 - [ ] 7b / 7c all article bodies (every block still marked *"nog op te halen"*)
 - [ ] 7d published module content (footer text, logo markup, sidebar)
 - [ ] 7e Home menu item + per‑item params
