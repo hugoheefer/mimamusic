@@ -151,8 +151,9 @@
   .submenu .arch { color: #8a8a8a; font-weight: 400; }
 
   /* ---------- content ---------- */
-  main { min-height: 76vh; }
-  .page { max-width: var(--container); margin: 0 auto; padding: 78px var(--pad) 96px; }
+  /* no min-height on <main>: the live site lets the footer sit directly under the
+     content (short pages just have black below the footer), so we do too */
+  .page { max-width: var(--container); margin: 0 auto; padding: 78px var(--pad) 69px; }   /* pad-bottom = live #content { padding-bottom:69px } */
 
   .art + .art { margin-top: 62px; }
 
@@ -244,11 +245,7 @@
 
   /* ---------- footer ---------- */
   .site-footer { border-top: 1px solid var(--divider); }   /* divider line 2 (full width) */
-  .foot-inner { max-width: var(--container); margin: 0 auto; padding: 40px var(--pad) 60px; }
-  .foot-nav { margin: 0 0 12px; }
-  .foot-nav a { font-size: 12px; text-decoration: none; }
-  .copyright { color: #8f8f8f; font-size: 12px; line-height: 1.7; }
-  .copyright .r { color: var(--accent); }
+  .foot-inner { max-width: var(--container); margin: 0 auto; padding: 49px var(--pad) 40px; }   /* pad-top = live .footer-wrapper-inner { padding-top:49px } */
   .badge {
     width: 80px; height: 80px; border-radius: 50%;
     border: 2px solid var(--accent);
@@ -675,12 +672,6 @@
 
 <footer class="site-footer">
   <div class="foot-inner">
-    <div class="foot-nav"><a href="#" data-page="privacy">Privacy</a></div>
-    <div class="copyright">
-      Copyright &copy; 2026 MimaMusic. All Rights Reserved.<br />
-      <span class="r">Joomla!</span> is Free Software released under the
-      <span class="r">GNU General Public License.</span>
-    </div>
     <div class="badge" aria-hidden="true"><b>MIMA</b><span>Music</span></div>
   </div>
 </footer>

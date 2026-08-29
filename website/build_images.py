@@ -126,7 +126,7 @@ def build():
     #page-home .hc-ond .home-figure { aspect-ratio: 16 / 9; }
   }
 
-  .badge-img { width: 84px; height: 84px; margin-top: 22px; display: block; }
+  .badge-img { width: 84px; height: 84px; margin-top: 0; display: block; }
   @media (max-width: 760px) { .ph-lead { float: none; width: 100%; max-width: 340px; margin: 0 0 16px; } }
 
   /* shared section-landing photo row (Koren, Onderwijs, ...): native ratios,
@@ -140,8 +140,9 @@ def build():
     .photo-band .band-photo { flex: 1 1 calc(50% - 5px) !important; }
   }
 
-  /* section-landing teaser grid — the original's cols-2 blocks below the leading article */
-  .teaser-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px 34px; margin-top: 54px; }
+  /* section-landing teasers — full-width stacked blocks below the leading article
+     (text spans the menu-bar measure, same as every other page) */
+  .teaser-grid { display: flex; flex-direction: column; gap: 54px; margin-top: 54px; }
   .teaser { min-width: 0; }
   .teaser-title { font-family: var(--font-title); color: var(--title-red); font-size: 19px; font-weight: 400; line-height: 1.3; margin: 0 0 12px; }
   .teaser-title a { color: inherit; text-decoration: none; }
@@ -151,7 +152,6 @@ def build():
   .teaser-logo.has-img { width: 175px; height: 52px; padding: 0; border: 0; margin-top: 14px; }
   .teaser-logo.contain.has-img { background: #fff; }
   .teaser-img.has-img { width: 100%; max-width: 275px; margin-top: 14px; aspect-ratio: 275 / 183; border: 0; }
-  @media (max-width: 760px) { .teaser-grid { grid-template-columns: 1fr; gap: 38px; } }
 """
     h = h.replace(
         "\n  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }",
