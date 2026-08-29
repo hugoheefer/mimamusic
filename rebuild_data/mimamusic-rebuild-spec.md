@@ -29,7 +29,8 @@ Reference inputs (this spec + `screenshots old site/`) live in `rebuild_data/`.
   a single "Berkshire Swash" stand‑in before — now replaced.)
 - Full nav + every section built, incl. **Koren** and **workshop/les** landing
   pages, **Dwarsfluit** as 4 articles, **Arrangeren** + "Arrangementen" block,
-  archived **Koor Voluum**, **Privacy** page (footer‑linked only).
+  archived **Koor Voluum**, **Privacy** page (footer‑linked only). Parent menu
+  items link to their landing; dropdowns list only the children.
 - **Home** = fading 3‑slide carousel (full‑frame, `object-fit: contain` on black —
   no cropping) + Homepage 1/2/3 blocks (bodies still placeholder). Real slide set
   + banner shape still unknown (trashed articles → check Wayback).
@@ -385,7 +386,7 @@ SELECT id, catid, imgtitle, imgfilename, imgdate, published FROM `mm_joomgallery
 | D3 | Red `#cb4752`, grey heading `#7e7e7e`, body `#f4f4f4` | `#cb4752`/`#7e7e7e` from CSS; body lightened from CSS `#f4f4f4`‑ish for legibility (real `.copyright` is `#2b2b2b`, near‑invisible) | Keep; revisit copyright colour |
 | D4 | Heading colour = red on top‑level pages, grey on sub‑pages & Agenda | CSS: `.title` (red) vs `.heading-style-1` (grey) | Keep |
 | D5 | **1200px centred container** (`margin: 0 auto`); ~1170px text column | Matches live `template.css` `.container` | Keep |
-| D6 | Nav = single‑column dropdowns | Simplifies the original DJ‑MegaMenu; menus are tiny | Fine → Squarespace Folders |
+| D6 | Nav = single‑column dropdowns; **parent items (Koren, workshop/les) are links** → click = go to landing page, hover/focus = open dropdown; dropdown lists **only the children** (no repeated parent) | Standard mega‑menu behaviour; simplifies the original DJ‑MegaMenu; menus are tiny | Fine → Squarespace Folders (folder landing page + child pages) |
 | D7 | Home slider = `object-fit: contain` on black, 16:10 box at **half column width** (~590px), 3 slides, 5 s fade | Show full frames, kept small; real slide set/shape unknown | Replace with real Wayback slides |
 | D8 | Footer badge = real `MIMAmusic_LOGO2-4.png` | Actual asset | Keep |
 | D9 | Dropped the "Joomla!" footer line | No Joomla cruft on the rebuild | — |

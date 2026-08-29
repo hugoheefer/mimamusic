@@ -148,7 +148,6 @@
     text-decoration: none;
   }
   .submenu a:hover { background: var(--menu-hover); }
-  .submenu .lead { border-bottom: 1px solid #e2e2e2; color: #111; }
   .submenu .arch { color: #8a8a8a; font-weight: 400; }
 
   /* ---------- content ---------- */
@@ -321,9 +320,8 @@
     <ul class="menu">
       <li class="is-current" data-nav="home"><a class="nav-link" href="#" data-page="home" aria-current="page">Home</a></li>
       <li class="has-sub" data-nav="koren">
-        <button class="nav-link" type="button" aria-expanded="false" aria-haspopup="true">Koren <span class="caret" aria-hidden="true"></span></button>
+        <a class="nav-link" href="#" data-page="koren" aria-haspopup="true">Koren <span class="caret" aria-hidden="true"></span></a>
         <ul class="submenu">
-          <li><a class="lead" href="#" data-page="koren">Koren</a></li>
           <li><a href="#" data-page="spirit">Gospelpopkoor Spirit</a></li>
           <li><a href="#" data-page="singin">Singin'Gestel</a></li>
           <li><a href="#" data-page="miks">Popkoor MIKS</a></li>
@@ -334,9 +332,8 @@
       <li data-nav="dwarsfluit"><a class="nav-link" href="#" data-page="dwarsfluit">Dwarsfluit</a></li>
       <li data-nav="arrangeren"><a class="nav-link" href="#" data-page="arrangeren">Arrangeren</a></li>
       <li class="has-sub" data-nav="workshop">
-        <button class="nav-link" type="button" aria-expanded="false" aria-haspopup="true">Workshop/les <span class="caret" aria-hidden="true"></span></button>
+        <a class="nav-link" href="#" data-page="workshop" aria-haspopup="true">Workshop/les <span class="caret" aria-hidden="true"></span></a>
         <ul class="submenu">
-          <li><a class="lead" href="#" data-page="workshop">workshop/les</a></li>
           <li><a href="#" data-page="ondersteuning">Muzikale ondersteuning</a></li>
           <li><a href="#" data-page="workshopmog">Workshopmogelijkheden</a></li>
         </ul>
@@ -674,34 +671,36 @@
 
 <button class="specs-btn" type="button" id="specsBtn" aria-expanded="false" aria-controls="specsPanel">specs</button>
 <aside class="specs" id="specsPanel" hidden>
-  <h2>Build reference &mdash; MiMaMusic</h2>
-  <p style="margin:0 0 4px;color:#9a9a9a;">Look reproduced from the screenshots; structure from the
-  DB recon (<code>mimamusic-rebuild-spec.md</code>). Colours + display font are close
-  approximations &mdash; <strong>confirm against the live site / SQL 7a</strong>.</p>
+  <h2>Build reference &mdash; MimaMusic</h2>
+  <p style="margin:0 0 4px;color:#9a9a9a;">Layout + fonts + colours matched to the live
+  <code>template.css</code> (fetched 2026-08-29). Structure from the DB recon
+  (<code>rebuild_data/mimamusic-rebuild-spec.md</code>).</p>
 
-  <h3>Colour</h3>
+  <h3>Colour (from template.css)</h3>
   <dl>
     <dt><span class="sw" style="background:#000;"></span>page bg</dt><dd>#000000</dd>
     <dt><span class="sw" style="background:#f4f4f4;"></span>body text</dt><dd>#f4f4f4</dd>
-    <dt><span class="sw" style="background:#707070;"></span>dim heading</dt><dd>#707070</dd>
-    <dt><span class="sw" style="background:#e42a1a;"></span>accent red</dt><dd>#e42a1a</dd>
-    <dt><span class="sw" style="background:#2b2b2b;"></span>header strip</dt><dd>#2b2b2b</dd>
+    <dt><span class="sw" style="background:#7e7e7e;"></span>grey heading</dt><dd>#7e7e7e</dd>
+    <dt><span class="sw" style="background:#cb4752;"></span>red heading + links</dt><dd>#cb4752</dd>
+    <dt><span class="sw" style="background:#333;"></span>divider rules</dt><dd>#333 (real #1c1c1c)</dd>
     <dt><span class="sw" style="background:#4b4b4b;"></span>menu bar</dt><dd>#595959 &rarr; #3a3a3a</dd>
   </dl>
 
-  <h3>Type</h3>
+  <h3>Type (from template.css)</h3>
   <dl>
-    <dt>logo + headings</dt><dd>ornamental script &mdash; mock uses "Berkshire Swash". Real face = GK5 <code>googleFont</code> param (SQL 7a), or use the logo PNG</dd>
-    <dt>body / nav</dt><dd>Arial / Helvetica sans</dd>
-    <dt>logo / heading / body / nav</dt><dd>~72 / ~34 / ~15 / 11px</dd>
-    <dt>heading colour</dt><dd>red on top-level pages, grey on sub-pages &amp; Agenda</dd>
+    <dt>logo + grey headings</dt><dd>Henny Penny</dd>
+    <dt>red headings</dt><dd>Fredericka the Great</dd>
+    <dt>body</dt><dd>Gabriela (serif)</dd>
+    <dt>nav</dt><dd>Arial / sans</dd>
+    <dt>heading colour</dt><dd>red = top-level pages, grey = sub-pages &amp; Agenda</dd>
   </dl>
 
-  <h3>Layout</h3>
+  <h3>Layout (from template.css)</h3>
   <dl>
-    <dt>left indent</dt><dd>~92px (desktop)</dd>
-    <dt>text column</dt><dd>~1180px max</dd>
-    <dt>nav</dt><dd>black gutter &rarr; grey menu (content width) &rarr; dark strip to the edge. Original = DJ-MegaMenu, multi-column panels + mobile hamburger</dd>
+    <dt>container</dt><dd>1200px, centred (<code>margin: 0 auto</code>)</dd>
+    <dt>text column</dt><dd>~1170px max</dd>
+    <dt>dividers</dt><dd>full-width rule above the menu + above the footer</dd>
+    <dt>nav</dt><dd>parent items link to their landing; dropdowns on hover/focus. Original = DJ-MegaMenu (multi-column + mobile hamburger)</dd>
   </dl>
 
   <h3>From the DB recon</h3>
@@ -718,10 +717,10 @@
 
   <h3>Still to supply</h3>
   <ul>
-    <li>SQL 7a &mdash; brand colours, fonts, logo path</li>
     <li>SQL 7b/7c &mdash; all article bodies (blocks marked &ldquo;nog op te halen&rdquo;)</li>
     <li>SQL 7f/7g &mdash; events + gallery images</li>
-    <li>Logo files, all photos (scan first), homepage slider set</li>
+    <li>Mega-menu skin CSS (<code>custom-124.css</code>) + heading font-sizes</li>
+    <li>Real homepage slider image set + banner shape (Wayback)</li>
     <li>Drop the &ldquo;Joomla!&rdquo; footer line on the new build; replace the &ldquo;/at/&rdquo; email with a form</li>
   </ul>
 </aside>
@@ -754,30 +753,17 @@
         }
       });
       closeMenus();
+      if (document.activeElement && document.activeElement.blur) { document.activeElement.blur(); }
       window.scrollTo(0, 0);
     }
 
+    // Parent items (Koren, Workshop/les) are plain links → navigate to their landing.
+    // The dropdowns open on hover / keyboard focus via CSS only.
     document.querySelectorAll('[data-page]').forEach(function (a) {
       a.addEventListener('click', function (e) {
         e.preventDefault();
         show(a.getAttribute('data-page'));
       });
-    });
-
-    subs.forEach(function (s) {
-      var btn = s.querySelector('button.nav-link');
-      btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var isOpen = s.classList.contains('open');
-        closeMenus();
-        if (!isOpen) { s.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
-      });
-    });
-    document.addEventListener('click', function (e) {
-      if (!e.target.closest('.has-sub')) { closeMenus(); }
-    });
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') { closeMenus(); }
     });
 
     var sBtn = document.getElementById('specsBtn');
