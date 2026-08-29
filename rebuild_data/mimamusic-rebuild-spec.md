@@ -349,11 +349,24 @@ we hebben samen wel veel plezier gehad." + link to
 | 20 | Arrangeren | arrangeren-2 | -2 (skip) |
 
 ### Workshops  (category `Workshops`, nav “workshop/les”)
-| id | title | alias | state |
+From live `/index.php/workshops-en-les` 2026‑08‑29 — category blog:
+| id | title | alias | role |
 |---|---|---|---|
-| 9 | Muzikale ondersteuning | *(fetch body)* | 1 (nav child) |
-| 32 | Workshopmogelijkheden | *(fetch body)* | 1 (nav child) |
-| *(other rows beyond first 25 — fetch)* | | | |
+| 9 | Muzikale ondersteuning | muzikale-ondersteuning | **leading** — heading + one paragraph, no photo; nav child |
+| 40 | Jamulus | 40-jamulus | teaser only (no menu item); `2020-12-jamulus.png` 274×234 |
+| 32 | Workshopmogelijkheden | workshopmogelijkheden | teaser + nav child; `boomwhackers_1c.jpg` 303×225 |
+| 31 | *(third teaser — body not yet pulled)* | | teaser |
+
+*Leading body:* "Sinds 1988 ben ik al bezig met muziekonderwijs… Heb je een vraag?
+neem even contact op met info@mimamusic.nl" (email cloaked in the live HTML).
+
+**Prototype (2026‑08‑29):** the `workshop/les` **landing** (`#page-workshop`) =
+the *Muzikale ondersteuning* leading article only — heading (`is-red`) + the one
+paragraph, mailto link, **no photo, no teasers** (per D14, matches the rendered
+live page in the owner's screenshot). Was a placeholder + choir‑list + a
+jamulus photo; all removed. `2020-12-jamulus.png` now unused.
+Sub‑pages `#page-ondersteuning` (same text, `is-dim` title) and
+`#page-workshopmog` unchanged.
 
 ### Contact  (category `Contact`)
 | id | title | alias | state | note |

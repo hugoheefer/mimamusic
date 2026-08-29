@@ -206,14 +206,8 @@ def build():
         + ph("Wilma_fluitist_1986.jpg", "Wilma als fluitiste, 1986", "ph-side")
         + '\n      <p class="pending">Artikel-id&nbsp;11 (&ldquo;de fluitist&rdquo;). Tekst nog op te halen.</p>\n    </article>', 1)
 
-    # workshop/les landing
-    h = h.replace('<section class="page" id="page-workshop" data-owner="workshop" hidden>',
-                  '<section class="page clearfix" id="page-workshop" data-owner="workshop" hidden>', 1)
-    h = h.replace(
-        '    <h2 class="page-title is-dim">workshop/les</h2>\n    <div class="prose">\n      <p class="pending">Sectie-intro.',
-        '    <h2 class="page-title is-dim">workshop/les</h2>\n    <div class="prose">\n      '
-        + ph("2020-12-jamulus.png", "Online lesgeven via Jamulus en Zoom", "ph-side")
-        + '\n      <p class="pending">Sectie-intro.', 1)
+    # workshop/les landing = the "Muzikale ondersteuning" leading article only
+    # (heading + one paragraph, no photo, no teasers — matches the rendered live page)
 
     # Workshopmogelijkheden
     h = h.replace('<div class="ph ph-side">foto (gekleurde stiften) &rarr; origineel van Wilma</div>',
