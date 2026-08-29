@@ -288,7 +288,22 @@ ratios preserved, no cropping). Photos:
 placeholder choir‑list `<ul>` was removed.
 
 ### Onderwijs  (category `Onderwijs`)
-- Articles are beyond the first 25 rows of the recon — **bodies still to fetch** (see §7).
+Category blog, pulled from live `/index.php/onderwijs` 2026‑08‑29:
+| id | title | alias | role |
+|---|---|---|---|
+| 17 | Onderwijs | 17-onderwijs | **leading** — intro + 3‑photo row |
+| 7 | Bs Emmaus | 7-bs-emmaus | cols‑2 teaser (text + `Emmaus1.jpg` float‑left, link to school site) |
+
+*Leading body:* "De studie Docent Muziek heb ik aan de Fontys in Tilburg gedaan…
+Als je dat plezier kunt ervaren dan brengt dat je veel rijkdom."
+
+*3‑photo row* (live dims): `2014-10-08_Bieb_Heyhoef3.jpg` (203×154) ·
+`2012-11-06__De_Bron_leslokaal.jpg` (274×155) · `djembe_60.jpg` (233×156 native).
+
+**Prototype (2026‑08‑29):** landing = `Onderwijs` heading (`is-red`) + paragraph
++ shared `.photo-band` row (same equal‑height / full‑menu‑bar‑width treatment as
+Koren). Bs Emmaus teaser **not yet added**. Whether the category holds more than
+these two (trashed/unpublished) is still open — see §7 query (h).
 
 ### Dwarsfluit  (category `dwarsfluit`)
 | id | title | alias | state |
@@ -411,6 +426,18 @@ ORDER BY d.dtstart DESC;
 -- (g) Photo galleries + image counts, then image filenames per gallery
 SELECT cid, name, description, parent_id FROM `mm_joomgallery_catg` ORDER BY parent_id, ordering;
 SELECT id, catid, imgtitle, imgfilename, imgdate, published FROM `mm_joomgallery` ORDER BY catid, ordering;
+
+-- (h) EVERY article in a category incl. trashed/unpublished, with body + images.
+--     Answers "does 'Onderwijs' hold more than the 2 live articles?"
+--     Swap 'Onderwijs' for any category alias (Koren, dwarsfluit, workshops-en-les, ...).
+SELECT c.id, c.title, c.alias, c.state,          -- state: 1=published 0=unpublished 2=archived -2=trashed
+       c.created, c.modified, c.featured, c.ordering,
+       LENGTH(c.introtext) AS introtext_len, LENGTH(c.`fulltext`) AS fulltext_len,
+       c.images, c.introtext, c.`fulltext`
+FROM `mm_content` c
+JOIN `mm_categories` cat ON cat.id = c.catid
+WHERE cat.path = 'Onderwijs' OR cat.alias = 'onderwijs'
+ORDER BY c.state DESC, c.ordering;
 ```
 
 ### Non‑DB assets to capture

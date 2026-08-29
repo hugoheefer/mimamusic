@@ -66,6 +66,20 @@ def ph(fname, alt, extra=""):
             % (cls, datauri(fname), alt))
 
 
+def band(items):
+    """Shared photo-row used on every section landing (Koren, Onderwijs, ...).
+    items: (filename, alt, native_w, native_h). Each photo's flex-grow is its
+    aspect ratio and aspect-ratio is locked, so the whole row spans the menu-bar
+    width at one common height, native proportions, no cropping."""
+    rows = ['<div class="photo-band">']
+    for fn, alt, w, h in items:
+        rows.append(
+            '        <div class="ph band-photo has-img" style="flex: %.3f 1 0; aspect-ratio: %d / %d;">'
+            '<img src="%s" alt="%s" loading="lazy" /></div>' % (w / h, w, h, datauri(fn), alt))
+    rows.append('      </div>')
+    return "\n".join(rows)
+
+
 def build():
     with open(SRC_FILE, "r", encoding="utf-8") as f:
         h = f.read()
@@ -115,18 +129,15 @@ def build():
   .badge-img { width: 84px; height: 84px; margin-top: 22px; display: block; }
   @media (max-width: 760px) { .ph-lead { float: none; width: 100%; max-width: 340px; margin: 0 0 16px; } }
 
-  /* koren landing — photo row: native ratios, one common height, whole row spans
-     the menu-bar width (like the homepage band). flex-grow ∝ each photo's aspect
-     ratio, aspect-ratio locked → equal heights, no cropping, full width. */
-  .koren-band { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 10px; margin: 24px 0 4px; width: 100%; }
-  .koren-band .koren-photo { min-width: 0; padding: 0; border: 0; background: none; overflow: hidden; }
-  .koren-band .koren-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .koren-band .kb-1 { flex: 0.665 1 0; aspect-ratio: 105 / 158; }
-  .koren-band .kb-2 { flex: 1.503 1 0; aspect-ratio: 236 / 157; }
-  .koren-band .kb-3 { flex: 1.013 1 0; aspect-ratio: 160 / 158; }
-  .koren-band .kb-4 { flex: 1.333 1 0; aspect-ratio: 212 / 159; }
+  /* shared section-landing photo row (Koren, Onderwijs, ...): native ratios,
+     one common height, whole row spans the menu-bar width. flex-grow ∝ each
+     photo's aspect ratio (set inline), aspect-ratio locked → equal heights,
+     no cropping, full width. Same treatment as the homepage band. */
+  .photo-band { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 10px; margin: 24px 0 4px; width: 100%; }
+  .photo-band .band-photo { min-width: 0; padding: 0; border: 0; background: none; overflow: hidden; }
+  .photo-band .band-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
   @media (max-width: 620px) {
-    .koren-band .koren-photo { flex: 1 1 calc(50% - 5px); }
+    .photo-band .band-photo { flex: 1 1 calc(50% - 5px) !important; }
   }
 """
     h = h.replace(
@@ -141,14 +152,13 @@ def build():
     h = h.replace('<div class="ph home-fig-dwf">[home-foto: dwarsfluit]</div>',
                   ph("Wilma_fluitist_1986.jpg", "Wilma als fluitiste, 1986", "home-figure home-figure--dwf"), 1)
 
-    # koren landing — "Koordirigent" intro + 4-photo band, native ratios, ~158px tall, left-aligned
-    koren_band = [("2010-kerst__dirigent_wilma_in_de_sneeuw.jpg", "Wilma dirigeert in de sneeuw, kerst 2010", "kb-1"),
-                  ("2015-09-23_GGK_40.png", "Gestels Gemengd Koor, 2015", "kb-2"),
-                  ("Wilma_vleermuis_2022.jpg", "Wilma dirigeert, 2022", "kb-3"),
-                  ("Wilma_2024.jpg", "Wilma, 2024", "kb-4")]
-    for i, (fn, alt, cls) in enumerate(koren_band, 1):
-        h = h.replace('<div class="ph %s">[koor-foto %d]</div>' % (cls, i),
-                      ph(fn, alt, "koren-photo " + cls), 1)
+    # koren landing — "Koordirigent" intro + 4-photo band
+    h = h.replace('<!--BAND:koren-->', band([
+        ("2010-kerst__dirigent_wilma_in_de_sneeuw.jpg", "Wilma dirigeert in de sneeuw, kerst 2010", 105, 158),
+        ("2015-09-23_GGK_40.png", "Gestels Gemengd Koor, 2015", 236, 157),
+        ("Wilma_vleermuis_2022.jpg", "Wilma dirigeert, 2022", 160, 158),
+        ("Wilma_2024.jpg", "Wilma, 2024", 212, 159),
+    ]), 1)
 
     # Spirit
     h = h.replace(
@@ -166,12 +176,12 @@ def build():
     h = h.replace('<div class="ph ph-logo">logo Popkoor MIKS &rarr; origineel</div>',
                   ph("MIKS_logo.png", "Popkoor MIKS", "ph-logo contain"), 1)
 
-    # Onderwijs
-    h = h.replace(
-        '      <div class="photo-row">\n        <div class="ph">foto &rarr; origineel van Wilma</div>\n        <div class="ph">foto &rarr; origineel van Wilma</div>\n        <div class="ph">foto &rarr; origineel van Wilma</div>\n      </div>',
-        '      <div class="photo-row">\n        ' + ph("2014-10-08_Bieb_Heyhoef3.jpg", "Muziekworkshop in de bibliotheek")
-        + '\n        ' + ph("2012-11-06__De_Bron_leslokaal.jpg", "Leslokaal met keyboards")
-        + '\n        ' + ph("djembe_60.jpg", "Djembeworkshop op het schoolplein") + '\n      </div>', 1)
+    # Onderwijs landing — intro + 3-photo band (live dims 203x154 / 274x155; djembe native 233x156)
+    h = h.replace('<!--BAND:onderwijs-->', band([
+        ("2014-10-08_Bieb_Heyhoef3.jpg", "Muziekworkshop in de bibliotheek, 2014", 203, 154),
+        ("2012-11-06__De_Bron_leslokaal.jpg", "Leslokaal met keyboards, De Bron", 274, 155),
+        ("djembe_60.jpg", "Djembeworkshop op het schoolplein", 233, 156),
+    ]), 1)
 
     # Dwarsfluit / de fluitist
     h = h.replace(
