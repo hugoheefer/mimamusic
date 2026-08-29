@@ -14,65 +14,103 @@ final platform TBD, see §14/§15), without needing access to the compromised Jo
 
 ## 0. Prototype status  (living — update on every prototype change)
 
-**Prototype:** `website/` in this repo — `mimamusic-reference.src.html` (edit) →
-`build_images.py` → `mimamusic-reference.html` (published Artifact:
-https://claude.ai/code/artifact/fcf1a98b-ad3e-460c-9f94-3b4a51c561fd).
-Reference inputs (this spec + `screenshots old site/`) live in `rebuild_data/`.
+**Prototype:** `website/` in this repo — edit `mimamusic-reference.src.html`,
+run `build_images.py` → `mimamusic-reference.html` (+ repo `docs/index.html`).
+Published Artifact: **https://claude.ai/code/artifact/bea26d35-ff4c-45c7-bad8-65419f9e0835**
+(kept in sync via a scratch mirror). Reference inputs (this spec +
+`screenshots old site/`) live in `rebuild_data/`.
 
-### Done
-- Visual shell matched to the live `template.css`: all‑black GK5 "Theatre" look,
-  **1200px centred container** (menu / page titles / footer all align to its
-  left edge), grey mega‑menu bar, **two full‑width divider rules** (above the
-  menu, above the footer), circular MIMA footer badge (real logo image).
-- **Real fonts** wired in: logo + grey headings = **Henny Penny**; red headings =
-  **Fredericka the Great** (`#cb4752`); body = **Gabriela** serif. (Prototype had
-  a single "Berkshire Swash" stand‑in before — now replaced.)
-- Full nav + every section built, incl. **Koren** and **workshop/les** landing
-  pages, **Dwarsfluit** as 4 articles, **Arrangeren** + "Arrangementen" block,
-  archived **Koor Voluum**, **Privacy** page (footer‑linked only). Parent menu
-  items link to their landing; dropdowns list only the children.
-- **Home** = 3 blocks (Dirigeren / Onderwijs / Dwarsfluit), each heading + 2 lines
-  + one still photo. **No carousel** (SQL 7b confirmed: the Swiper is old/trashed).
-  Text + photos + placement all from `mm_content` ids 21/16/15 — see §4 Home. Done.
-- **Agenda** = static repro of the JEvents month grid (Aug 2026).
-- **Photos:** all 20 images from `mimamusic.nl/images/` downloaded to
-  `website/images/` (full‑res) + `website/images/web/` (shrunk, ≤1000px q72),
-  wired in where they map to the old pages — inventory below.
+### Done — visual shell
+- All‑black GK5 "Theatre" look from the live `template.css`: **1200px centred
+  container** (logo / menu / page titles / footer all align to its left inner
+  edge), grey mega‑menu bar, **two full‑width divider rules** (above the menu,
+  above the footer), circular MiMaMusic footer badge (real logo image).
+- **Fonts** (from `template.css` + a pasted live DOM):
+  - logo wordmark = **Henny Penny** (styled text, not an image)
+  - section titles (`.page-title`, `.teaser-title`) = **Gabriela serif, 20px /
+    1.5, weight 400** — `#cb4752` for linked/category titles (`.is-red`),
+    `#6f6f6f` for sub‑page titles (`.is-dim`; live is `#333`, near‑invisible —
+    flag for owner). (D4)
+  - body = **Arial, Helvetica, sans‑serif — 14px / line‑height 20px**, colour
+    `#989898`; `<strong>` in body copy = `#cb4752`. (D2)
+  - Fredericka the Great and the old "Berkshire Swash" stand‑in are gone.
+- **Vertical rhythm** matched to live: `.page` padding‑bottom 69px, footer
+  `.foot-inner` padding‑top 49px, `.badge-img` margin‑top 0, **no
+  `main { min-height }`**, paragraph spacing `.prose p` / `.teaser p`
+  margin‑bottom 20px. (D13)
+- **Footer** = the badge on every page; **on the home page only**, a
+  `Copyright © <year> MimaMusic. All Rights Reserved.` line **below** the badge
+  (year auto‑set by a 1‑line script). No Privacy link, no Joomla line.
+  `#page-privacy` still in the markup but unlinked. (D11)
+- Nav: parent items (Koren, workshop/les) link to their landing; dropdowns list
+  **only** the children, no bullets. (D6)
+
+### Done — content (page by page, from live fetch + DB query (h))
+- **Home** — 3 columns (`space-between`) Dirigeren / Onderwijs / Dwarsfluit,
+  each: heading → one flowing paragraph (capped to its photo's width) → one
+  photo (240px tall; Onderwijs kept native 16:9). No carousel. Text from
+  `mm_content` 21/16/15 — the minimal tagline version **is** the live design;
+  the fuller 2017 copy is an abandoned older design. (§4 Home, D7/D12)
+- **Koren landing** — *Koordirigent* heading + paragraph + 4‑photo band **only**.
+  No choir teasers (live rendered page shows none — D14). Choir content is on
+  the sub‑pages via the KOREN dropdown.
+- **Onderwijs landing** — heading + paragraph + 3‑photo band + **Bs Emmaus
+  teaser** (kept, pending owner review). Category = 5 articles, 3 trashed.
+- **workshop/les landing** — the *Muzikale ondersteuning* leading article only
+  (heading + one paragraph + mailto). No teasers.
+- **Contact** — the live *"over mij,"* article; inline styling matched
+  (MiMaMusic 18pt white + red‑italic, name `#9a2d2d`, "of bellen" white 10pt,
+  phone `#ce3939` 14pt). Portrait kept as the prototype's `.ph-portrait`
+  (244×264 — owner prefers it to the original). (§4 Contact)
+- **Agenda** — static repro of the JEvents month grid + a reader‑facing line
+  ("…op dit moment geen activiteiten gepland…"). Live grid is empty.
+- **Dwarsfluit / Arrangeren / Privacy** — sections built; bodies still
+  placeholder (see pending).
+- **Sub‑pages** `page-spirit / -singin / -miks / -voluum` — real bodies are in
+  hand from query (h) but **not yet pasted in** (still placeholder).
+- **Photos:** all 20 files from `mimamusic.nl/images/` in `website/images/`
+  (full‑res) + `images/web/` (shrunk ≤1000px q72). Baked as data‑URIs by
+  `build_images.py`. Inventory below.
+
+### Hosting
+- **GitHub Pages** (`master` `/docs`) tried 2026‑08‑29, then repo set back to
+  private → paused. `docs/index.html` + `.nojekyll` stay in the repo,
+  `build_images.py` keeps regenerating them. Platform choice open — §14 / §15.
 
 ### Still pending
-- **SQL 7a** — real brand colours + `googleFont` (prototype uses guessed
-  `#e42a1a` + "Berkshire Swash" as the script face).
-- **SQL 7b/7c** — bodies for every block still marked *"nog op te halen"*:
-  Homepage 1/2/3, Koordirigent, Onderwijs, Dwarsfluitles, Blokfluitles, de
-  fluitist, Muzikale ondersteuning, Workshopmogelijkheden intro, Arrangementen,
-  Koor Voluum, Privacy.
-- **SQL 7f** — events. **SQL 7g** — gallery images.
-- Header wordmark is styled text (the real one is template‑font text, not an asset).
-- Koor Voluum has no photo of its own.
+- **Sub‑page bodies** (text already pulled via query (h) — just needs pasting):
+  Spirit, Singin'Gestel, Popkoor MIKS, Koor Voluum.
+- **Bodies still to pull** (query (h) per category): **Dwarsfluit**
+  (Dwarsfluitles id 33, Blokfluitles id 10, de fluitist id 11, Geschiedenis),
+  **Arrangeren** (Arrangeren + Arrangementen), **Workshopmogelijkheden** full
+  body, **Privacy**.
+- **SQL 7f** events — grid confirmed empty; agenda mechanism = open owner
+  decision. **SQL 7g** gallery images (JoomGallery) — not exported.
+- Module `92` (`{loadmoduleid 92}` in each home heading) — what is it? (query d)
+- Owner review items: black look vs lighter; `#6f6f6f` vs live `#333` sub‑page
+  titles; Bs Emmaus teaser; proofread transcribed copy.
 
-### Image inventory  (`website/images/` — filename → use in prototype)
+### Image inventory  (`website/images/` — filename → current use; sizes = display)
 | file | used on |
 |---|---|
-| `MIMAmusic_LOGO2-4.png` | footer badge (circular MIMA·Music) |
-| `2017-12b.jpg` | **home block "Dirigeren"** (id 21, float left 249×275) — Wilma conducting, 2017 |
-| `Wilma_fluitist_1986.jpg` | **home block "Dwarsfluit"** (id 15, 222×290) + Dwarsfluit page "de fluitist" (B&W, flute, 1986) |
-| `2012-11-06__De_Bron_leslokaal_4.jpg` | **home block "Onderwijs"** (id 16, 321×180) — wide music‑room |
-| `2012-11-06__De_Bron_leslokaal.jpg` | Onderwijs row — keyboard classroom |
-| `2014-10-08_Bieb_Heyhoef3.jpg` | Onderwijs row — library workshop |
-| `djembe_60.jpg` | Onderwijs row — djembé circle |
-| `2010-kerst__dirigent_wilma_in_de_sneeuw.jpg` | Koren landing — lead image |
-| `_DSC8853.jpg` | Spirit — teal robes |
-| `spirit_3.jpg` | Spirit — red/blue scarves |
-| `2024-05_met_kinderen.jpg` | Singin'Gestel — church, green |
-| `2024-03-20.jpg` | Singin'Gestel — blue steps, hands up |
-| `MIKS_logo.png` | Popkoor MIKS logo |
-| `boomwhackers_1c.jpg` | Workshopmogelijkheden — side image |
-| `2020-12-jamulus.png` | workshop/les landing — side image (headset) |
+| `MIMAmusic_LOGO2-4.png` | footer badge |
+| `2017-12b.jpg` | home "Dirigeren" (270px band) |
+| `2012-11-06__De_Bron_leslokaal_4.jpg` | home "Onderwijs" (427px, native 16:9) |
+| `Wilma_fluitist_1986.jpg` | home "Dwarsfluit" (270px) + Dwarsfluit "de fluitist" |
+| `2010-kerst__dirigent_wilma_in_de_sneeuw.jpg` | Koordirigent band (1/4) |
+| `2015-09-23_GGK_40.png` | Koordirigent band (2/4) |
+| `Wilma_vleermuis_2022.jpg` | Koordirigent band (3/4) |
+| `Wilma_2024.jpg` | Koordirigent band (4/4) |
+| `2014-10-08_Bieb_Heyhoef3.jpg` | Onderwijs band (1/3) |
+| `2012-11-06__De_Bron_leslokaal.jpg` | Onderwijs band (2/3) |
+| `djembe_60.jpg` | Onderwijs band (3/3) |
+| `Emmaus1.jpg` | Onderwijs — Bs Emmaus teaser |
 | `2020-06-28_Wilma.jpg` | Contact — portrait |
-| `2015-09-23_GGK_40.png` | *unused* — old GGK photo |
-| `Wilma_2024.jpg` | *unused* |
-| `Wilma_vleermuis_2022.jpg` | *unused* |
-| `Emmaus1.jpg` | *unused* — school photo |
+| `boomwhackers_1c.jpg` | Workshopmogelijkheden sub‑page — side image |
+| `_DSC8853.jpg`, `spirit_3.jpg` | reserved — Spirit sub‑page (teasers off Koren landing) |
+| `2024-05_met_kinderen.jpg`, `2024-03-20.jpg` | reserved — Singin'Gestel sub‑page |
+| `MIKS_logo.png` | reserved — Popkoor MIKS sub‑page |
+| `2020-12-jamulus.png` | *unused* (was workshop landing, now stripped) |
 
 ---
 
@@ -559,7 +597,7 @@ ORDER BY c.state DESC, c.ordering;
 | D8 | Footer badge = real `MIMAmusic_LOGO2-4.png` | Actual asset | Keep |
 | D9 | Dropped the "Joomla!" footer line | No Joomla cruft on the rebuild | — |
 | D10 | Transcribed copy keeps original quirks ("2017 .", "Dat  was", "Sind 2014") | Faithful until owner proofreads | Owner proofread pass |
-| D11 | **Footer stripped to just the circular MiMaMusic badge** (owner req. 2026‑08‑29): removed the "Privacy" link, the "Copyright © 2026…" line and the "Joomla! is Free Software…" line from every page. `.foot-nav`/`.copyright` CSS deleted. `#page-privacy` section still in the markup but now unlinked. | Owner wants a clean footer | Decide what (if anything) the real footer carries — Privacy link, contact, social — see §Footer |
+| D11 | **Footer** (owner, 2026‑08‑29, evolved): first stripped to just the circular MiMaMusic badge (dropped the "Privacy" link and the "Joomla! is Free Software…" line for good). Then the owner asked for `Copyright © <year> MimaMusic. All Rights Reserved.` back — **home page only**, **below** the badge — with the year auto‑set (`document.getElementById('cur-year').textContent = new Date().getFullYear()`, toggled by `show()`). `.foot-nav` CSS gone; `.copyright` re‑added (`12px #8f8f8f`). `#page-privacy` still in the markup but unlinked. | Owner iterated on it | Owner: confirm home‑only + below‑badge placement; decide if other pages need any footer link |
 | D12 | **One text measure everywhere.** The original renders the same article at two widths — full (`col-sm-12`) on its own page, half (`cols-2`/`col-sm-6`) as a category‑blog teaser. Prototype drops that split: all content text (leading, teaser, sub‑page) flows at the shared `--measure` (~1170px, menu‑bar width); teaser blocks are full‑width stacked, not `cols-2`. | Owner pointed at the full‑width version; also serves "all pages breathe the same look" | Keep |
 | D14 | **Section landings = leading article only** (owner, 2026‑08‑29, from the live rendered Koren page). Koren landing shows just Koordirigent + text + 4 photos; the choir teasers were removed. Per‑choir content lives on its own sub‑page via the dropdown. Onderwijs/Bs Emmaus teaser kept pending owner review. Supersedes the earlier "match the original cols‑2 teasers". | Live rendered page shows no teasers; broken‑JS site isn't a reliable visual ref, owner's call is | Confirm Bs Emmaus with owner |
 | D13 | **Vertical rhythm matched to live `template.css`, via the shared rules** (so every page moves together): `.page { padding-bottom: 69px }` (= live `#content { padding-bottom:69px }`, was 96); `.foot-inner { padding: 49px … 40px }` + `.badge-img { margin-top:0 }` (= live `.footer-wrapper-inner { padding-top:49px }`, was 40+22); **removed `main { min-height: 76vh }`** — that was stretching `<main>` on short pages (Singin'Gestel, MIKS, Spirit, Voluum) so the footer divider sat far below the content. Live site has no such rule; footer now sits directly under the content, black fills the rest of the viewport. **Paragraph spacing** `.prose p` / `.teaser p` `margin-bottom` 10 → **20px** (= live `p { margin:0; padding:0 0 20px }`) — site‑wide, one knob. | Owner: match the original's spacing | Keep |

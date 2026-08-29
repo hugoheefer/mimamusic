@@ -254,6 +254,7 @@
   /* ---------- footer ---------- */
   .site-footer { border-top: 1px solid var(--divider); }   /* divider line 2 (full width) */
   .foot-inner { max-width: var(--container); margin: 0 auto; padding: 49px var(--pad) 40px; }   /* pad-top = live .footer-wrapper-inner { padding-top:49px } */
+  .copyright { margin: 16px 0 0; font-size: 12px; color: #8f8f8f; }   /* below the badge, home page only */
   .badge {
     width: 80px; height: 80px; border-radius: 50%;
     border: 2px solid var(--accent);
@@ -645,6 +646,7 @@
 <footer class="site-footer">
   <div class="foot-inner">
     <div class="badge" aria-hidden="true"><b>MIMA</b><span>Music</span></div>
+    <p class="copyright">Copyright &copy; <span id="cur-year">2026</span> MimaMusic. All Rights Reserved.</p>
   </div>
 </footer>
 
@@ -731,6 +733,8 @@
           else { link.removeAttribute('aria-current'); }
         }
       });
+      var cr = document.querySelector('.site-footer .copyright');
+      if (cr) { cr.hidden = (pageId !== 'home'); }
       closeMenus();
       if (document.activeElement && document.activeElement.blur) { document.activeElement.blur(); }
       window.scrollTo(0, 0);
@@ -754,5 +758,9 @@
     });
 
     show('home');
+
+    // keep the footer copyright year current
+    var cy = document.getElementById('cur-year');
+    if (cy) { cy.textContent = new Date().getFullYear(); }
   })();
 </script>

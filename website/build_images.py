@@ -103,7 +103,7 @@ def build():
      Stacks below 768px. */
   #page-home .home-cols { display: flex; flex-wrap: wrap; justify-content: space-between; }
   #page-home .home-col { flex: 0 0 auto; }
-  #page-home .home-col > .page-title:first-child { font-size: clamp(22px, 2.4vw, 27px); margin: 0 0 14px; }
+  #page-home .home-col > .page-title:first-child { margin: 0 0 14px; }   /* size = base .page-title (20px), like every other page */
   #page-home .home-col p { margin: 0 0 16px; min-height: 80px; }
   #page-home .home-figure { height: 240px; }
   /* per-column width shared by text + photo. Onderwijs keeps its native 16:9
@@ -118,7 +118,6 @@ def build():
     #page-home .home-cols { flex-direction: column; flex-wrap: nowrap; }
     #page-home .home-col { margin-bottom: 34px; }
     #page-home .home-col p { min-height: 0; }
-    #page-home .home-col > .page-title:first-child { font-size: clamp(22px, 5.5vw, 27px); }
     #page-home .hc-dir p, #page-home .hc-ond p, #page-home .hc-dwf p,
     #page-home .hc-dir .home-figure, #page-home .hc-ond .home-figure, #page-home .hc-dwf .home-figure { width: 100%; max-width: 440px; }
     #page-home .home-figure { height: auto; }
@@ -144,7 +143,7 @@ def build():
      (text spans the menu-bar measure, same as every other page) */
   .teaser-grid { display: flex; flex-direction: column; gap: 54px; margin-top: 54px; }
   .teaser { min-width: 0; }
-  .teaser-title { font-family: var(--font-title); color: var(--title-red); font-size: 19px; font-weight: 400; line-height: 1.3; margin: 0 0 12px; }
+  .teaser-title { font: 400 20px/1.5 "Gabriela", Georgia, serif; color: var(--title-red); margin: 0 0 12px; }   /* same as .page-title */
   .teaser-title a { color: inherit; text-decoration: none; }
   .teaser-title a:hover { text-decoration: underline; }
   .teaser p { margin: 0 0 20px; }   /* match .prose p (live: p padding-bottom 20px) */
