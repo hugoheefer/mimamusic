@@ -1,7 +1,17 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
+import { EleventyHtmlBasePlugin } from "@11ty/eleventy";
 import Image from "@11ty/eleventy-img";
 import MarkdownIt from "markdown-it";
+
+/*
+ * Where the site is served from:
+ *   - local dev / a custom domain (mimamusic.nl at the root):  "/"
+ *   - GitHub Pages project site (hugoheefer.github.io/mimamusic/):  "/mimamusic/"
+ * The deploy workflow sets PATH_PREFIX=/mimamusic/. EleventyHtmlBasePlugin
+ * rewrites every root-relative href/src/srcset in the output HTML to match.
+ */
+const PATH_PREFIX = process.env.PATH_PREFIX || "/";
 
 /*
  * MiMaMusic site build.
@@ -143,6 +153,7 @@ function calendarShortcode(entries = []) {
 
 export default function (eleventyConfig) {
   eleventyConfig.setLibrary("md", md);
+  eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
 
   eleventyConfig.addFilter("md", (s) => (s ? md.render(String(s)) : ""));
   eleventyConfig.addFilter("mdInline", (s) => (s ? md.renderInline(String(s)) : ""));
@@ -171,6 +182,7 @@ export default function (eleventyConfig) {
 
   return {
     dir: { input: "src", includes: "_includes", data: "_data", output: "_site" },
+    pathPrefix: PATH_PREFIX,
     templateFormats: ["njk", "md"],
     markdownTemplateEngine: false, // content bodies are plain Markdown — never run template syntax on them
     htmlTemplateEngine: "njk",

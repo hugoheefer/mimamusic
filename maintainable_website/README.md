@@ -111,8 +111,20 @@ the layout or the build.
    writes the `CNAME` file for you; `deploy/CNAME` is a reference copy). At the
    DNS host: 4 `A` records to GitHub's Pages IPs for the apex + a `CNAME` for
    `www`. **Leave the `MX` records alone** — `@mimamusic.nl` mail is unaffected.
+   Then in the workflow set `PATH_PREFIX: /` (or delete that `env:` line) — see
+   *Path prefix* below — and let it redeploy.
 5. Connect the repo at **app.pagescms.org** and hand the owner the one-page
    runbook above.
+
+### Path prefix
+
+A GitHub Pages **project site** is served from `…github.io/<repo>/`, not the
+domain root, so every root-relative URL (`/assets/…`, `/koren/`) would 404.
+`eleventy.config.js` reads `PATH_PREFIX` (default `/`) and `EleventyHtmlBasePlugin`
+rewrites every `href`/`src`/`srcset` in the output HTML to match. The deploy
+workflow sets `PATH_PREFIX: /mimamusic/`. Once `mimamusic.nl` is attached (served
+at root), set it back to `/`. Local dev and the eventual custom domain both use
+the `/` default.
 
 ### Redirects
 

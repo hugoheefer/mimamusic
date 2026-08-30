@@ -45,6 +45,11 @@ jobs:
           cache-dependency-path: maintainable_website/package-lock.json
       - run: npm ci
       - run: npm run build
+        env:
+          # Project site is served from hugoheefer.github.io/<repo>/ , so the
+          # build must prefix every root-relative URL. Set this to "/" (or delete
+          # it) once mimamusic.nl is attached as a custom domain (served at root).
+          PATH_PREFIX: /mimamusic/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
