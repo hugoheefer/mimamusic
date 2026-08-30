@@ -210,7 +210,8 @@ automatically after every save. To download that built version:
      elsewhere.
 5. Click **site-portable**, a `site-portable.zip` downloads. **Unzip it** — inside
    is the complete website as plain HTML, CSS and image files. Double-click
-   `index.html` to view it.
+   `index.html` to open it; every menu link and page works from there, no server
+   needed.
 
 Each run keeps both copies for **90 days**. If you'd rather not use GitHub at all,
 a free tool such as **HTTrack** (Windows) aimed at the live web address downloads

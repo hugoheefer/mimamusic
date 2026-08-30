@@ -138,10 +138,12 @@ at root), set it back to `/`. Local dev and the eventual custom domain both use
 the `/` default.
 
 **Portable build:** `npm run build:portable` (`RELATIVE_URLS=1`) instead rewrites
-every link to be **document-relative** (`../assets/…`) via an `addTransform`. That
-`_site/` runs from anywhere with no server config — opened as `file://`, or
-dropped into any web server's webroot **or** a subfolder. It's a hand-off copy,
-not what the workflow deploys.
+every link to be **document-relative** (`../assets/…`) and points each page link
+at its real `…/index.html` file (so it also works under `file://`, which has no
+directory index). That `_site/` runs from anywhere with no server config — opened
+straight from a folder, or served from any web server's root **or** a subfolder
+(URLs just show the explicit `index.html`). It's a hand-off copy, not what the
+workflow deploys.
 
 ### Redirects
 

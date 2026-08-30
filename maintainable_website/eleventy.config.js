@@ -220,20 +220,28 @@ export default function (eleventyConfig) {
   eleventyConfig.setLibrary("md", md);
   eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
 
-  // portable build: turn every root-relative /… link into a document-relative
-  // ../… link, so the output runs from any path (file://, any webroot, subfolder)
+  // portable build: rewrite every root-relative /… link to a document-relative
+  // path, and point directory links (…/ ) at the real …/index.html file. The
+  // result runs from anywhere — opened as file://, or served from any web
+  // server's root or a subfolder (URLs just show the explicit index.html).
   if (RELATIVE_URLS) {
     eleventyConfig.addTransform("relativeUrls", function (content) {
+      if (!String(this.page.outputPath || "").endsWith(".html")) return content;
       const url = this.page.url || "/";
       const segs = url.split("/").filter(Boolean);
       const depth = url.endsWith("/") ? segs.length : Math.max(segs.length - 1, 0);
       const up = depth === 0 ? "./" : "../".repeat(depth);
-      if (!String(this.page.outputPath || "").endsWith(".html")) return content;
+      const fix = (rootRel) => {
+        let p = up + rootRel.replace(/^\//, "");
+        if (p.endsWith("/")) p += "index.html"; // file:// has no directory index
+        return p;
+      };
       return content
-        .replace(/\b(href|src)=("|')\/(?!\/)/g, (_m, a, q) => `${a}=${q}${up}`)
+        .replace(/\b(href|src)=("|')(\/(?!\/)[^"']*)\2/g, (_m, a, q, v) => `${a}=${q}${fix(v)}${q}`)
         .replace(
           /\bsrcset=("|')([^"']*)\1/g,
-          (_m, q, v) => `srcset=${q}${v.replace(/(^|,\s*)\/(?!\/)/g, (_x, sep) => sep + up)}${q}`
+          (_m, q, v) =>
+            `srcset=${q}${v.replace(/(^|,\s*)(\/(?!\/)[^\s,]*)/g, (_x, sep, u) => sep + fix(u))}${q}`
         );
     });
   }

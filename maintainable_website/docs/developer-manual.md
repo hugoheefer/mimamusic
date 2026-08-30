@@ -159,9 +159,11 @@ PATH_PREFIX=/mimamusic/ npm run build
 
 **Portable copy** — `npm run build:portable` (`RELATIVE_URLS=1`, cross-platform via
 `cross-env`). A `relativeUrls` transform rewrites every root-relative `href` /
-`src` / `srcset` to `../…` based on the page's depth. The resulting `_site/` runs
-from any location: `file://`, any web server's webroot, or any subfolder. Hand
-this to anyone who wants a self-contained copy of the site.
+`src` / `srcset` to `../…` based on page depth, and rewrites page (directory)
+links to their explicit `…/index.html` so they resolve without a server's
+directory-index behaviour. The resulting `_site/` runs from any location:
+double-clicked from a folder (`file://`), any web server's webroot, or any
+subfolder. Hand this to anyone who wants a self-contained copy of the site.
 
 ---
 
