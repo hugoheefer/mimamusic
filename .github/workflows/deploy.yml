@@ -37,14 +37,14 @@ jobs:
       run:
         working-directory: maintainable_website
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
           cache-dependency-path: maintainable_website/package-lock.json
       - run: npm ci
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
 
       # 1) build for GitHub Pages (served from hugoheefer.github.io/<repo>/, so
       #    every root-relative URL gets the /mimamusic/ prefix). Set PATH_PREFIX
@@ -52,11 +52,11 @@ jobs:
       - run: npm run build
         env:
           PATH_PREFIX: /mimamusic/
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: maintainable_website/_site
       # exact copy of what is deployed (links assume the /mimamusic/ path)
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: site
           path: maintainable_website/_site
@@ -66,7 +66,7 @@ jobs:
       #    any web server's webroot, any subfolder). Download this one to reuse
       #    the site elsewhere:  Actions -> a run -> Artifacts -> site-portable.
       - run: npm run build:portable
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: site-portable
           path: maintainable_website/_site
@@ -80,4 +80,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

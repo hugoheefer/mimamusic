@@ -17,7 +17,7 @@ step-by-step operational guide.
 
 ## 1. Prerequisites
 
-- **Node.js 18+** (built on 24; CI uses 22) and **npm**
+- **Node.js 20+** (developed and CI both on 24) and **npm**
 - **git**
 - A **GitHub account with admin on the repo** (for the one-time Pages/Actions setup)
 
