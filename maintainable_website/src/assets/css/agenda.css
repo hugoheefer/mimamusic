@@ -2,22 +2,27 @@
    month (see the `calendar` shortcode). Light panel on the black page, matching
    the prototype's .cal* treatment. */
 
-/* Agenda page = upcoming list on the left, month grid(s) on the right;
-   stacks below 900px. */
+/* Agenda page = upcoming list on the left half, one month grid on the right half.
+   Stacks to one column below 900px. */
 .agenda-layout {
   display: flex;
   gap: 34px;
   align-items: flex-start;
   margin-top: 4px;
 }
-.agenda-list { flex: 0 0 300px; min-width: 0; }
-.agenda-layout .cal-scroll { flex: 1 1 auto; min-width: 0; margin-top: 0; }
+.agenda-list { flex: 1 1 0; min-width: 0; }
+.agenda-layout .cal-scroll { flex: 1 1 0; min-width: 0; margin-top: 0; }
 
-/* stack once the list + a full-width month grid (720px) no longer fit side by side */
-@media (max-width: 1040px) {
+@media (max-width: 900px) {
   .agenda-layout { flex-direction: column; gap: 24px; }
   .agenda-list { flex-basis: auto; width: 100%; }
 }
+
+/* Only the browsed month is shown. Prev/next are in-page #anchors; the month
+   whose id is in the URL wins (:target), otherwise the first (current) month. */
+.cal-scroll .cal { display: none; }
+.cal-scroll .cal:target { display: block; }
+.cal-scroll:not(:has(.cal:target)) .cal:first-child { display: block; }
 
 .cal-empty { margin: 0; overflow-wrap: break-word; }
 
@@ -37,14 +42,13 @@
 
 .cal-scroll { overflow-x: auto; margin-top: 4px; }
 .cal {
-  min-width: 720px;
+  min-width: 0;
   background: var(--panel);
   color: var(--panel-ink);
   border-radius: 12px;
-  padding: 20px 22px 24px;
-  scroll-margin-top: 16px;
+  padding: 16px 18px 20px;
+  scroll-margin-top: 24px;
 }
-.cal + .cal { margin-top: 20px; }
 .cal-top { display: flex; align-items: baseline; justify-content: space-between; }
 
 .cal-nav {
@@ -58,28 +62,28 @@
 .cal-nav a:hover { text-decoration: underline; }
 .cal-month {
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 28px;
+  font-size: 23px;
   color: #7c7c7c;
   text-transform: capitalize;
 }
 
-table.cal-grid { width: 100%; border-collapse: collapse; margin-top: 12px; }
+table.cal-grid { width: 100%; border-collapse: collapse; margin-top: 12px; table-layout: fixed; }
 table.cal-grid th {
   text-align: left;
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 700;
   color: #555;
-  padding: 9px 8px;
+  padding: 7px 6px;
   border-bottom: 1px solid var(--panel-rule);
   text-transform: capitalize;
 }
 table.cal-grid th.we { color: var(--panel-mut); }
 table.cal-grid td {
-  height: 74px;
+  height: 58px;
   width: 14.28%;
   vertical-align: top;
-  padding: 5px 8px;
-  font-size: 11.5px;
+  padding: 4px 6px;
+  font-size: 11px;
   border: 1px solid var(--panel-rule);
   color: #333;
   font-variant-numeric: tabular-nums;
@@ -99,12 +103,12 @@ table.cal-grid td.mute { background: var(--panel-shade); color: #bcbcbc; }
 
 .cal-ev {
   display: block;
-  margin-top: 4px;
-  padding: 2px 5px;
+  margin-top: 3px;
+  padding: 1px 4px;
   border-left: 3px solid #bbb;
   background: #fff;
   color: #333;
-  font-size: 10.5px;
+  font-size: 9.5px;
   line-height: 1.3;
   border-radius: 2px;
   overflow: hidden;

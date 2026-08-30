@@ -158,10 +158,11 @@ Screaming Frog crawl of the live site before go-live.
   prototype's plain wrapping bar with CSS-only dropdowns (no JS, no hamburger);
   on touch the parent links reach their landing pages, which list the children.
 - Agenda: the fake JEvents mode toggles are dropped. Layout is an **"Aankomende
-  optredens" list on the left, month grid(s) on the right** (stacks < 1040px). The
-  grids are generated from `agenda.yaml` and run from the current month through
-  the month of the furthest upcoming event (cap 6), paged with in-page prev/next
-  anchors — no client JS. All auto-updates as dates pass.
+  optredens" list on the left half, one month grid on the right half** (stacks
+  < 900px). Grids are generated from `agenda.yaml` for the current month through
+  the month of the furthest upcoming event (cap 6); **one is shown at a time**,
+  browsed with in-page `‹ vorige / volgende ›` anchors via `:target` + `:has()`
+  CSS — no client JS. All auto-updates as dates pass.
 - Dwarsfluit "Dwarsfluitles" `<br>` pseudo-list → a real Markdown bullet list
   (spec D16 open question — converted for CMS cleanliness).
 - Transcribed copy keeps the original quirks verbatim ("Daarna heeft heb ik",
