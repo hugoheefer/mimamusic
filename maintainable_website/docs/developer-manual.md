@@ -99,6 +99,13 @@ workflow file). It:
 A Pages CMS "Save" is just a commit on the branch, so it triggers the same run.
 Watch runs at **repo → Actions → "Deploy site to GitHub Pages"**.
 
+`_site/` is git-ignored — the built site is never committed. Each run keeps a
+downloadable **`site`** artifact (90-day retention) via `actions/upload-artifact`;
+plus the transient `github-pages` artifact the deploy step consumes. To get the
+built files: Actions → a run → Artifacts → `site`. It's built with
+`PATH_PREFIX=/mimamusic/`; for a root-path copy run `PATH_PREFIX=/ npm run build`
+locally (§5).
+
 ---
 
 ## 4. First-time GitHub setup (what was done)

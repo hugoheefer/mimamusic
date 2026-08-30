@@ -50,6 +50,13 @@ jobs:
           # build must prefix every root-relative URL. Set this to "/" (or delete
           # it) once mimamusic.nl is attached as a custom domain (served at root).
           PATH_PREFIX: /mimamusic/
+      # Downloadable copy of the built site, kept 90 days:
+      # Actions -> a run -> "Artifacts" -> "site" -> download the zip.
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: maintainable_website/_site
+          retention-days: 90
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

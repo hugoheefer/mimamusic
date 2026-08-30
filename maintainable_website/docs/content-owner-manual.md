@@ -185,6 +185,27 @@ Refresh the page (hard refresh if needed — §4). There is nothing else to "pub
 
 ---
 
+## 8a. Getting a copy of the finished website files
+
+The editor holds the *source*; the finished, ready-to-host pages are built
+automatically on every save. To download them:
+
+1. On GitHub, open the repository → **Actions** tab.
+2. Click the most recent green run of **Deploy site to GitHub Pages**.
+3. Scroll to **Artifacts** at the bottom → click **site** → a `site.zip`
+   downloads. Unzip it — that's the whole website as plain HTML/CSS/images.
+
+Kept for 90 days per run. Notes:
+
+- These files are built for the current address
+  (`hugoheefer.github.io/mimamusic/`), so links inside them expect that path. To
+  host them somewhere else at a domain root, ask the developer to build a
+  root-path copy.
+- For a quick snapshot without GitHub, a tool like **HTTrack** (free, Windows)
+  pointed at the live site address will download exactly what's online.
+
+---
+
 ## 9. If something looks wrong
 
 - **Every change is reversible.** Nothing is ever lost.
