@@ -73,7 +73,8 @@ Down the left side, under **Content**:
 | **Contact** | The "over mij" text, the portrait photo, e-mail and phone. |
 | **Koren — subpagina's** | Spirit, Singin'Gestel, Popkoor MIKS, Koor Voluum. You can add a new one here. |
 | **Workshop/les — subpagina's** | Muzikale ondersteuning, Workshopmogelijkheden. |
-| **Agenda (komende optredens)** | The list of upcoming events. |
+| **Agenda — kop en introtekst** | The "Agenda" heading and the sentence above the calendar. |
+| **Agenda — optredens (kalender)** | The list of upcoming events shown on the page and marked on the calendar. |
 | **Privacyverklaring** | The privacy page (currently a placeholder). |
 
 Under **Media** is the photo library.
@@ -133,20 +134,25 @@ the site slower; the build automatically makes smaller versions for phones.
 
 ## 6. The Agenda
 
-1. Click **Agenda (komende optredens)**.
-2. Each entry has:
+The Agenda has **two** entries in the editor:
+
+**Agenda — kop en introtekst** — the heading and the sentence above the calendar.
+Edit the **Kop** and **Introtekst** fields, **Save**.
+
+**Agenda — optredens (kalender)** — the list of events:
+1. Each entry has:
    - **Datum** — the date.
    - **Titel** — e.g. *"Najaarsconcert Singin'Gestel"*.
    - **Soort** — `concert`, `dienst`, or `evenement` (sets the colour dot).
    - **Locatie** — optional, e.g. *"Sint-Michielsgestel"*.
-3. **Add** a new entry, or delete a past one.
-4. **Save**.
+2. **Add** a new entry, or delete a past one.
+3. **Save**.
 
-On the site, the Agenda page shows the list of upcoming events on the left and a
-month calendar on the right. The calendar automatically grows to include every
-month up to your furthest event (up to 6 months ahead), with **‹ vorige /
-volgende ›** links to page between them — so an event next month is visible both
-in the list and on its own calendar page. Nothing to configure.
+On the site, the Agenda page shows the intro text and the list of upcoming events
+on the left, and one month of the calendar on the right. The calendar covers every
+month up to your furthest event (up to 6 months ahead); **‹ vorige / volgende ›**
+switch which month is shown, in place — so an event next month appears both in the
+list and on its own calendar page. Nothing to configure.
 
 If the list is empty, the page shows *"Op dit moment staan er geen activiteiten
 gepland…"*. Past dates drop off the upcoming list on their own, but it's tidy to

@@ -194,8 +194,17 @@ content:
           - { name: alt, label: Alt-tekst, type: string }
           - { name: layout, label: Plaatsing, type: select, options: { values: [ph-side] } }
 
+  - name: agenda_intro
+    label: "Agenda — kop en introtekst"
+    type: file
+    path: maintainable_website/src/content/agenda.md
+    fields:
+      - { name: title, label: Kop, type: string }
+      - { name: description, label: Omschrijving voor Google, type: text }
+      - { name: body, label: Introtekst (boven de kalender), type: text }
+
   - name: agenda
-    label: Agenda (komende optredens)
+    label: "Agenda — optredens (kalender)"
     type: file
     path: maintainable_website/src/_data/agenda.yaml
     list: true
