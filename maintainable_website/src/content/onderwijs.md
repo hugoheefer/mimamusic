@@ -18,7 +18,6 @@ teasers:
       src: Emmaus1.jpg
       alt: Basisschool Emmaus
 ---
-De studie Docent Muziek heb ik aan de Fontys in Tilburg gedaan. Sindsdien geef ik op
-allerlei scholen les. Momenteel werk ik via Muzelinck in Oss op bs. De Emmaus in Heesch.
-Een belangrijkste doel is de kinderen plezier in muziek maken mee te geven. Als je dat
-plezier kunt ervaren dan brengt dat je veel rijkdom.
+Sinds de studie Docent Muziek  aan de Fontys in Tilburg geef ik op allerlei scholen muziekles.   
+Momenteel werk ik via Muzelinck in Oss op BS. De Emmaus in Heesch.  
+Ik geniet er het meest van als de kinderen vol overtuiging hun lied zingen. Ik vind het belangrijk om de kinderen plezier in muziek maken mee te geven. Als je dat plezier kunt ervaren dan brengt dat je veel rijkdom.
