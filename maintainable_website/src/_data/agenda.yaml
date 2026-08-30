@@ -6,3 +6,23 @@
   title: Test workshop in agenda
   type: evenement
   location: Den Durpsherd - Berlicum
+- date: 2026-09-13
+  title: Test kerkdienst
+  type: dienst
+  location: Lambertuskerk (Rosmalen)
+- date: 2026-09-20
+  title: Test evenement
+  type: evenement
+  location: Workshop Djembe (Boxtel)
+- date: 2026-10-14
+  title: Test concert Spirit
+  type: concert
+  location: Durpsherd (Berlicum)
+- date: 2026-10-15
+  title: Test concert
+  type: concert
+  location: Dorpshuis de Dorsvlegel (Krommenie)
+- date: 2026-11-10
+  title: Test evenement
+  type: evenement
+  location: Den Bosch
