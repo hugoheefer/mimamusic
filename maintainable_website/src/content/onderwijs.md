@@ -3,11 +3,6 @@ title: Onderwijs
 titleClass: is-red
 description: Muziekonderwijs op school en thuis — Wilma van der Schoot, docent
   muziek (Fontys).
-band:
-  - src: /assets/images/2012-11-06__De_Bron_leslokaal.jpg
-    alt: Leslokaal met keyboards, De Bron
-    w: 274
-    h: 155
 teasers:
   - title: Bs Emmaus
     body: |-
