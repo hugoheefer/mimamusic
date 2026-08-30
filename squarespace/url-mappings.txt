@@ -2,8 +2,8 @@
  MiMaMusic — Squarespace URL Mappings   (old Joomla URL -> new URL, 301)
  Settings -> Advanced -> URL Mappings
 
- Mirrors spec §12. Finalise against a Screaming Frog crawl of the live
- site before go-live in case there are stray indexed URLs not listed here.
+ Finalise against a Screaming Frog crawl of the live site before go-live
+ in case there are stray indexed URLs not listed here.
 
  >>> Do NOT paste this comment header. Paste only the RULES block below. <<<
  Squarespace URL Mappings does not support comments or query strings.
@@ -36,6 +36,6 @@ NOT COVERED BY URL MAPPINGS (handle separately):
 
 - JEvents event URLs (?option=com_jevents&...): these carry query strings,
   which Squarespace URL Mappings cannot match. They will 404 to the custom
-  404 page. Acceptable — the live agenda grid is empty (spec §6), so there
-  are no indexed event pages worth saving. If a crawl finds any, add a
+  404 page. Acceptable — the live agenda grid is empty, so there are no
+  indexed event pages worth saving. If a crawl finds any, add a
   manual redirect for each exact path, or point the 404 page at /agenda.

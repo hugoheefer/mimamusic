@@ -1,29 +1,42 @@
 # Squarespace trial — feasibility & working notes
 
 Living doc for the Squarespace rebuild of MiMaMusic. Part of the self-contained
-`squarespace/` folder (see `README.md` there). Pairs with the full site
-definition at `../rebuild_data/mimamusic-rebuild-spec.md` and the step-by-step
-`build-runbook.md` next to this file. **Update this on every trial finding or
-decision.**
+`squarespace/` folder (see `README.md`). Pairs with `build-runbook.md` (the
+steps) and `content-pack.md` (all page copy). **Update this on every trial
+finding or decision.**
 
-Prototype it must match: `../website/mimamusic-reference.html`
-(Artifact: https://claude.ai/code/artifact/bea26d35-ff4c-45c7-bad8-65419f9e0835)
+Visual target: `look-reference.html` in this folder.
 
 ---
 
-## Verdict (2026‑08‑29, pre‑trial)
+## Verdict (2026‑08‑29, pre‑trial — still stands)
 
-The look is **reproducible** on Squarespace — black ground, centred column, custom
-fonts, simple photos are all within its wheelhouse. It will **not be
+The look is **reproducible** on Squarespace — black ground, centred column,
+custom fonts, simple photos are all within its wheelhouse. It will **not be
 pixel‑identical without Custom CSS**, and a few things need workarounds.
 
 - Style editor alone: **~85–90%** visual match.
-- Style editor + modest Custom CSS: **~95%+**. Residual gap = nav chrome + a few px
-  of section spacing — invisible to the owner and visitors.
-- No automated Joomla → Squarespace importer exists; the build is manual.
+- Style editor + modest Custom CSS: **~95%+**. Residual gap = nav chrome + a few
+  px of section spacing — invisible to the owner and visitors.
+- **No automated importer exists** (Joomla → Squarespace, or HTML → Squarespace).
+  The build is manual, section by section. `content-pack.md` is the shortcut:
+  all copy pre‑formatted, five page templates, build‑once‑then‑duplicate.
 
-**Plan needed: Business or higher** (Custom CSS / Code Injection is *not* on the
-Personal plan). Trial is 14 days (extendable).
+**Plan needed: Business or higher** — Custom CSS / Code Injection is not on the
+Personal plan. Trial is 14 days (extendable once via support).
+
+---
+
+## Locked decisions (2026‑08‑30)
+
+| # | Decision |
+|---|---|
+| SQ1 | Platform = **Squarespace Business**, chosen over the `../maintainable_website/` 11ty build for a simpler owner‑maintenance model. |
+| SQ2 | **All‑black** ground, per the prototype. A lightened variant is shown to Wilma at review, not built now. |
+| SQ3 | **Logo = "MiMaMusic" wordmark in Henny Penny** — live text via a Custom CSS `@import`, with an uploaded PNG wordmark as the fallback if the font is flaky. |
+| SQ4 | **Headings = Gabriela** — a clean serif already in the Squarespace font picker. Set in the style editor, not CSS. **Fredericka the Great is dropped.** |
+| SQ5 | **Body = Arial / system sans, 14px / line‑height 20px** — matches the real `template.css`. Body is *not* a serif. |
+| SQ6 | Nav dropdowns = **Squarespace Folders** for Koren and Workshop/les. |
 
 ---
 
@@ -31,120 +44,74 @@ Personal plan). Trial is 14 days (extendable).
 
 | Element | Squarespace |
 |---|---|
-| All‑black background | Site‑wide background colour |
+| All‑black background | Site‑wide background colour + dark section theme |
 | 1200px centred column | "Max content width" site style (centred by default) |
-| Colours `#cb4752` / `#7e7e7e` / white | Colour palette / theme |
-| Body = **Gabriela** serif | Font picker (standard Google font) → Paragraph |
-| Inline photos, home slideshow | Image blocks + Slideshow section (fade + dots) |
-| Footer: badge image + text, left‑aligned | Footer section |
+| Colours `#000` / `#989898` body / `#cb4752` red / `#7e7e7e` grey | Colour palette / theme |
+| Headings = **Gabriela** | Font picker (standard Google font) → Headings |
+| Body = **Arial / system sans**, 14 / 20 | Font picker → Paragraph |
+| Inline photos, photo bands | Image blocks / Gallery sections |
+| Footer: badge image + copyright line, left‑aligned | Footer section |
 | Contact form + map | Native blocks |
-| 301 redirects | Settings → URL Mappings (use the §12 table in the spec) |
+| 301 redirects | Settings → URL Mappings — paste `url-mappings.txt` |
 
 ## What needs Custom CSS (→ Business plan)
 
-- **Henny Penny / Fredericka the Great** — older Google fonts; may not be in the
-  picker. Add via `@import` in Custom CSS, or via Adobe Fonts (paid‑plan add‑on).
-- **Two heading fonts by role** (red Fredericka vs grey Henny Penny) — map to
-  H‑levels + CSS to keep it consistent site‑wide.
-- **Grey gradient mega‑menu bar** — native nav is opinionated; dropdowns work
-  (Folders) but the grey bar, borders, uppercase tracking, hover states need CSS.
-- The two full‑width divider rules (above menu, above footer).
-- Logo as text in Henny Penny — or just upload a wordmark PNG (cleaner).
+All of it is in `custom-css.css`, one commented block. In summary:
+
+- **Henny Penny** for the wordmark — older Google font, `@import` in Custom CSS
+  (only if the wordmark stays as live text; a PNG logo removes this need).
+- **Grey gradient mega‑menu bar** — native nav is opinionated; Folders give the
+  dropdowns, but the grey bar / borders / uppercase tracking / hover states need
+  CSS.
+- The two **full‑width divider rules** (above the menu, above the footer).
+- Body‑bold colour (`#cb4752`) and a background safety net, if the theme can't do
+  them natively.
+
+> Note: headings are now **Gabriela via the style editor** (SQ4) — no
+> per‑heading‑role font CSS. The only inline heading quirks are on **Arrangeren**
+> (`#ff0000` / 14pt) and **Contact** (see `content-pack.md`), set per block.
 
 ## Genuine gaps / friction
 
 - **"Click Koren → Koren landing" + a dropdown.** Squarespace **Folders** are the
   dropdown mechanism, but a folder *title is not a link* — clicking it only opens
   the dropdown. Options:
-  1. Put a "Koren / overzicht" link as the first dropdown item (this is what the
-     prototype deliberately *removed* — tension to resolve with the owner).
-  2. Small JS in Code Injection (footer) that makes folder titles navigate to a
-     chosen page.
-  3. Accept folder-opens-only; landing reached from the first child.
+  1. First dropdown item is a "Koren / overzicht" link that is the landing
+     (no‑code fallback).
+  2. Small JS in Code Injection (footer) makes folder titles navigate — snippet
+     in `code-injection.html`. **Chosen** (closest to the prototype, which drops
+     the repeated parent link).
+  3. Accept folder‑opens‑only; landing reached from the first child.
 - **Agenda** — Squarespace Events is a real calendar/list but Squarespace‑styled,
-  not the JEvents month grid.
-- **Micro‑spacing** — Squarespace imposes its own section rhythm.
-
----
-
-## First test — scope (keep it small)
-
-- [ ] Start a Squarespace **trial** (Business plan features).
-- [ ] Global styles: black background, max width ~1200, the 3 fonts, colour palette
-      (`#cb4752`, `#7e7e7e`, `#000`, `#f4f4f4`).
-- [ ] Build **4 pages only**: Home (slideshow), Arrangeren (text page),
-      Spirit *or* Onderwijs (photo page), + header + footer.
-- [ ] Judge three things:
-      1. do the fonts load and look right?
-      2. can the nav bar be made acceptable?
-      3. does the overall feel hold?
-- [ ] Don't build the other 11 pages for the test.
-
----
-
-## Custom CSS — starting points
-
-Class names in Squarespace 7.1 vary by version; verify each with the browser
-inspector on the trial site and adjust.
-
-```css
-/* 1 — fonts that may not be in the picker */
-@import url('https://fonts.googleapis.com/css2?family=Fredericka+the+Great&family=Henny+Penny&display=swap');
-
-/* 2 — heading roles: red = Fredericka, grey = Henny Penny */
-h1 { font-family: 'Fredericka the Great', cursive; color: #cb4752; }
-h2 { font-family: 'Henny Penny', cursive; color: #7e7e7e; }
-
-/* 3 — text site title in Henny Penny (skip if using a logo image) */
-.header-title-text a { font-family: 'Henny Penny', cursive; color: #fff;
-  font-size: 60px; line-height: 1; }
-
-/* 4 — grey gradient nav bar with item dividers */
-.header-nav-list { background: linear-gradient(#595959, #3a3a3a);
-  border-top: 1px solid rgba(255,255,255,.16); }
-.header-nav-item a { text-transform: uppercase; letter-spacing: .12em;
-  font-size: 11px; font-weight: 700; color: #e8e8e8; padding: 15px 20px;
-  border-left: 1px solid rgba(255,255,255,.07); }
-
-/* 5 — full-width divider rules */
-.header { border-top: 1px solid #333; }
-.footer-sections { border-top: 1px solid #333; }
-
-/* 6 — body + background safety net */
-body, .sqs-block { color: #f4f4f4; }
-#siteWrapper, body { background: #000; }
-```
-
-Folder‑title‑as‑link (Code Injection → Footer), if we go that route:
-```html
-<script>
-document.querySelectorAll('.header-nav-folder-title').forEach(function(t){
-  var map = { 'Koren': '/koren', 'Workshop/les': '/workshop-les' };
-  var href = map[t.textContent.trim()];
-  if (href) t.addEventListener('click', function(){ location.href = href; });
-});
-</script>
-```
+  not the old JEvents month grid. Live grid is empty, so start empty.
+- **Micro‑spacing** — Squarespace imposes its own section rhythm; a few px off is
+  accepted.
+- **Footer is global** — the prototype's home‑only copyright line will show
+  site‑wide (accepted, minor deviation).
 
 ---
 
 ## Trial log
 
-_(fill in as the test runs)_
-
 | date | finding |
 |---|---|
-| 2026‑08‑30 | Guided build started. Decisions logged above: Henny Penny wordmark kept, Gabriela (not Fredericka) for headings, all‑black kept. Next: start Business trial → set global styles (Phase 2). |
+| 2026‑08‑30 | Guided build set up. Decisions SQ1–SQ6 locked (above). Content pack written — all page copy paste‑ready, five templates, image originals copied into `assets/images/`. Folder made self‑contained. Next: start Business trial → global styles (runbook Phase 2). |
+
+_(add a dated line for every trial finding or structural/CSS change to the live site)_
+
+---
 
 ## Open questions for the owner
 
 - [ ] Business plan cost (~€23/mo billed yearly) acceptable for the Custom CSS we need?
-- [x] **Fonts (decided 2026‑08‑30):** keep **Henny Penny** for the MiMaMusic
-      wordmark (text via Custom CSS `@import`, or an uploaded PNG wordmark as the
-      clean fallback); **red section headings move off Fredericka the Great to
-      Gabriela** — a clean serif already in the Squarespace picker, matches spec
-      D4. Fredericka the Great is dropped. Net: the only font `@import` still
-      needed is Henny Penny, and only if the wordmark stays as live text.
-- [x] **Look (decided 2026‑08‑30):** keep the **all‑black** ground for the build;
-      present a lightened option to Wilma at review. Build to the prototype.
-- [ ] Folder‑title behaviour: "overzicht" first item vs. JS link vs. dropdown‑only?
+- [ ] Folder‑title behaviour: confirm the JS‑link approach (option 2) vs an
+      "overzicht" first item.
+- [x] **Fonts (2026‑08‑30):** Henny Penny wordmark kept; red section headings
+      move off Fredericka the Great to **Gabriela** (native picker). Fredericka
+      dropped. Only font `@import` still needed is Henny Penny, and only if the
+      wordmark stays as live text.
+- [x] **Look (2026‑08‑30):** keep the **all‑black** ground for the build; present
+      a lightened option to Wilma at review.
+- [ ] The full owner to‑do list (proofread, Privacy text, Contact address + form
+      recipient, review questions) is in `content-pack.md` → "Still needed from
+      the owner".

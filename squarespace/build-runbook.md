@@ -3,11 +3,18 @@
 Step-by-step build of the mimamusic.nl rebuild on Squarespace 7.1, Business plan.
 Follow the phases in order. Log every finding and decision in `trial-log.md`.
 
-- **Look reference:** `../website/mimamusic-reference.html`
-  (Artifact: https://claude.ai/code/artifact/bea26d35-ff4c-45c7-bad8-65419f9e0835)
-- **Content + IA + redirects:** `../rebuild_data/mimamusic-rebuild-spec.md`
-  (referred to below as "spec §N")
-- **Paste-in config:** `custom-css.css`, `code-injection.html`, `url-mappings.txt`
+- **Look reference:** `look-reference.html` (in this folder — open in a browser).
+- **All page copy + per-block images + IA:** `content-pack.md` (in this folder) —
+  verbatim from the prototype, in nav order. Where a phase below says "text =
+  content-pack", that is the source.
+- **Redirects:** `url-mappings.txt`. **Paste-in config:** `custom-css.css`,
+  `code-injection.html`.
+- **Images:** `assets/images/` (19 originals) — `assets/README.md` maps each to
+  its block.
+- `"D<n>"` tags below are the prototype design-decision numbers, kept as
+  shorthand; the reasoning is summarised in `trial-log.md`. The original full
+  site-recon doc (`../rebuild_data/mimamusic-rebuild-spec.md`) is background only
+  — everything the build needs is in this folder.
 
 Squarespace menu paths below are 7.1 as of 2026; if a label has moved, the intent
 still holds — note the new path in `trial-log.md`.
@@ -98,12 +105,12 @@ look right? does the black theme apply cleanly to a test section? Log it.
 ### a. Logo
 - Try **Design → Site title & tagline** as text "MiMaMusic", then style it in
   `custom-css.css` block 3 (Henny Penny `@import` + 60px white). (SQ3)
-- If Henny Penny renders unreliably: upload `assets/` wordmark PNG via
+- If Henny Penny renders unreliably: upload a wordmark PNG (see `assets/README.md`) via
   **Edit header → Site title → Add a logo image** and skip the font for the logo.
 - Logo links to Home (default).
 
 ### b. Menu structure — Pages panel
-Build top-level nav in spec §3 order:
+Build top-level nav in this order (also in `content-pack.md`):
 
 ```
 Home
@@ -153,8 +160,8 @@ Contact
 
 ## Phase 5 — TRIAL GATE (build only these three pages)
 
-Per `trial-log.md` "First test — scope". Build **Home, Arrangeren, and one photo
-page (Onderwijs)** — nothing else — then judge:
+Build **Home, Arrangeren, and one photo page (Onderwijs)** — nothing else — then
+judge:
 
 1. Do the fonts load and look right?
 2. Can the nav bar be made acceptable?
@@ -163,7 +170,10 @@ page (Onderwijs)** — nothing else — then judge:
 **If yes:** continue to Phase 6. **If no:** stop, log why, reconsider
 `../maintainable_website/`.
 
-### Home (spec §4 "Home", D7/D12/D13)
+Full copy for every page is in `content-pack.md`; the notes below are the
+layout shape only.
+
+### Home (content-pack "T5 · HOME", D7/D12/D13)
 - Dark section, three **equal columns** side by side, stacking on mobile.
   Squarespace: one section, a 3-column layout (or three inline blocks).
 - Each column: **heading → one short paragraph → one photo below**.
@@ -174,20 +184,19 @@ page (Onderwijs)** — nothing else — then judge:
     mogelijkheden aanbieden om hier aan mee te doen."
   - Dwarsfluit — `Wilma_fluitist_1986.jpg` (crop, keep the face — focal point
     top), text "Muziek zonder woorden. Het instrument als spreekbuis."
-- Photos aim for equal height (~240px) so they line up. No carousel (spec is
-  explicit — the old Swiper was a trashed design).
+- Photos aim for equal height (~240px) so they line up. No carousel — the old
+  Swiper was a discarded design.
 - Home headings a touch larger than other pages is fine (prototype eases to
   ~22–27px on Home only).
 
-### Arrangeren (spec §4 "Arrangeren", D15)
-- Single dark section: heading + **2 paragraphs** + a mailto link. Text = spec
-  §4 (synced to live 2026-08-29).
+### Arrangeren (content-pack "T1 · ARRANGEREN", D15)
+- Single dark section: heading + **2 paragraphs** + a mailto link.
 - Heading keeps the live inline quirk **`color:#ff0000; font-size:14pt`** — set
   it on that one heading block, not globally. Flag to Wilma whether to normalise
   it to the Gabriela `#cb4752` treatment long-term.
 
-### Onderwijs (spec §4 "Onderwijs", D14)
-- Heading (red) + one paragraph (spec §4 leading body) + a **3-photo band**:
+### Onderwijs (content-pack "T2 · ONDERWIJS", D14)
+- Heading (red) + one paragraph + a **3-photo band**:
   `2014-10-08_Bieb_Heyhoef3.jpg`, `2012-11-06__De_Bron_leslokaal.jpg`,
   `djembe_60.jpg`.
 - **Bs Emmaus teaser** kept for now (text + `Emmaus1.jpg`, link to the school
@@ -197,40 +206,39 @@ page (Onderwijs)** — nothing else — then judge:
 
 ## Phase 6 — Remaining pages
 
-Build from spec §4 / §3. All dark sections, 1200px column, headings Gabriela red
-(`is-red` in the prototype) for category-landing titles, grey for sub-page
-titles.
+Copy for all of these is in `content-pack.md`. All dark sections, 1200px column,
+headings Gabriela red (`is-red` in the prototype) for category-landing titles,
+grey (`is-dim`) for sub-page titles.
 
-| Page | Shape (spec ref) |
+| Page | Shape |
 |---|---|
-| **Koren** (folder landing) | Koordirigent heading + paragraph + **4-photo band** only. No choir teasers (spec D14). |
-| Koren → Spirit | Sub-page. Body from spec §7 query (h) text — currently placeholder; fill it. `_DSC8853.jpg`, `spirit_3.jpg`; link spiritgospelpop.nl. |
+| **Koren** (folder landing) | Koordirigent heading + paragraph + **4-photo band** only. No choir teasers (D14). |
+| Koren → Spirit | Sub-page. `_DSC8853.jpg`, `spirit_3.jpg`; link spiritgospelpop.nl. |
 | Koren → Singin'Gestel | Sub-page. `2024-05_met_kinderen.jpg`, `2024-03-20.jpg`; link singingestel.nl. |
 | Koren → Popkoor MIKS | Sub-page. `MIKS_logo.png`; address Meander / Meanderplein 3 / 5271 GC. |
-| **Dwarsfluit** | One page, **4 stacked sections** in DB order: Geschiedenis, fluitist, Dwarsfluitles, Blokfluitles. Bodies = spec §4 (synced from DB, D16). "fluitist" has a floated photo `Wilma_fluitist_1986.jpg` with the text beside it. Keep the copy quirks. |
-| **workshop/les** (folder landing) | *Muzikale ondersteuning* article only — heading + one paragraph + mailto. No photo, no teasers (spec D14). |
+| **Dwarsfluit** | One page, **4 stacked sections**: Geschiedenis, fluitist, Dwarsfluitles, Blokfluitles (D16). "fluitist" has a floated photo `Wilma_fluitist_1986.jpg` with the text beside it. Keep the copy quirks. |
+| **workshop/les** (folder landing) | *Muzikale ondersteuning* article only — heading + one paragraph + mailto. No photo, no teasers (D14). |
 | workshop/les → Muzikale ondersteuning | Same text as the landing, grey (sub-page) title. |
-| workshop/les → Workshopmogelijkheden | Body not yet pulled (spec §11). `boomwhackers_1c.jpg` side image. Placeholder until then. |
+| workshop/les → Workshopmogelijkheden | Body **is** in content-pack (fuller than earlier notes). `boomwhackers_1c.jpg` side image. |
 | **Contact** | See Phase 7. |
-| **Privacy** | Body not yet written (spec §11 — needs accurate NL/GDPR text). Page + footer link. |
+| **Privacy** | Body not yet written — needs accurate NL/GDPR text from the owner. Page + footer link. |
 
-Sub-page bodies still marked placeholder in spec §0: Spirit, Singin'Gestel,
-Popkoor MIKS, (Koor Voluum if kept). Pull from spec §7 query (h) before building.
+Still-placeholder bodies (owner must supply): **Koor Voluum** (if kept),
+**Privacy**. Everything else is filled in `content-pack.md`.
 
 ---
 
 ## Phase 7 — Functional sections
 
-### Contact (spec §4 "Contact")
+### Contact (content-pack "CONTACT")
 - Dark section: portrait `2020-06-28_Wilma.jpg` (prototype keeps its own
   `ph-portrait` sizing — owner prefers it) + the "over mij," text with inline
-  styling: "MiMa" white / "Music" red italic 18pt; name **Wilma van der Schoot**
-  bold `#9a2d2d`; bio; "of bellen" white 10pt; "06-27418262" `#ce3939` 14pt.
+  styling — the line-by-line styling table is in `content-pack.md`.
 - **Form block** — recipient = the owner's address (confirm which). Replaces the
   cloaked `/at/` email.
-- **Map block** — needs the real postal address (spec §11 open item).
+- **Map block** — needs the real postal address (owner to supply).
 
-### Agenda (spec §6)
+### Agenda (content-pack "AGENDA")
 - **Squarespace Events** collection page. Live JEvents grid is empty, so start
   empty with the reader line: "In de agenda staan de komende concerten,
   kerkdiensten en optredens… Op dit moment staan er geen activiteiten
@@ -241,19 +249,20 @@ Popkoor MIKS, (Koor Voluum if kept). Pull from spec §7 query (h) before buildin
 ### Cookie banner
 - **Settings → Cookies & Visitor Data** → enable the banner. No custom work.
 
-### Chat / comments / newsletter (spec §5, §11)
-- Olark chat, Komento comments, AcyMailing newsletter — all **owner decisions**.
-  Default: drop chat and comments (low volume), no newsletter unless asked.
+### Chat / comments / newsletter
+- Old site had Olark chat, Komento comments, AcyMailing newsletter — all **owner
+  decisions**. Default: drop chat and comments (low volume), no newsletter unless
+  asked.
 
 ---
 
-## Phase 8 — Review, redirects, go-live (spec §12)
+## Phase 8 — Review, redirects, go-live
 
-1. **Owner review** on the trial URL. Big questions (spec §15 step 2): keep
-   black or lighten; keep Henny Penny or go fully clean; nav OK; keep Agenda;
-   keep archived choirs; want galleries. Wilma proofreads **every** page and
-   supplies the missing bodies (Privacy, Workshopmogelijkheden, sub-pages) and
-   the contact address + form recipient.
+1. **Owner review** on the trial URL. Big questions: keep black or lighten; keep
+   Henny Penny or go fully clean; nav OK; keep Agenda; keep archived choirs; want
+   galleries. Wilma proofreads **every** page and supplies the missing bodies
+   (Privacy, Koor Voluum) and the contact address + form recipient — full list in
+   `content-pack.md` → "Still needed from the owner".
 2. **Upgrade** to the Business plan when the trial passes.
 3. **URL Mappings** — Settings → Advanced → URL Mappings. Paste `url-mappings.txt`.
 4. **Domain** — connect `mimamusic.nl`. Point web DNS to Squarespace. **Leave MX

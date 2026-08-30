@@ -1,43 +1,39 @@
 # squarespace/ — the MiMaMusic Squarespace rebuild
 
-Self-contained working folder for rebuilding **mimamusic.nl** on Squarespace
-(Business plan). Everything Squarespace-specific lives here so the folder can be
-moved, handed over, or dropped as one unit.
+**Self‑contained.** Everything needed to rebuild **mimamusic.nl** on Squarespace
+(Business plan) is in this folder — copy, images, paste‑in config, and the visual
+target. Nothing here points outside the folder.
 
 ## What's here
 
 | File | Purpose |
 |---|---|
-| `build-runbook.md` | **Start here.** The step-by-step build, Phases 1–8, plus the maintenance model for the owner. |
-| `trial-log.md` | Living feasibility notes + the running log of trial findings and decisions. Update it every session. |
-| `custom-css.css` | The single Custom CSS block to paste into **Design → Custom CSS**. Every rule is commented with what it targets and why. Keep it to a minimum. |
-| `code-injection.html` | Optional snippets for **Settings → Advanced → Code Injection** (footer). Currently only the folder-title-as-link helper. |
-| `url-mappings.txt` | Old → new URL redirect map in Squarespace **URL Mappings** syntax, ready to paste. Mirrors spec §12. |
-| `assets/README.md` | Manifest: which image from `../website/images/` goes on which page/block, and the logo wordmark note. |
+| `build-runbook.md` | **Start here.** Step‑by‑step build, Phases 1–8, plus the owner maintenance model. |
+| `content-pack.md` | **All page copy, paste‑ready**, in nav order — verbatim from the prototype, with the "build once + duplicate" strategy, per‑block image mapping, and the owner's outstanding to‑dos. |
+| `custom-css.css` | The single Custom CSS block for **Design → Custom CSS**. Every rule commented. Keep it minimal. |
+| `code-injection.html` | Optional **Settings → Advanced → Code Injection** snippets (currently just folder‑title‑as‑link). |
+| `url-mappings.txt` | Old → new 301 redirect map in Squarespace **URL Mappings** syntax, ready to paste. |
+| `trial-log.md` | Feasibility notes + the running log of trial findings and decisions. Update it every session. |
+| `look-reference.html` | The prototype, self‑contained — open in a browser. **This is the visual target**; the Squarespace build must match it. |
+| `assets/images/` | The 19 image originals to upload to Squarespace. |
+| `assets/README.md` | Which image goes on which block. |
 
-## How this folder relates to the rest of the repo
+## Working order
 
-- `../website/` — the single-file **prototype**. This is the *look reference*; the
-  Squarespace build must match `../website/mimamusic-reference.html`. Do not edit
-  the prototype from here.
-- `../rebuild_data/mimamusic-rebuild-spec.md` — the **definitive site
-  definition** (content, IA, CSS facts, redirects, decisions log). The runbook
-  here points into it rather than duplicating it.
-- `../maintainable_website/` — an **alternative** production build (Eleventy +
-  Pages CMS + GitHub Pages). Squarespace was chosen over it for a simpler
-  maintenance model for a non-technical owner. That folder is left in place but
-  is **not** the direction being pursued while this one is active. Revisit only
-  if the Phase 5 trial gate fails.
+1. `build-runbook.md` Phases 1–4 — trial, global styles, header/nav, footer.
+2. `content-pack.md` — build the pages (five templates, then duplicate).
+3. `build-runbook.md` Phases 5–8 — trial gate, remaining pages, functional
+   sections, review + redirects + go‑live.
 
-## If you move this folder
+## Context (not needed for the build)
 
-Only two things point outside it, both by relative path:
+- `../website/` — the original single‑file prototype this folder was built from.
+  `look-reference.html` here is a copy of its built output.
+- `../rebuild_data/mimamusic-rebuild-spec.md` — the original full site‑recon
+  document (Joomla DB, SQL, history). Everything from it that the Squarespace
+  build needs has been folded into `content-pack.md` and `build-runbook.md`.
+- `../maintainable_website/` — the abandoned 11ty alternative. Revisit only if
+  the Phase 5 trial gate fails.
 
-1. `../website/images/*` — referenced by `assets/README.md` as the source of
-   images to upload. If you relocate, either fix the path or copy the listed
-   files into `assets/`.
-2. `../rebuild_data/mimamusic-rebuild-spec.md` — referenced by `build-runbook.md`
-   and `trial-log.md`.
-
-Nothing in this folder is built or compiled. The Squarespace site itself is the
-artifact; these files are its source-of-truth notes and paste-in config.
+Nothing in this folder is built or compiled — the Squarespace site itself is the
+artifact; these files are its source‑of‑truth notes and paste‑in config.
