@@ -200,22 +200,21 @@ automatically after every save. To download that built version:
    **not** what you want. Use the tab in the top row.
 3. In the list of runs, **click the most recent one with a green check mark**,
    titled *Deploy site to GitHub Pages*.
-4. On that run's page, **scroll to the bottom to the "Artifacts" box** and click
-   **site**. A file called `site.zip` downloads.
-5. **Unzip it.** Inside is the complete website as plain HTML, CSS and image
-   files.
+4. On that run's page, **scroll to the bottom to the "Artifacts" box**. There are
+   two:
+   - **site-portable** — the one to take. Its internal links are relative, so this
+     copy **works wherever you put it**: opened straight from a folder on your
+     computer, dropped into any web server, or in a subfolder of one.
+   - **site** — the exact copy of what is currently live. Its links assume the
+     `hugoheefer.github.io/mimamusic/` path, so it's for reference, not for moving
+     elsewhere.
+5. Click **site-portable**, a `site-portable.zip` downloads. **Unzip it** — inside
+   is the complete website as plain HTML, CSS and image files. Double-click
+   `index.html` to view it.
 
-Each run keeps its copy for **90 days**. Two things to know:
-
-- The **site** artifact above is built for the current web address
-  (`hugoheefer.github.io/mimamusic/`), so its links expect that exact path — fine
-  for reference, but it won't just work if you move it elsewhere.
-- For a copy that **runs from anywhere** — opened straight from a folder on your
-  computer, or placed in any web server — ask the developer for the **portable
-  build** (`npm run build:portable`). Its links are relative, so it works wherever
-  you put it, no configuration.
-- If you'd rather not use GitHub at all, a free tool such as **HTTrack** (Windows)
-  aimed at the live web address downloads exactly what is online at that moment.
+Each run keeps both copies for **90 days**. If you'd rather not use GitHub at all,
+a free tool such as **HTTrack** (Windows) aimed at the live web address downloads
+exactly what is online at that moment.
 
 ---
 

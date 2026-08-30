@@ -44,23 +44,33 @@ jobs:
           cache: npm
           cache-dependency-path: maintainable_website/package-lock.json
       - run: npm ci
+      - uses: actions/configure-pages@v5
+
+      # 1) build for GitHub Pages (served from hugoheefer.github.io/<repo>/, so
+      #    every root-relative URL gets the /mimamusic/ prefix). Set PATH_PREFIX
+      #    to "/" once mimamusic.nl is attached as a custom domain (served at root).
       - run: npm run build
         env:
-          # Project site is served from hugoheefer.github.io/<repo>/ , so the
-          # build must prefix every root-relative URL. Set this to "/" (or delete
-          # it) once mimamusic.nl is attached as a custom domain (served at root).
           PATH_PREFIX: /mimamusic/
-      # Downloadable copy of the built site, kept 90 days:
-      # Actions -> a run -> "Artifacts" -> "site" -> download the zip.
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: maintainable_website/_site
+      # exact copy of what is deployed (links assume the /mimamusic/ path)
       - uses: actions/upload-artifact@v4
         with:
           name: site
           path: maintainable_website/_site
           retention-days: 90
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+
+      # 2) rebuild with relative links — this copy runs from anywhere (file://,
+      #    any web server's webroot, any subfolder). Download this one to reuse
+      #    the site elsewhere:  Actions -> a run -> Artifacts -> site-portable.
+      - run: npm run build:portable
+      - uses: actions/upload-artifact@v4
         with:
+          name: site-portable
           path: maintainable_website/_site
+          retention-days: 90
 
   deploy:
     needs: build
