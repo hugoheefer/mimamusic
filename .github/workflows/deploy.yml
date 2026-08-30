@@ -1,0 +1,61 @@
+# GitHub Pages deploy for the MiMaMusic site (Eleventy project in maintainable_website/).
+#
+# One-time setup on GitHub:
+#   1. Settings -> Pages -> Build and deployment -> Source = "GitHub Actions".
+#   2. Settings -> Environments -> github-pages -> "Deployment branches and tags":
+#      by default only the DEFAULT branch may deploy. To deploy from the feature
+#      branch below, add it here (or choose "No restriction").
+#   3. GitHub Pages serves PUBLIC repos free; a private repo needs GitHub Pro
+#      (~EUR 4/mo). The repo being private is what paused the earlier Pages test.
+#
+# The `feature/...` line lets the branch be previewed before merging to master;
+# remove it once the work is on master. When maintainable_website/ is promoted to
+# the repo root, drop the `paths:` filter, `working-directory:` and the path
+# prefixes below.
+
+name: Deploy site to GitHub Pages
+
+on:
+  push:
+    branches: [master, main, feature/build-mainainable-site]
+    paths: ["maintainable_website/**", ".github/workflows/deploy.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: maintainable_website
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: maintainable_website/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: maintainable_website/_site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
