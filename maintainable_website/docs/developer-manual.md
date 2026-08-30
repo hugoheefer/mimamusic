@@ -233,6 +233,37 @@ used: `string`, `text`, `rich-text`, `image`, `boolean`, `number`, `select`,
 
 ---
 
+## 7a. Moving it to a different GitHub account / repo
+
+**Travels unchanged** — the whole `maintainable_website/` project (`src/`,
+`eleventy.config.js`, `package.json`, `.github/workflows/deploy.yml`, `.pages.yml`
+at the repo root). `npm install && npm run build` works anywhere. The workflow
+derives the Pages path from the repo name (`PATH_PREFIX=/${GITHUB_REPOSITORY#*/}/`),
+so a project site at `newowner.github.io/newrepo/` just works.
+
+**Edit in the files** (only if the value actually changes):
+
+| File | What | When |
+|---|---|---|
+| `src/_data/site.js` | `domain`, contact details, nav | different domain / details |
+| `src/_data/redirects.json` | old→new URL map | different old site |
+| `deploy/CNAME` | the custom domain | different domain |
+| `.github/workflows/deploy.yml` | drop `feature/build-mainainable-site` from `on: push: branches`; `PATH_PREFIX` line → `/` for a custom domain at root | always / custom domain |
+| `.pages.yml`, workflow `paths:` + `working-directory:` | the `maintainable_website/` prefix | if you don't keep that subfolder name |
+| `README.md`, `docs/*.md` | `hugoheefer/mimamusic`, the github.io URL, branch name | cosmetic, but do it |
+
+**Set up in the new repo's GitHub UI** (these are per-repo settings, not in the
+files — none of them transfer):
+
+- Settings → Pages → Source = **GitHub Actions**
+- Settings → Environments → `github-pages` → allowed deployment branches
+- Repo **public**, or GitHub **Pro** for private Pages
+- **app.pagescms.org** → connect the new repo, pick the branch
+- Settings → Collaborators → re-add the owner
+- Custom domain + DNS, if used
+
+---
+
 ## 8. Troubleshooting (issues hit during the build)
 
 | Symptom | Cause / fix |

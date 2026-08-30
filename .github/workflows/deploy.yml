@@ -46,16 +46,19 @@ jobs:
       - run: npm ci
       - uses: actions/configure-pages@v6
 
-      # 1) build for GitHub Pages (served from hugoheefer.github.io/<repo>/, so
-      #    every root-relative URL gets the /mimamusic/ prefix). Set PATH_PREFIX
-      #    to "/" once mimamusic.nl is attached as a custom domain (served at root).
+      # A GitHub Pages *project* site is served from <owner>.github.io/<repo>/ ,
+      # so links need the /<repo>/ prefix. Derived from the repo name, so this
+      # workflow works unchanged in any repo. For a custom domain served at the
+      # root, replace the line below with:  echo "PATH_PREFIX=/" >> "$GITHUB_ENV"
+      - name: Compute Pages base path
+        run: echo "PATH_PREFIX=/${GITHUB_REPOSITORY#*/}/" >> "$GITHUB_ENV"
+
+      # 1) build for GitHub Pages (absolute links, prefixed with PATH_PREFIX)
       - run: npm run build
-        env:
-          PATH_PREFIX: /mimamusic/
       - uses: actions/upload-pages-artifact@v5
         with:
           path: maintainable_website/_site
-      # exact copy of what is deployed (links assume the /mimamusic/ path)
+      # exact copy of what is deployed (links assume the /<repo>/ path)
       - uses: actions/upload-artifact@v7
         with:
           name: site
