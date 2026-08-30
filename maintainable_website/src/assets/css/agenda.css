@@ -2,12 +2,38 @@
    month (see the `calendar` shortcode). Light panel on the black page, matching
    the prototype's .cal* treatment. */
 
-.cal-empty { margin: 0 0 20px; }
+/* Agenda page = upcoming list on the left, month grid(s) on the right;
+   stacks below 900px. */
+.agenda-layout {
+  display: flex;
+  gap: 34px;
+  align-items: flex-start;
+  margin-top: 4px;
+}
+.agenda-list { flex: 0 0 300px; min-width: 0; }
+.agenda-layout .cal-scroll { flex: 1 1 auto; min-width: 0; margin-top: 0; }
 
-.cal-upcoming { list-style: none; margin: 0 0 24px; padding: 0; }
-.cal-upcoming li { margin: 0 0 8px; }
-.cal-upcoming time { color: var(--accent); font-weight: 700; }
-.cal-loc { color: var(--ink-dim); }
+/* stack once the list + a full-width month grid (720px) no longer fit side by side */
+@media (max-width: 1040px) {
+  .agenda-layout { flex-direction: column; gap: 24px; }
+  .agenda-list { flex-basis: auto; width: 100%; }
+}
+
+.cal-empty { margin: 0; overflow-wrap: break-word; }
+
+.cal-upcoming { list-style: none; margin: 0; padding: 0; }
+.cal-upcoming li {
+  margin: 0 0 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--divider);
+  line-height: 1.45;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+.cal-upcoming li:last-child { border-bottom: 0; }
+.cal-upcoming time { display: block; color: var(--accent); font-weight: 700; }
+.cal-up-title { display: block; }
+.cal-loc { display: block; color: var(--ink-dim); font-size: 0.92em; }
 
 .cal-scroll { overflow-x: auto; margin-top: 4px; }
 .cal {
@@ -16,8 +42,20 @@
   color: var(--panel-ink);
   border-radius: 12px;
   padding: 20px 22px 24px;
+  scroll-margin-top: 16px;
 }
+.cal + .cal { margin-top: 20px; }
 .cal-top { display: flex; align-items: baseline; justify-content: space-between; }
+
+.cal-nav {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0 2px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.cal-nav a { color: var(--cal-blue); text-decoration: none; }
+.cal-nav a:hover { text-decoration: underline; }
 .cal-month {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 28px;

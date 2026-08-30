@@ -142,9 +142,15 @@ the site slower; the build automatically makes smaller versions for phones.
 3. **Add** a new entry, or delete a past one.
 4. **Save**.
 
-If the list is empty, the Agenda page automatically shows *"Op dit moment staan er
-geen activiteiten gepland…"*. Past dates drop off the "upcoming" list on their own,
-but it's tidy to delete them now and then.
+On the site, the Agenda page shows the list of upcoming events on the left and a
+month calendar on the right. The calendar automatically grows to include every
+month up to your furthest event (up to 6 months ahead), with **‹ vorige /
+volgende ›** links to page between them — so an event next month is visible both
+in the list and on its own calendar page. Nothing to configure.
+
+If the list is empty, the page shows *"Op dit moment staan er geen activiteiten
+gepland…"*. Past dates drop off the upcoming list on their own, but it's tidy to
+delete them now and then.
 
 ---
 

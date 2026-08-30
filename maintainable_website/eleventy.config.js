@@ -66,30 +66,14 @@ async function imageShortcode(src, alt, opts = {}) {
   });
 }
 
-/* Month grid for the Agenda page: current month, Monday-first, prev/next spill
- * greyed, today marked, entries dotted on their day. Auto-updates — nothing to
- * hand-maintain. Reuses the prototype's .cal* styles (assets/css/agenda.css). */
-function calendarShortcode(entries = []) {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
-  const todayDate = now.getDate();
+const CAL_TYPE_COLOUR = { concert: "#4a77b5", dienst: "#5aa469", evenement: "#d98b3a" };
+const CAL_MAX_MONTHS = 6; // this month .. furthest upcoming event, capped
+const htmlEsc = (s) =>
+  String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
-  const events = (entries || [])
-    .map((e) => ({ ...e, d: new Date(e.date) }))
-    .filter((e) => !Number.isNaN(e.d.getTime()))
-    .sort((a, b) => a.d - b.d);
-
-  const future = events.filter((e) => e.d >= new Date(year, month, todayDate));
-  const inMonth = new Map();
-  for (const e of events) {
-    if (e.d.getFullYear() === year && e.d.getMonth() === month) {
-      const list = inMonth.get(e.d.getDate()) || [];
-      list.push(e);
-      inMonth.set(e.d.getDate(), list);
-    }
-  }
-
+/* One month grid: Monday-first, prev/next spill greyed, today marked (only in the
+ * real current month), events chipped on their day. */
+function renderMonthGrid(year, month, byDay, today, monthId, prevId, nextId) {
   const firstDow = (new Date(year, month, 1).getDay() + 6) % 7; // Mon = 0
   const daysThis = new Date(year, month + 1, 0).getDate();
   const daysPrev = new Date(year, month, 0).getDate();
@@ -99,25 +83,87 @@ function calendarShortcode(entries = []) {
   for (let d = 1; d <= daysThis; d++) cells.push({ n: d, mute: false });
   while (cells.length % 7 !== 0) cells.push({ n: cells.length - (firstDow + daysThis) + 1, mute: true });
 
-  const typeColour = { concert: "#4a77b5", dienst: "#5aa469", evenement: "#d98b3a" };
-  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-
+  const isCurrentMonth = year === today.y && month === today.m;
   let rows = "";
   for (let i = 0; i < cells.length; i += 7) {
     rows += "<tr>";
     for (const cell of cells.slice(i, i + 7)) {
-      const evs = !cell.mute ? inMonth.get(cell.n) || [] : [];
-      const isToday = !cell.mute && cell.n === todayDate;
-      const dayLabel = isToday ? `<span class="today">${cell.n}</span>` : `${cell.n}`;
-      const dots = evs
+      const evs = cell.mute ? [] : byDay.get(cell.n) || [];
+      const isToday = isCurrentMonth && !cell.mute && cell.n === today.d;
+      const label = isToday ? `<span class="today">${cell.n}</span>` : `${cell.n}`;
+      const chips = evs
         .map(
           (e) =>
-            `<span class="cal-ev" style="border-left-color:${typeColour[e.type] || "#bbbbbb"}">${esc(e.title)}</span>`
+            `<span class="cal-ev" style="border-left-color:${
+              CAL_TYPE_COLOUR[e.type] || "#bbbbbb"
+            }">${htmlEsc(e.title)}</span>`
         )
         .join("");
-      rows += `<td class="${cell.mute ? "mute" : ""}">${dayLabel}${dots}</td>`;
+      rows += `<td class="${cell.mute ? "mute" : ""}">${label}${chips}</td>`;
     }
     rows += "</tr>";
+  }
+
+  const nav =
+    prevId || nextId
+      ? `<div class="cal-nav">
+        ${prevId ? `<a href="#${prevId}">&#8249; vorige</a>` : `<span></span>`}
+        ${nextId ? `<a href="#${nextId}">volgende &#8250;</a>` : `<span></span>`}
+      </div>`
+      : "";
+
+  return `
+    <div class="cal" id="${monthId}">
+      <div class="cal-top"><div class="cal-month">${nlMonth.format(new Date(year, month, 1))}</div></div>
+      ${nav}
+      <table class="cal-grid">
+        <thead><tr><th>ma</th><th>di</th><th>wo</th><th>do</th><th>vr</th><th class="we">za</th><th class="we">zo</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div class="cal-legend">
+        <span><i style="background:#4a77b5;"></i>concert</span>
+        <span><i style="background:#5aa469;"></i>dienst</span>
+        <span><i style="background:#d98b3a;"></i>evenement</span>
+      </div>
+    </div>`;
+}
+
+/* Agenda page: an "Aankomende optredens" list plus month grids running from the
+ * current month through the month of the furthest upcoming event (cap 6),
+ * paged with in-page prev/next anchors. Fully static — no client JS. */
+function calendarShortcode(entries = []) {
+  const now = new Date();
+  const today = { y: now.getFullYear(), m: now.getMonth(), d: now.getDate() };
+  const startOfToday = new Date(today.y, today.m, today.d);
+
+  const events = (entries || [])
+    .map((e) => ({ ...e, d: new Date(e.date) }))
+    .filter((e) => !Number.isNaN(e.d.getTime()))
+    .sort((a, b) => a.d - b.d);
+  const future = events.filter((e) => e.d >= startOfToday);
+
+  let monthCount = 1;
+  if (future.length) {
+    const last = future[future.length - 1].d;
+    monthCount = (last.getFullYear() - today.y) * 12 + (last.getMonth() - today.m) + 1;
+    monthCount = Math.min(Math.max(monthCount, 1), CAL_MAX_MONTHS);
+  }
+
+  const monthId = (y, m) => `agenda-${y}-${String(m + 1).padStart(2, "0")}`;
+  let grids = "";
+  for (let i = 0; i < monthCount; i++) {
+    const dt = new Date(today.y, today.m + i, 1);
+    const y = dt.getFullYear();
+    const m = dt.getMonth();
+    const byDay = new Map();
+    for (const e of events) {
+      if (e.d.getFullYear() === y && e.d.getMonth() === m) {
+        byDay.set(e.d.getDate(), [...(byDay.get(e.d.getDate()) || []), e]);
+      }
+    }
+    const prevId = i > 0 ? monthId(new Date(today.y, today.m + i - 1, 1).getFullYear(), new Date(today.y, today.m + i - 1, 1).getMonth()) : null;
+    const nextId = i < monthCount - 1 ? monthId(new Date(today.y, today.m + i + 1, 1).getFullYear(), new Date(today.y, today.m + i + 1, 1).getMonth()) : null;
+    grids += renderMonthGrid(y, m, byDay, today, monthId(y, m), prevId, nextId);
   }
 
   const emptyLine = future.length
@@ -128,26 +174,18 @@ function calendarShortcode(entries = []) {
     ? `<ul class="cal-upcoming">${future
         .map(
           (e) =>
-            `<li><time datetime="${e.d.toISOString().slice(0, 10)}">${nlLong.format(e.d)}</time> &mdash; ${esc(
-              e.title
-            )}${e.location ? ` <span class="cal-loc">(${esc(e.location)})</span>` : ""}</li>`
+            `<li>` +
+            `<time datetime="${e.d.toISOString().slice(0, 10)}">${nlLong.format(e.d)}</time>` +
+            `<span class="cal-up-title">${htmlEsc(e.title)}</span>` +
+            (e.location ? `<span class="cal-loc">${htmlEsc(e.location)}</span>` : "") +
+            `</li>`
         )
         .join("")}</ul>`
     : "";
 
-  return `${emptyLine}${upcoming}
-  <div class="cal-scroll">
-    <div class="cal">
-      <div class="cal-top"><div class="cal-month">${nlMonth.format(now)}</div></div>
-      <table class="cal-grid">
-        <thead><tr><th>ma</th><th>di</th><th>wo</th><th>do</th><th>vr</th><th class="we">za</th><th class="we">zo</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-      <div class="cal-legend">
-        <span><i style="background:#4a77b5;"></i>concert</span>
-        <span><i style="background:#5aa469;"></i>dienst</span>
-        <span><i style="background:#d98b3a;"></i>evenement</span>
-      </div>
+  return `<div class="agenda-layout">
+    <div class="agenda-list">${emptyLine}${upcoming}</div>
+    <div class="cal-scroll">${grids}
     </div>
   </div>`;
 }
