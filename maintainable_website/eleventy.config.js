@@ -3,6 +3,7 @@ import path from "node:path";
 import { EleventyHtmlBasePlugin } from "@11ty/eleventy";
 import Image from "@11ty/eleventy-img";
 import MarkdownIt from "markdown-it";
+import { load as loadYaml } from "js-yaml";
 
 /*
  * Where the site is served from:
@@ -154,6 +155,10 @@ function calendarShortcode(entries = []) {
 export default function (eleventyConfig) {
   eleventyConfig.setLibrary("md", md);
   eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
+
+  // Eleventy has no built-in YAML data loader — register one so
+  // src/_data/agenda.yaml (Pages CMS-editable) is actually read.
+  eleventyConfig.addDataExtension("yaml,yml", (contents) => loadYaml(contents) ?? []);
 
   eleventyConfig.addFilter("md", (s) => (s ? md.render(String(s)) : ""));
   eleventyConfig.addFilter("mdInline", (s) => (s ? md.renderInline(String(s)) : ""));
