@@ -3,11 +3,6 @@ title: Onderwijs
 titleClass: is-red
 description: Muziekonderwijs op school en thuis — Wilma van der Schoot, docent
   muziek (Fontys).
-band:
-  - src: /assets/images/2012-11-06__De_Bron_leslokaal.jpg
-    alt: Leslokaal met keyboards, De Bron
-    w: 274
-    h: 155
 teasers:
   - title: Bs Emmaus
     body: |-
@@ -20,7 +15,7 @@ teasers:
       Voor informatie kunt u terecht bij:
       [basisschool Emmaus](https://sites.google.com/filiosscholengroep.nl/bsemmaus/startpagina)
     image:
-      src: /assets/images/Emmaus1.jpg
+      src: Emmaus1.jpg
       alt: Basisschool Emmaus
 ---
 De studie Docent Muziek heb ik aan de Fontys in Tilburg gedaan. Sindsdien geef ik op
