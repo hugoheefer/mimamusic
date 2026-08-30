@@ -187,22 +187,33 @@ Refresh the page (hard refresh if needed — §4). There is nothing else to "pub
 
 ## 8a. Getting a copy of the finished website files
 
-The editor holds the *source*; the finished, ready-to-host pages are built
-automatically on every save. To download them:
+The editor holds the *source*; the finished, ready-to-host pages are rebuilt
+automatically after every save. To download that built version:
 
-1. On GitHub, open the repository → **Actions** tab.
-2. Click the most recent green run of **Deploy site to GitHub Pages**.
-3. Scroll to **Artifacts** at the bottom → click **site** → a `site.zip`
-   downloads. Unzip it — that's the whole website as plain HTML/CSS/images.
+1. **Open the repository on GitHub** — sign in and go to
+   `https://github.com/hugoheefer/mimamusic`.
+2. **Click "Actions" in the row of tabs across the top of the repository** — the
+   strip that reads *Code · Issues · Pull requests · Actions · … · Settings*, just
+   under the repository name.
+   *Watch out:* there is a second link also called "Actions" inside **Settings**,
+   in the grey menu down the left-hand side. That one is for configuration and is
+   **not** what you want. Use the tab in the top row.
+3. In the list of runs, **click the most recent one with a green check mark**,
+   titled *Deploy site to GitHub Pages*.
+4. On that run's page, **scroll to the bottom to the "Artifacts" box** and click
+   **site**. A file called `site.zip` downloads.
+5. **Unzip it.** Inside is the complete website as plain HTML, CSS and image
+   files.
 
-Kept for 90 days per run. Notes:
+Each run keeps its copy for **90 days**. Two things to know:
 
-- These files are built for the current address
-  (`hugoheefer.github.io/mimamusic/`), so links inside them expect that path. To
-  host them somewhere else at a domain root, ask the developer to build a
-  root-path copy.
-- For a quick snapshot without GitHub, a tool like **HTTrack** (free, Windows)
-  pointed at the live site address will download exactly what's online.
+- The files are built for the current web address
+  (`hugoheefer.github.io/mimamusic/`), so the links inside them expect that path.
+  If you want a copy to put on a different host at its own domain root, ask the
+  developer to produce a root-path build.
+- If you just want a snapshot and would rather not use GitHub, a free tool such as
+  **HTTrack** (Windows) aimed at the live web address downloads exactly what is
+  online at that moment.
 
 ---
 
