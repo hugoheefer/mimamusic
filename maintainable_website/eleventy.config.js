@@ -50,6 +50,10 @@ const capFirst = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 const IMAGE_DIR = "src/assets/images";
 
 async function imageShortcode(src, alt, opts = {}) {
+  // A CMS editor can clear an image field and leave the object behind
+  // ({ alt, layout } with no src). Skip rather than fail the whole build.
+  if (!src) return "";
+
   const {
     className = "",
     sizes = "(max-width: 760px) 100vw, 700px",

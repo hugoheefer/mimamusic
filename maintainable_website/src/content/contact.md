@@ -3,6 +3,7 @@ title: over mij,
 titleClass: is-red
 description: Over Wilma van der Schoot en MiMaMusic — contact via e-mail of telefoon.
 photo:
+  src: /assets/images/2020-06-28_Wilma.jpg
   alt: Wilma van der Schoot
   layout: ph-portrait
 ---
