@@ -1,0 +1,41 @@
+========================================================================
+ MiMaMusic — Squarespace URL Mappings   (old Joomla URL -> new URL, 301)
+ Settings -> Advanced -> URL Mappings
+
+ Mirrors spec §12. Finalise against a Screaming Frog crawl of the live
+ site before go-live in case there are stray indexed URLs not listed here.
+
+ >>> Do NOT paste this comment header. Paste only the RULES block below. <<<
+ Squarespace URL Mappings does not support comments or query strings.
+========================================================================
+
+----- RULES (paste from here down) -------------------------------------
+
+/index.php -> / 301
+/index.php/koren -> /koren 301
+/index.php/koren/gospelpopkoor-spirit -> /koren/gospelpopkoor-spirit 301
+/index.php/koren/singin-gestel -> /koren/singin-gestel 301
+/index.php/koren/popkoor-miks -> /koren/popkoor-miks 301
+/index.php/onderwijs -> /onderwijs 301
+/index.php/dwarsfluit -> /dwarsfluit 301
+/index.php/arrangeren-menu -> /arrangeren 301
+/index.php/workshops-en-les -> /workshop-les 301
+/index.php/workshops-en-les/muzikale-ondersteuning -> /workshop-les/muzikale-ondersteuning 301
+/index.php/workshops-en-les/workshopmogelijkheden -> /workshop-les/workshopmogelijkheden 301
+/index.php/agenda -> /agenda 301
+/index.php/contact -> /contact 301
+
+----- END RULES -------------------------------------------------------
+
+NOT COVERED BY URL MAPPINGS (handle separately):
+
+- Bare "/" and "/index.php" with no trailing path: the site root already
+  serves the new home page, and Squarespace 301s the non-canonical host
+  (www vs non-www) automatically once the domain is connected. The
+  "/index.php -> /" rule above catches the explicit form.
+
+- JEvents event URLs (?option=com_jevents&...): these carry query strings,
+  which Squarespace URL Mappings cannot match. They will 404 to the custom
+  404 page. Acceptable — the live agenda grid is empty (spec §6), so there
+  are no indexed event pages worth saving. If a crawl finds any, add a
+  manual redirect for each exact path, or point the 404 page at /agenda.

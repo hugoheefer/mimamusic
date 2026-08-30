@@ -700,17 +700,27 @@ ORDER BY c.state DESC, c.ordering;
 
 ## 13. Squarespace build notes
 
-> Full feasibility matrix, plan choice, Custom CSS starting points and the trial
-> log live in **`squarespace-trial.md`** (same folder). Summary below.
+> **The Squarespace rebuild now lives in its own self-contained folder:
+> `../squarespace/`** — `build-runbook.md` (step-by-step, Phases 1–8),
+> `trial-log.md` (feasibility matrix + running findings log, was
+> `squarespace-trial.md`), `custom-css.css`, `code-injection.html`,
+> `url-mappings.txt`, `assets/README.md`. Summary below; the runbook is the
+> working document.
 
+- **Locked decisions (2026‑08‑30):** platform = Squarespace **Business** (chosen
+  over `../maintainable_website/` for owner-maintenance simplicity); **all‑black**
+  kept; logo wordmark = **Henny Penny** live text (PNG fallback); headings =
+  **Gabriela** (native picker) — **Fredericka the Great dropped**; body = **Arial
+  14px/20px** (not a serif, per D2).
 - **Plan**: **Business** or higher — Custom CSS / Code Injection is *not* on Personal.
-- **Fonts**: Gabriela (body) is a standard Google font; Henny Penny + Fredericka the
-  Great may need a Custom CSS `@import` or Adobe Fonts.
+- **Fonts**: Gabriela + Arial are standard; only **Henny Penny** needs a Custom
+  CSS `@import` (and only if the wordmark stays as live text).
 - **Nav**: two Folders (Koren, workshop/les) — but a folder *title is not a link* in
   Squarespace. Resolve: "overzicht" first child, or a JS injection (snippet in
-  `squarespace-trial.md`), or dropdown‑only. Privacy in footer nav only.
+  `../squarespace/code-injection.html`), or dropdown‑only. Privacy in footer nav only.
 - **Expectation**: ~85–90% with the style editor, ~95%+ with modest Custom CSS.
-- **Home**: Slideshow section + three text sections (Homepage 1/2/3).
+- **Home**: **no slideshow** — three column sections (Dirigeren / Onderwijs /
+  Dwarsfluit), each heading + one paragraph + one photo (see §4 Home, D7).
 - **Dwarsfluit**: one page, four stacked sections in DB `ordering`: Geschiedenis, fluitist, Dwarsfluitles, Blokfluitles.
 - **Arrangeren**: one page (single article, as live). Add an "Arrangementen"
   examples section only if id 14 gets published / owner asks.
@@ -720,11 +730,15 @@ ORDER BY c.state DESC, c.ordering;
 - **Cookie banner**: Squarespace setting. Chat / comments / newsletter per §11.
 - Enter the §12 redirect table in Squarespace URL mappings.
 
-## 14. Hosting / deploy  (platform NOT locked)
+## 14. Hosting / deploy  (platform: Squarespace, pending the Phase 5 trial gate)
 
-The prototype is static HTML, so the leading option is **static hosting we control**
-rather than a closed builder. Squarespace stays the "least technical, monthly fee,
-no code access" fallback (see `squarespace-trial.md`).
+**2026‑08‑30:** the owner chose to build on **Squarespace** for the simplest
+maintenance model — build in progress in `../squarespace/` (see §13). The
+`../maintainable_website/` 11ty build stays in the repo as the fallback if the
+Phase 5 trial gate fails. The notes below are retained for that scenario.
+
+The prototype is static HTML, so the fallback option is **static hosting we control**
+rather than a closed builder.
 
 ### Photo injection markers
 `build_images.py` swaps labelled placeholders in the `.src.html` for baked

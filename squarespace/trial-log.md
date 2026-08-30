@@ -1,11 +1,13 @@
 # Squarespace trial — feasibility & working notes
 
-Living doc for the first Squarespace test of the MiMaMusic rebuild. Pairs with
-`mimamusic-rebuild-spec.md` (the full site definition). Update this on every trial
-finding or decision.
+Living doc for the Squarespace rebuild of MiMaMusic. Part of the self-contained
+`squarespace/` folder (see `README.md` there). Pairs with the full site
+definition at `../rebuild_data/mimamusic-rebuild-spec.md` and the step-by-step
+`build-runbook.md` next to this file. **Update this on every trial finding or
+decision.**
 
-Prototype it must match: `website/mimamusic-reference.html`
-(Artifact: https://claude.ai/code/artifact/fcf1a98b-ad3e-460c-9f94-3b4a51c561fd)
+Prototype it must match: `../website/mimamusic-reference.html`
+(Artifact: https://claude.ai/code/artifact/bea26d35-ff4c-45c7-bad8-65419f9e0835)
 
 ---
 
@@ -132,11 +134,17 @@ _(fill in as the test runs)_
 
 | date | finding |
 |---|---|
-| — | — |
+| 2026‑08‑30 | Guided build started. Decisions logged above: Henny Penny wordmark kept, Gabriela (not Fredericka) for headings, all‑black kept. Next: start Business trial → set global styles (Phase 2). |
 
 ## Open questions for the owner
 
 - [ ] Business plan cost (~€23/mo billed yearly) acceptable for the Custom CSS we need?
-- [ ] Keep the quirky display fonts (Henny Penny / Fredericka the Great) or take the
-      rebuild as a chance to pick cleaner faces?
+- [x] **Fonts (decided 2026‑08‑30):** keep **Henny Penny** for the MiMaMusic
+      wordmark (text via Custom CSS `@import`, or an uploaded PNG wordmark as the
+      clean fallback); **red section headings move off Fredericka the Great to
+      Gabriela** — a clean serif already in the Squarespace picker, matches spec
+      D4. Fredericka the Great is dropped. Net: the only font `@import` still
+      needed is Henny Penny, and only if the wordmark stays as live text.
+- [x] **Look (decided 2026‑08‑30):** keep the **all‑black** ground for the build;
+      present a lightened option to Wilma at review. Build to the prototype.
 - [ ] Folder‑title behaviour: "overzicht" first item vs. JS link vs. dropdown‑only?

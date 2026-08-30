@@ -1,0 +1,48 @@
+<!-- ==========================================================================
+     MiMaMusic — Squarespace Code Injection
+     Paste into: Settings -> Advanced -> Code Injection -> FOOTER.
+     Keep this file and the live footer box identical.
+
+     Only add a snippet here when the style editor genuinely can't do the job.
+     Every snippet says what it's for. The owner should not touch this box.
+     ========================================================================== -->
+
+
+<!-- 1 — Folder title as link (OPTIONAL) -------------------------------------
+     Squarespace Folders open a dropdown but their title is NOT a link. The
+     prototype's Koren / workshop-les parents ARE links to their landing page
+     (spec D6). This makes the folder titles navigate on click.
+
+     Only paste this if you chose option 2 in Phase 3b of the runbook. If you
+     went with an "overzicht" first child instead, leave this out.
+
+     VERIFY the selector: on 7.1 the folder title is commonly
+     .header-nav-folder-title (desktop). Inspect the live nav and adjust. -->
+<script>
+  (function () {
+    var map = {
+      'Koren': '/koren',
+      'workshop/les': '/workshop-les'
+    };
+    document.querySelectorAll('.header-nav-folder-title').forEach(function (t) {
+      var href = map[t.textContent.trim()];
+      if (!href) return;
+      t.style.cursor = 'pointer';
+      t.addEventListener('click', function () { window.location.href = href; });
+    });
+  })();
+</script>
+
+
+<!-- 2 — Home-only footer copyright (OPTIONAL) -----------------------------------
+     The prototype shows the "Copyright © <year> MimaMusic..." line on the HOME
+     page only, below the badge (spec D11). Squarespace footers are global.
+     Simplest path is to accept it site-wide and skip this. If Wilma wants it
+     home-only, put the line in the footer as normal, give its block a class or
+     id, and hide it off the homepage:
+
+     VERIFY: homepage <body> gets a homepage class/id on 7.1 (often
+     .homepage on the body, or a collection id). Adjust the :not() check. -->
+<style>
+  body:not(.homepage) .mm-footer-copyright { display: none; }
+</style>

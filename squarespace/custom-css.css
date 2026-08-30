@@ -1,0 +1,96 @@
+/* ============================================================================
+   MiMaMusic — Squarespace Custom CSS
+   Paste into: Design -> Custom CSS. Keep this file and the live block identical.
+
+   RULES OF THE ROAD
+   - This is the ONLY place raw CSS lives. Anything settable in Design -> Colours
+     / Fonts / Spacing is set THERE, not here.
+   - Every block below says what it targets and why. Keep it that way.
+   - Squarespace 7.1 class names drift between versions. After any Squarespace
+     update that looks off: re-check each selector with the browser inspector on
+     the live site and fix the drifted names. That is the only recurring task.
+   - Last verified against live selectors: NOT YET (fill in date on first paste).
+   ============================================================================ */
+
+
+/* 1 — Logo wordmark font (Henny Penny) --------------------------------------
+   Decision SQ3: "MiMaMusic" stays in Henny Penny as live text. It is an old
+   Google font and usually NOT in the Squarespace picker, so import it here.
+   If it renders unreliably, delete this block + block 3 and upload a PNG
+   wordmark instead (Edit header -> Site title -> Add a logo image). */
+@import url('https://fonts.googleapis.com/css2?family=Henny+Penny&display=swap');
+
+
+/* 2 — Body bold = brand red ----------------------------------------------------
+   Spec D3: <strong> inside body copy renders #cb4752 on the live site. Try to
+   get this from the colour theme first; keep this only if the theme can't.
+   VERIFY selector: on 7.1 body text blocks are usually .sqs-block-content. */
+.sqs-block-content strong,
+.sqs-html-content strong {
+  color: #cb4752;
+}
+
+
+/* 3 — Site title in Henny Penny ---------------------------------------------
+   Pairs with block 1. Skip entirely if using a PNG logo image.
+   VERIFY selector: 7.1 text site title is often .header-title-text a. */
+.header-title-text a {
+  font-family: 'Henny Penny', cursive;
+  color: #ffffff;
+  font-size: 60px;
+  line-height: 1;
+}
+
+
+/* 4 — Grey gradient mega-menu bar ----------------------------------------------
+   The prototype's nav is a grey gradient bar with uppercase, tracked, divided
+   items. Squarespace's native nav won't do the bar; this reproduces it.
+   VERIFY selectors: 7.1 desktop nav is commonly .header-nav-list and
+   .header-nav-item a. Inspect and correct. */
+.header-nav-list {
+  background: linear-gradient(#595959, #3a3a3a);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+.header-nav-item a {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 11px;
+  font-weight: 700;
+  color: #e8e8e8;
+  padding: 15px 20px;
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+
+/* 5 — Two full-width divider rules -------------------------------------------
+   Prototype has a 1px hairline above the menu and above the footer, spanning
+   the full viewport width (spec §2 live-CSS facts).
+   VERIFY selectors: .header wrapper and the footer sections wrapper. */
+.header {
+  border-top: 1px solid #333333;
+}
+.footer-sections,
+#footer-sections {
+  border-top: 1px solid #333333;
+}
+
+
+/* 6 — Background / text safety net -------------------------------------------
+   The black theme (Design -> Colours) should already do this on every section.
+   Keep this ONLY as a fallback if a stray section or block shows through white.
+   If the theme holds everywhere, delete this block. */
+body,
+#siteWrapper {
+  background: #000000;
+}
+
+
+/* 7 — Arrangeren heading quirk --------------------------------------------------
+   Spec D15: the Arrangeren page heading is #ff0000 / 14pt inline on the live
+   site, NOT the Gabriela #cb4752 treatment. Prefer to set this on that single
+   heading block in the editor. Use this class only if you add a code block or
+   need it reusable. Flag to Wilma whether to keep or normalise. */
+.mm-heading-arrangeren {
+  color: #ff0000;
+  font-size: 14pt;
+}
