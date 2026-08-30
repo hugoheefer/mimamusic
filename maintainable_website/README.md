@@ -59,8 +59,9 @@ src/
     images/*           real photos (from ../website/images/web/)
   redirects.njk        emits a meta-refresh stub per redirects.json entry
   sitemap.njk robots.njk
-eleventy.config.js     filters (md, nldate, pageSlug), the {% image %} and
-                       {% calendar %} shortcodes, and the CSS bundle step
+eleventy.config.js     filters (md, nldate, pageSlug); the {% image %},
+                       {% agendaList %} and {% agendaCalendar %} shortcodes;
+                       YAML data loader; the CSS bundle step
 .pages.yml             Pages CMS schema (see "Editing" below)
 deploy/                staging copies of the GitHub Actions workflow + CNAME
 ```
@@ -157,12 +158,13 @@ Screaming Frog crawl of the live site before go-live.
   `@media print`, `sitemap.xml`, `robots.txt`, a `404.html`. The nav is the
   prototype's plain wrapping bar with CSS-only dropdowns (no JS, no hamburger);
   on touch the parent links reach their landing pages, which list the children.
-- Agenda: the fake JEvents mode toggles are dropped. Layout is an **"Aankomende
-  optredens" list on the left half, one month grid on the right half** (stacks
-  < 900px). Grids are generated from `agenda.yaml` for the current month through
-  the month of the furthest upcoming event (cap 6); **one is shown at a time**,
-  browsed with in-page `‹ vorige / volgende ›` anchors via `:target` + `:has()`
-  CSS — no client JS. All auto-updates as dates pass.
+- Agenda: the fake JEvents mode toggles are dropped. Left half = the "Agenda"
+  heading + intro + "Aankomende optredens" list; right half = one month grid,
+  top-aligned with the heading. Stacks < 900px. Grids run from the current month
+  through the month of the furthest upcoming event (cap 6); **one shows at a
+  time**, switched by `‹ vorige / volgende ›` `<label>`s that flip a hidden radio
+  (`:checked` + positional `:nth-of-type` CSS) — no client JS, and no scroll jump.
+  All auto-updates as dates pass.
 - Dwarsfluit "Dwarsfluitles" `<br>` pseudo-list → a real Markdown bullet list
   (spec D16 open question — converted for CMS cleanliness).
 - Transcribed copy keeps the original quirks verbatim ("Daarna heeft heb ik",

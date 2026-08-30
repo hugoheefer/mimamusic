@@ -2,9 +2,14 @@
 layout: layouts/base.njk
 ---
 <section class="page" id="page-agenda">
-  <h1 class="page-title is-red">{{ title }}</h1>
-  <div class="prose" style="margin-bottom: 24px;">
-    {{ content | safe }}
+  <div class="agenda-layout">
+    <div class="agenda-left">
+      <h1 class="page-title is-red">{{ title }}</h1>
+      <div class="prose">{{ content | safe }}</div>
+      {% agendaList agenda %}
+    </div>
+    <div class="cal-scroll">
+      {% agendaCalendar agenda %}
+    </div>
   </div>
-  {% calendar agenda %}
 </section>
