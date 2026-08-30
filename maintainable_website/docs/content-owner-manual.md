@@ -207,13 +207,15 @@ automatically after every save. To download that built version:
 
 Each run keeps its copy for **90 days**. Two things to know:
 
-- The files are built for the current web address
-  (`hugoheefer.github.io/mimamusic/`), so the links inside them expect that path.
-  If you want a copy to put on a different host at its own domain root, ask the
-  developer to produce a root-path build.
-- If you just want a snapshot and would rather not use GitHub, a free tool such as
-  **HTTrack** (Windows) aimed at the live web address downloads exactly what is
-  online at that moment.
+- The **site** artifact above is built for the current web address
+  (`hugoheefer.github.io/mimamusic/`), so its links expect that exact path — fine
+  for reference, but it won't just work if you move it elsewhere.
+- For a copy that **runs from anywhere** — opened straight from a folder on your
+  computer, or placed in any web server — ask the developer for the **portable
+  build** (`npm run build:portable`). Its links are relative, so it works wherever
+  you put it, no configuration.
+- If you'd rather not use GitHub at all, a free tool such as **HTTrack** (Windows)
+  aimed at the live web address downloads exactly what is online at that moment.
 
 ---
 

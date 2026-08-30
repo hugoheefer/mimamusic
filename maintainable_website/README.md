@@ -137,6 +137,12 @@ workflow sets `PATH_PREFIX: /mimamusic/`. Once `mimamusic.nl` is attached (serve
 at root), set it back to `/`. Local dev and the eventual custom domain both use
 the `/` default.
 
+**Portable build:** `npm run build:portable` (`RELATIVE_URLS=1`) instead rewrites
+every link to be **document-relative** (`../assets/…`) via an `addTransform`. That
+`_site/` runs from anywhere with no server config — opened as `file://`, or
+dropped into any web server's webroot **or** a subfolder. It's a hand-off copy,
+not what the workflow deploys.
+
 ### Redirects
 
 GitHub Pages has no `_redirects` file, so `src/redirects.njk` renders one

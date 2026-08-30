@@ -11,8 +11,13 @@ import { load as loadYaml } from "js-yaml";
  *   - GitHub Pages project site (hugoheefer.github.io/mimamusic/):  "/mimamusic/"
  * The deploy workflow sets PATH_PREFIX=/mimamusic/. EleventyHtmlBasePlugin
  * rewrites every root-relative href/src/srcset in the output HTML to match.
+ *
+ * RELATIVE_URLS=1 (npm run build:portable) instead rewrites every link to be
+ * document-relative (../assets/…). That copy runs from any location: opened as
+ * a file:// page, or dropped into any web server's webroot or a subfolder.
  */
-const PATH_PREFIX = process.env.PATH_PREFIX || "/";
+const RELATIVE_URLS = process.env.RELATIVE_URLS === "1";
+const PATH_PREFIX = RELATIVE_URLS ? "/" : process.env.PATH_PREFIX || "/";
 
 /*
  * MiMaMusic site build.
@@ -214,6 +219,24 @@ function agendaCalendarShortcode(entries = []) {
 export default function (eleventyConfig) {
   eleventyConfig.setLibrary("md", md);
   eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
+
+  // portable build: turn every root-relative /… link into a document-relative
+  // ../… link, so the output runs from any path (file://, any webroot, subfolder)
+  if (RELATIVE_URLS) {
+    eleventyConfig.addTransform("relativeUrls", function (content) {
+      const url = this.page.url || "/";
+      const segs = url.split("/").filter(Boolean);
+      const depth = url.endsWith("/") ? segs.length : Math.max(segs.length - 1, 0);
+      const up = depth === 0 ? "./" : "../".repeat(depth);
+      if (!String(this.page.outputPath || "").endsWith(".html")) return content;
+      return content
+        .replace(/\b(href|src)=("|')\/(?!\/)/g, (_m, a, q) => `${a}=${q}${up}`)
+        .replace(
+          /\bsrcset=("|')([^"']*)\1/g,
+          (_m, q, v) => `srcset=${q}${v.replace(/(^|,\s*)\/(?!\/)/g, (_x, sep) => sep + up)}${q}`
+        );
+    });
+  }
 
   // Eleventy has no built-in YAML data loader — register one so
   // src/_data/agenda.yaml (Pages CMS-editable) is actually read.

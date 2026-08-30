@@ -154,6 +154,12 @@ PATH_PREFIX=/mimamusic/ npm run build
 (On Windows Git Bash use `MSYS_NO_PATHCONV=1 PATH_PREFIX=/mimamusic/ npm run build`
 — otherwise the shell mangles the value into a Windows path.)
 
+**Portable copy** — `npm run build:portable` (`RELATIVE_URLS=1`, cross-platform via
+`cross-env`). A `relativeUrls` transform rewrites every root-relative `href` /
+`src` / `srcset` to `../…` based on the page's depth. The resulting `_site/` runs
+from any location: `file://`, any web server's webroot, or any subfolder. Hand
+this to anyone who wants a self-contained copy of the site.
+
 ---
 
 ## 6. Pages CMS setup
@@ -246,7 +252,8 @@ used: `string`, `text`, `rich-text`, `image`, `boolean`, `number`, `select`,
 cd maintainable_website
 npm install                 # once, and after dependency changes
 npm start                   # dev server, live reload, http://localhost:8080
-npm run build               # build to _site/
+npm run build               # build to _site/ (absolute links)
+npm run build:portable      # build to _site/ with relative links (runs anywhere)
 npm run clean               # remove _site/
 
 # reproduce the deployed build locally (Linux/macOS)
