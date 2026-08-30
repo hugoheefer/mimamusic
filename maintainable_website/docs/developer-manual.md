@@ -11,7 +11,7 @@ step-by-step operational guide.
 | Live (preview) | `https://hugoheefer.github.io/mimamusic/` |
 | Working branch | `feature/build-mainainable-site` |
 | Editor for the owner | Pages CMS — `https://app.pagescms.org` |
-| Stack | Eleventy 3 · Nunjucks · `@11ty/eleventy-img` · `markdown-it` · GitHub Actions → GitHub Pages |
+| Stack | Eleventy 3 · Nunjucks · `@11ty/eleventy-img` · `markdown-it` · `js-yaml` · GitHub Actions → GitHub Pages |
 
 ---
 
@@ -226,6 +226,7 @@ used: `string`, `text`, `rich-text`, `image`, `boolean`, `number`, `select`,
 | Page URLs contain **`/content/`** | `src/content/content.11tydata.js` sets a computed `permalink` that strips the `content/` segment — keep it. |
 | **Images missing** when added inside a Nunjucks **macro** | The `{% image %}` shortcode is async and can't run inside `{% macro %}`. Inline the loop into the template instead (see `layouts/section.njk`). |
 | `<title>` shows **"MimaMusic — MimaMusic"** on home | Home is detected with `page.url == "/"`, not `fileSlug` — keep that check in `base.njk`. |
+| **Agenda entries don't show** on the site | Eleventy has no built-in `.yaml` data loader. `eleventy.config.js` registers one via `addDataExtension("yaml,yml", …)` with `js-yaml` — keep it, or `src/_data/agenda.yaml` is silently ignored. |
 | Env var mangled to a `C:/Program Files/Git/...` path in local builds | Windows Git Bash MSYS path conversion — prefix with `MSYS_NO_PATHCONV=1` (§5). |
 | `sharp` install-script warning during `npm install` | Harmless — sharp ships prebuilt binaries; the image pipeline still works. CI installs the Linux binary automatically. |
 
