@@ -33,7 +33,14 @@ const IMAGE_WIDTHS = [320, 640, 960, null]; // null = keep original (never upsca
 const md = new MarkdownIt({ html: true, breaks: false, linkify: false });
 
 const nlLong = new Intl.DateTimeFormat("nl-NL", { day: "numeric", month: "long", year: "numeric" });
+const nlWeekdayLong = new Intl.DateTimeFormat("nl-NL", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
 const nlMonth = new Intl.DateTimeFormat("nl-NL", { month: "long", year: "numeric" });
+const capFirst = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
 const IMAGE_DIR = "src/assets/images";
 
@@ -160,7 +167,7 @@ function agendaListShortcode(entries = []) {
     .map(
       (e) =>
         `<li>` +
-        `<time datetime="${e.d.toISOString().slice(0, 10)}">${nlLong.format(e.d)}</time>` +
+        `<time datetime="${e.d.toISOString().slice(0, 10)}">${capFirst(nlWeekdayLong.format(e.d))}</time>` +
         `<span class="cal-up-title">${htmlEsc(e.title)}</span>` +
         (e.location ? `<span class="cal-loc">${htmlEsc(e.location)}</span>` : "") +
         `</li>`
