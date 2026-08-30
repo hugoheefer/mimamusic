@@ -1,10 +1,4 @@
-# Agenda — komende optredens. Edited via Pages CMS ("Agenda" collection).
-# Each entry: date (YYYY-MM-DD), title, type (concert | dienst | evenement), location (optional).
-# Empty list  ->  the Agenda page shows "op dit moment geen activiteiten gepland".
-#
-# Example (remove the leading '#' and adjust):
-# - date: 2026-09-20
-#   title: Najaarsconcert Singin'Gestel
-#   type: concert
-#   location: Sint-Michielsgestel
-[]
+- date: 2026-08-30
+  title: Test concert in agenda
+  type: concert
+  location: Theater aan de parade - Den Bosch
