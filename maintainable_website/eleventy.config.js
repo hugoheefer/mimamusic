@@ -110,7 +110,8 @@ function renderMonthGrid(year, month, byDay, today, prevInputId, nextInputId) {
   const cells = [];
   for (let i = 0; i < firstDow; i++) cells.push({ n: daysPrev - firstDow + 1 + i, mute: true });
   for (let d = 1; d <= daysThis; d++) cells.push({ n: d, mute: false });
-  while (cells.length % 7 !== 0) cells.push({ n: cells.length - (firstDow + daysThis) + 1, mute: true });
+  // always 6 rows (42 cells) so the grid is the same height every month
+  while (cells.length < 42) cells.push({ n: cells.length - (firstDow + daysThis) + 1, mute: true });
 
   const isCurrentMonth = year === today.y && month === today.m;
   let rows = "";
