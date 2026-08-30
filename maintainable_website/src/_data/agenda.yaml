@@ -22,3 +22,7 @@
   title: Test concert
   type: concert
   location: Dorpshuis de Dorsvlegel (Krommenie)
+- date: 2026-11-10
+  title: Test evenement
+  type: evenement
+  location: Den Bosch
