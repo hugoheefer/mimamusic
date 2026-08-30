@@ -1,0 +1,21 @@
+<nav class="nav" aria-label="Hoofdmenu">
+  <div class="nav-inner">
+    <ul class="menu">
+      {%- for item in site.navigation -%}
+      {%- set current = (item.url == "/" and page.url == "/") or (item.url != "/" and page.url | startsWith(item.url)) -%}
+      <li class="{% if item.children %}has-sub {% endif %}{% if current %}is-current{% endif %}">
+        <a class="nav-link" href="{{ item.url }}"{% if current %} aria-current="page"{% endif %}>
+          {{ item.text }}{% if item.children %} <span class="caret" aria-hidden="true"></span>{% endif %}
+        </a>
+        {%- if item.children -%}
+        <ul class="submenu">
+          {%- for child in item.children -%}
+          <li><a href="{{ child.url }}"{% if child.muted %} class="arch"{% endif %}{% if page.url == child.url %} aria-current="page"{% endif %}>{{ child.text }}</a></li>
+          {%- endfor -%}
+        </ul>
+        {%- endif -%}
+      </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</nav>

@@ -1,0 +1,18 @@
+{
+  "comment": "Old Joomla URL -> new path. Rendered by src/redirects.njk into meta-refresh stubs (GitHub Pages has no _redirects file). Finalise against a Screaming Frog crawl before go-live (spec §12).",
+  "map": {
+    "/index.php": "/",
+    "/index.php/koren": "/koren/",
+    "/index.php/koren/gospelpopkoor-spirit": "/koren/gospelpopkoor-spirit/",
+    "/index.php/koren/singin-gestel": "/koren/singin-gestel/",
+    "/index.php/koren/popkoor-miks": "/koren/popkoor-miks/",
+    "/index.php/onderwijs": "/onderwijs/",
+    "/index.php/dwarsfluit": "/dwarsfluit/",
+    "/index.php/arrangeren-menu": "/arrangeren/",
+    "/index.php/workshops-en-les": "/workshop-les/",
+    "/index.php/workshops-en-les/muzikale-ondersteuning": "/workshop-les/muzikale-ondersteuning/",
+    "/index.php/workshops-en-les/workshopmogelijkheden": "/workshop-les/workshopmogelijkheden/",
+    "/index.php/agenda": "/agenda/",
+    "/index.php/contact": "/contact/"
+  }
+}

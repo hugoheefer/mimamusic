@@ -1,0 +1,106 @@
+/* Section titles, body prose, and the photo layouts (home band, section band,
+   stacks/pairs, floated side/portrait images, teasers). Values match the live
+   template.css + the prototype's resolved layout (spec D2–D16). */
+
+.page-title {
+  /* live: bare <h*> -> h1..h6 { font-family:'Gabriela',serif; font-weight:400; line-height:1.5 } */
+  font: 400 20px/1.5 "Gabriela", Georgia, "Times New Roman", serif;
+  margin: 0 0 26px;
+  text-wrap: balance;
+}
+.page-title.is-red { color: var(--title-red); }    /* linked category-landing titles */
+.page-title.is-dim { color: var(--title-dim); }    /* sub-page titles (live #333, lifted for legibility — spec D4) */
+
+/* Arrangeren keeps the live site's inline heading quirk (spec D15 — flagged for
+   the owner to confirm or normalise). Kept in CSS, not inline front matter, so
+   the CMS can't touch it. */
+.p-arrangeren .page-title { color: #ff0000; font-size: 14pt; }
+
+.prose { max-width: var(--measure); }
+.prose.is-narrow { max-width: 50%; }               /* Dwarsfluit "fluitist": text beside the floated photo */
+.prose p { margin: 0 0 20px; }                     /* live: p { margin:0; padding:0 0 20px } */
+.prose strong { font-weight: 700; color: var(--accent); }   /* live: .item_introtext strong { color:#cb4752 } */
+.prose ul { margin: 0 0 1.15em; padding-left: 1.1em; }
+.prose li { margin: 0.1em 0; }
+.t-red { color: var(--accent-soft); }
+.t-red-strong { color: var(--accent-soft); font-weight: 700; }
+.addr span { display: block; }
+
+.pending {
+  color: #6f6f6f;
+  font-size: 12px;
+  font-style: italic;
+  border-left: 2px solid #333;
+  padding-left: 12px;
+  margin: 0 0 1.15em;
+}
+
+/* ---------- baked photos: one <picture> per figure via {% image %} ---------- */
+.ph {
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid #1c1c1c;
+  background: #111;
+}
+.ph :is(img, picture) { display: block; }
+.ph img { width: 100%; height: 100%; object-fit: cover; }
+.ph.contain { background: #f2f2f2; }
+.ph.contain img { object-fit: contain; }
+
+.ph-portrait { float: right; width: 244px; height: 264px; margin: 2px 0 16px 44px; }
+.ph-side { float: right; width: 300px; height: 244px; margin: 2px 0 16px 44px; }
+.ph-logo { width: 170px; height: 82px; margin-top: 20px; border: 0; }
+
+.photo-stack { display: flex; flex-direction: column; gap: 20px; margin-top: 24px; }
+.photo-stack .ph { width: min(400px, 100%); height: 208px; }
+.photo-pair { display: flex; gap: 16px; margin-top: 24px; flex-wrap: wrap; }
+.photo-pair .ph { flex: 0 1 212px; height: 152px; }
+
+/* ---------- homepage: original Joomla 3-column category layout, lightly tuned ---------- */
+#page-home .home-cols { display: flex; flex-wrap: wrap; justify-content: space-between; }
+#page-home .home-col { flex: 0 0 auto; }
+#page-home .home-col > .page-title:first-child { margin: 0 0 14px; }
+#page-home .home-col p { margin: 0 0 16px; min-height: 80px; }
+#page-home .home-figure { height: 240px; }
+#page-home .hc-dir p, #page-home .hc-dir .home-figure { width: 270px; max-width: 100%; }
+#page-home .hc-ond p, #page-home .hc-ond .home-figure { width: 427px; max-width: 100%; }   /* native 16:9, uncropped */
+#page-home .hc-dwf p, #page-home .hc-dwf .home-figure { width: 270px; max-width: 100%; }
+#page-home .hc-ond .home-figure img { object-fit: contain; }
+#page-home .hc-dwf .home-figure img { object-position: center top; }   /* keep the face */
+
+@media (max-width: 1040px) {
+  #page-home .home-cols { flex-direction: column; flex-wrap: nowrap; }
+  #page-home .home-col { margin-bottom: 34px; }
+  #page-home .home-col p { min-height: 0; }
+  #page-home .hc-dir p, #page-home .hc-ond p, #page-home .hc-dwf p,
+  #page-home .hc-dir .home-figure, #page-home .hc-ond .home-figure, #page-home .hc-dwf .home-figure {
+    width: 100%; max-width: 440px;
+  }
+  #page-home .home-figure { height: auto; }
+  #page-home .hc-dir .home-figure, #page-home .hc-dwf .home-figure { aspect-ratio: 9 / 8; }
+  #page-home .hc-ond .home-figure { aspect-ratio: 16 / 9; }
+}
+
+/* ---------- shared section-landing photo row (Koren, Onderwijs) ----------
+   flex-grow ∝ each photo's aspect ratio (set inline), aspect-ratio locked ->
+   equal heights, native proportions, whole row spans the menu-bar width. */
+.photo-band { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 10px; margin: 24px 0 4px; width: 100%; }
+.photo-band .band-photo { min-width: 0; padding: 0; border: 0; background: none; }
+.photo-band .band-photo img { width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 620px) {
+  .photo-band .band-photo { flex: 1 1 calc(50% - 5px) !important; }
+}
+
+/* ---------- section-landing teasers: full-width stacked blocks ---------- */
+.teaser-grid { display: flex; flex-direction: column; gap: 54px; margin-top: 54px; }
+.teaser { min-width: 0; }
+.teaser-title { font: 400 20px/1.5 "Gabriela", Georgia, serif; color: var(--title-red); margin: 0 0 12px; }
+.teaser-title a { color: inherit; text-decoration: none; }
+.teaser-title a:hover { text-decoration: underline; }
+.teaser p { margin: 0 0 20px; }
+.teaser-img { width: 100%; max-width: 380px; margin-top: 14px; aspect-ratio: 275 / 183; border: 0; }
+
+@media (max-width: 760px) {
+  .ph-portrait, .ph-side { float: none; width: 100%; max-width: 280px; margin: 0 0 16px; }
+  .prose.is-narrow { max-width: none; }
+}

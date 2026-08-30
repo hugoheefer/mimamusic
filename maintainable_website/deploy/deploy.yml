@@ -1,0 +1,57 @@
+# GitHub Pages deploy for the MiMaMusic site.
+#
+# STAGING COPY — at adoption, move this file to  .github/workflows/deploy.yml
+# at the repo root (and drop the `paths:` filter once maintainable_website/ has
+# been promoted to the root). Then: repo Settings -> Pages -> Build and
+# deployment -> Source = "GitHub Actions".
+#
+# Note: GitHub Pages serves PUBLIC repos for free. A private repo needs GitHub
+# Pro (~EUR 4/mo). The repo currently being private is what paused the earlier
+# Pages test.
+
+name: Deploy site to GitHub Pages
+
+on:
+  push:
+    branches: [main, master]
+    paths: ["maintainable_website/**"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: maintainable_website
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: maintainable_website/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: maintainable_website/_site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

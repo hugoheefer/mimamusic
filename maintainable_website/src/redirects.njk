@@ -1,0 +1,22 @@
+---
+pagination:
+  data: redirects.map
+  size: 1
+  alias: oldPath
+permalink: "{{ oldPath }}/index.html"
+eleventyExcludeFromCollections: true
+---
+{%- set target = redirects.map[oldPath] -%}
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<title>Verhuisd &mdash; {{ site.brand }}</title>
+<link rel="canonical" href="https://{{ site.domain }}{{ target }}">
+<meta http-equiv="refresh" content="0; url={{ target }}">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<p>Deze pagina is verhuisd naar <a href="{{ target }}">https://{{ site.domain }}{{ target }}</a>.</p>
+</body>
+</html>

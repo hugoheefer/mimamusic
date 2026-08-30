@@ -1,0 +1,214 @@
+# Pages CMS configuration — https://pagescms.org
+#
+# The site owner edits content at https://app.pagescms.org (sign in with GitHub,
+# pick this repo). Every field below maps to a fixed key in a content file, so
+# editing text or swapping a photo can never break the layout or the build.
+#
+# IMPORTANT: Pages CMS reads this file from the REPO ROOT of the deployed branch.
+# The paths below assume this folder (maintainable_website/) has been promoted to
+# the repo root at adoption. While it still lives in a subfolder, prefix every
+# `path:` and the media `input:` with  maintainable_website/  .
+
+media:
+  input: src/assets/images
+  output: /assets/images
+  extensions: [jpg, jpeg, png, webp, svg]
+
+content:
+  - name: home
+    label: Home
+    type: file
+    path: src/content/index.md
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: description, label: Omschrijving voor Google, type: text }
+      - name: blocks
+        label: Blokken
+        type: object
+        list: { min: 3, max: 3 }
+        fields:
+          - { name: heading, label: Kop, type: string }
+          - { name: text, label: Tekst, type: text }
+          - name: photo
+            label: Foto
+            type: object
+            fields:
+              - { name: src, label: Afbeelding, type: image }
+              - { name: alt, label: Alt-tekst (voor schermlezers), type: string }
+              - { name: variant, label: Kolom, type: select, options: { values: [dir, ond, dwf] } }
+
+  - name: koren
+    label: "Koren — overzicht"
+    type: file
+    path: src/content/koren.md
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: titleClass, label: Titelkleur, type: select, options: { values: [is-red, is-dim] }, default: is-red }
+      - { name: description, label: Omschrijving voor Google, type: text }
+      - { name: body, label: Tekst, type: rich-text }
+      - name: band
+        label: Fotoreeks
+        type: object
+        list: true
+        fields:
+          - { name: src, label: Afbeelding, type: image }
+          - { name: alt, label: Alt-tekst, type: string }
+          - { name: w, label: Breedte in px, type: number }
+          - { name: h, label: Hoogte in px, type: number }
+      - name: teasers
+        label: Blokken onder de tekst
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Kop, type: string }
+          - { name: body, label: Tekst, type: rich-text }
+          - { name: link, label: Link (optioneel), type: string }
+          - { name: external, label: Opent in nieuw tabblad, type: boolean }
+          - name: image
+            label: Foto
+            type: object
+            fields:
+              - { name: src, label: Afbeelding, type: image }
+              - { name: alt, label: Alt-tekst, type: string }
+
+  - name: onderwijs
+    label: Onderwijs
+    type: file
+    path: src/content/onderwijs.md
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: titleClass, label: Titelkleur, type: select, options: { values: [is-red, is-dim] }, default: is-red }
+      - { name: description, label: Omschrijving voor Google, type: text }
+      - { name: body, label: Tekst, type: rich-text }
+      - name: band
+        label: Fotoreeks
+        type: object
+        list: true
+        fields:
+          - { name: src, label: Afbeelding, type: image }
+          - { name: alt, label: Alt-tekst, type: string }
+          - { name: w, label: Breedte in px, type: number }
+          - { name: h, label: Hoogte in px, type: number }
+      - name: teasers
+        label: Blokken onder de tekst
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Kop, type: string }
+          - { name: body, label: Tekst, type: rich-text }
+          - name: image
+            label: Foto
+            type: object
+            fields:
+              - { name: src, label: Afbeelding, type: image }
+              - { name: alt, label: Alt-tekst, type: string }
+
+  - name: dwarsfluit
+    label: Dwarsfluit
+    type: file
+    path: src/content/dwarsfluit.md
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: description, label: Omschrijving voor Google, type: text }
+      - name: articles
+        label: Onderdelen
+        type: object
+        list: true
+        fields:
+          - { name: heading, label: Kop, type: string }
+          - { name: body, label: Tekst, type: rich-text }
+          - { name: narrow, label: Smalle tekstkolom (naast een foto), type: boolean }
+          - name: photo
+            label: Foto (optioneel)
+            type: object
+            fields:
+              - { name: src, label: Afbeelding, type: image }
+              - { name: alt, label: Alt-tekst, type: string }
+              - { name: layout, label: Plaatsing, type: select, options: { values: [ph-side] } }
+
+  - name: arrangeren
+    label: Arrangeren
+    type: file
+    path: src/content/arrangeren.md
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: description, label: Omschrijving voor Google, type: text }
+      - { name: body, label: Tekst, type: rich-text }
+
+  - name: workshop_les
+    label: "Workshop/les — overzicht"
+    type: file
+    path: src/content/workshop-les.md
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: titleClass, label: Titelkleur, type: select, options: { values: [is-red, is-dim] }, default: is-red }
+      - { name: description, label: Omschrijving voor Google, type: text }
+      - { name: body, label: Tekst, type: rich-text }
+
+  - name: contact
+    label: Contact
+    type: file
+    path: src/content/contact.md
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: titleClass, label: Titelkleur, type: select, options: { values: [is-red, is-dim] }, default: is-red }
+      - { name: description, label: Omschrijving voor Google, type: text }
+      - name: photo
+        label: Portretfoto
+        type: object
+        fields:
+          - { name: src, label: Afbeelding, type: image }
+          - { name: alt, label: Alt-tekst, type: string }
+          - { name: layout, label: Plaatsing, type: select, options: { values: [ph-portrait] } }
+      - { name: body, label: Tekst, type: rich-text }
+
+  - name: koor_subpaginas
+    label: "Koren — subpagina's"
+    type: collection
+    path: src/content/koren
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: body, label: Tekst, type: rich-text }
+      - { name: photoLayout, label: Fotolayout, type: select, options: { values: [stack, pair, logo] } }
+      - name: photos
+        label: Foto's
+        type: object
+        list: true
+        fields:
+          - { name: src, label: Afbeelding, type: image }
+          - { name: alt, label: Alt-tekst, type: string }
+
+  - name: workshop_subpaginas
+    label: "Workshop/les — subpagina's"
+    type: collection
+    path: src/content/workshop-les
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: body, label: Tekst, type: rich-text }
+      - name: photo
+        label: Foto (optioneel)
+        type: object
+        fields:
+          - { name: src, label: Afbeelding, type: image }
+          - { name: alt, label: Alt-tekst, type: string }
+          - { name: layout, label: Plaatsing, type: select, options: { values: [ph-side] } }
+
+  - name: agenda
+    label: Agenda (komende optredens)
+    type: file
+    path: src/_data/agenda.yaml
+    list: true
+    fields:
+      - { name: date, label: Datum, type: date }
+      - { name: title, label: Titel, type: string }
+      - { name: type, label: Soort, type: select, options: { values: [concert, dienst, evenement] } }
+      - { name: location, label: Locatie (optioneel), type: string }
+
+  - name: privacy
+    label: Privacyverklaring
+    type: file
+    path: src/content/privacy.md
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: draft, label: Verborgen (concept), type: boolean }
+      - { name: body, label: Tekst, type: rich-text }

@@ -1,0 +1,41 @@
+/* Page frame: header, the centred content column, footer.
+   Everything aligns to the 1200px container's left inner edge (spec D5). */
+
+.site-header {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 30px var(--pad) 16px;
+  background: var(--bg);
+}
+
+.wordmark {
+  display: inline-block;
+  font: 400 clamp(38px, 6vw, 60px)/1 var(--font-script);   /* #logo a: 60px 'Henny Penny' */
+  color: #ffffff;
+  text-decoration: none;
+  margin: 0;
+  /* live site renders this as text in 'Henny Penny', not an image */
+}
+.wordmark:hover { color: #ffffff; }
+
+/* content column — no min-height on <main>: the live site lets the footer sit
+   directly under the content (short pages just have black below it), so we do too */
+.page {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 78px var(--pad) 69px;   /* pad-bottom = live #content { padding-bottom: 69px } */
+}
+.art + .art { margin-top: 62px; }
+
+.site-footer { border-top: 1px solid var(--divider); }   /* full-width divider rule #2 */
+.foot-inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 49px var(--pad) 40px;   /* pad-top = live .footer-wrapper-inner { padding-top: 49px } */
+}
+.badge-img { display: block; width: 84px; height: 84px; }
+.copyright { margin: 16px 0 0; font-size: 12px; color: #8f8f8f; }   /* home page only, below the badge */
+
+@media (max-width: 760px) {
+  .page { padding-top: 52px; }
+}

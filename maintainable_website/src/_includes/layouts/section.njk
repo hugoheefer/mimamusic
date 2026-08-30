@@ -1,0 +1,35 @@
+---
+layout: layouts/base.njk
+---
+<section class="page">
+  <h1 class="page-title {{ titleClass }}">{{ title }}</h1>
+  <div class="prose">
+    {{ content | safe }}
+
+    {%- if band and band.length %}
+    <div class="photo-band">
+      {%- for p in band %}
+      <div class="ph band-photo" style="flex: {{ (p.w / p.h) | round(3) }} 1 0; aspect-ratio: {{ p.w }} / {{ p.h }};">
+        {% image p.src, p.alt, { sizes: "(max-width: 620px) 50vw, 22vw", widths: [240, 480, 720] } %}
+      </div>
+      {%- endfor %}
+    </div>
+    {%- endif %}
+
+    {%- if teasers and teasers.length %}
+    <div class="teaser-grid">
+      {%- for t in teasers %}
+      <article class="teaser">
+        <h2 class="teaser-title">
+          {%- if t.link -%}<a href="{{ t.link }}"{% if t.external %} target="_blank" rel="noopener"{% endif %}>{{ t.title }}</a>{%- else -%}{{ t.title }}{%- endif -%}
+        </h2>
+        {{ t.body | md | safe }}
+        {%- if t.image %}
+        <div class="ph teaser-img">{% image t.image.src, t.image.alt, { sizes: "(max-width: 420px) 100vw, 380px", widths: [380, 760] } %}</div>
+        {%- endif %}
+      </article>
+      {%- endfor %}
+    </div>
+    {%- endif %}
+  </div>
+</section>

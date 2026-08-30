@@ -1,0 +1,15 @@
+---
+layout: layouts/base.njk
+---
+<section class="page" id="page-home">
+  <h1 class="visually-hidden">{{ site.brand }} &mdash; koordirigent, dwarsfluit- en blokfluitles, arrangeren</h1>
+  <div class="home-cols">
+    {%- for b in blocks -%}
+    <article class="home-col hc-{{ b.photo.variant }}">
+      <h2 class="page-title is-red">{{ b.heading }}</h2>
+      <p>{{ b.text }}</p>
+      <div class="ph home-figure">{% image b.photo.src, b.photo.alt, { sizes: "(max-width: 1040px) 100vw, 427px", widths: [270, 427, 540, 854] } %}</div>
+    </article>
+    {%- endfor -%}
+  </div>
+</section>
