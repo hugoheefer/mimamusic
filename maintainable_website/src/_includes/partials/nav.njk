@@ -1,7 +1,7 @@
 <nav class="nav" aria-label="Hoofdmenu">
   <div class="nav-inner">
     <ul class="menu">
-      {%- for item in site.navigation -%}
+      {%- for item in navigation -%}
       {%- set current = (item.url == "/" and page.url == "/") or (item.url != "/" and page.url | startsWith(item.url)) -%}
       <li class="{% if item.children %}has-sub {% endif %}{% if current %}is-current{% endif %}">
         <a class="nav-link" href="{{ item.url }}"{% if current %} aria-current="page"{% endif %}>

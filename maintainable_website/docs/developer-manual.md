@@ -53,7 +53,8 @@ npm run clean     # delete _site/
 | Task | File(s) |
 |---|---|
 | Page text / photos / structured fields | `src/content/*.md` front matter (and body) |
-| Navigation order, brand, contact details | `src/_data/site.js` |
+| Menu bar — item order, dropdowns | `src/_data/navigation.yaml` (CMS: "Menubalk") |
+| Brand, contact details | `src/_data/site.js` |
 | Agenda entries | `src/_data/agenda.yaml` |
 | Old→new redirect table | `src/_data/redirects.json` |
 | Header / footer / `<head>` | `src/_includes/layouts/base.njk` |
@@ -73,7 +74,9 @@ below `---` is the prose.
 
 **Add a page** — e.g. a new choir sub-page:
 1. `src/content/koren/new-choir.md` with `title`, `body`, `photos`, `photoLayout`.
-2. Add it to the dropdown in `src/_data/site.js` → `navigation` → Koren `children`.
+2. Add it to the Koren dropdown: a new `children` entry under Koren in
+   `src/_data/navigation.yaml`. The owner can now also do this step themselves in
+   the CMS ("Menubalk").
 3. It's already covered by the `koor_subpaginas` collection in `.pages.yml`, so the
    owner can edit it too (and could have created it from the CMS).
 
@@ -245,7 +248,8 @@ so a project site at `newowner.github.io/newrepo/` just works.
 
 | File | What | When |
 |---|---|---|
-| `src/_data/site.js` | `domain`, contact details, nav | different domain / details |
+| `src/_data/site.js` | `domain`, contact details | different domain / details |
+| `src/_data/navigation.yaml` | menu bar items / links | different page set or paths |
 | `src/_data/redirects.json` | old→new URL map | different old site |
 | `deploy/CNAME` | the custom domain | different domain |
 | `.github/workflows/deploy.yml` | drop `feature/build-mainainable-site` from `on: push: branches`; `PATH_PREFIX` line → `/` for a custom domain at root | always / custom domain |

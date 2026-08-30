@@ -41,7 +41,8 @@ Requires Node 18+ (built and tested on Node 24). The image pipeline uses `sharp`
 ```
 src/
   _data/
-    site.js            nav order, brand, contact details, build year
+    site.js            brand, contact details, build year
+    navigation.yaml    menu bar: item order + dropdowns (CMS-editable, "Menubalk")
     agenda.yaml        upcoming events (CMS-editable); empty => "geen activiteiten gepland"
     redirects.json     old Joomla URL -> new path (spec §12)
   _includes/

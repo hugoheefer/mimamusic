@@ -222,3 +222,20 @@ content:
       - { name: title, label: Titel, type: string }
       - { name: draft, label: Verborgen (concept), type: boolean }
       - { name: body, label: Tekst, type: rich-text }
+
+  - name: navigation
+    label: "Menubalk (hoofdmenu)"
+    type: file
+    path: maintainable_website/src/_data/navigation.yaml
+    list: true
+    fields:
+      - { name: text, label: Menu-item, type: string }
+      - { name: url, label: "Link (bijv. /koren/ — met schuine strepen)", type: string }
+      - name: children
+        label: Submenu (optioneel — laat leeg voor een gewoon menu-item)
+        type: object
+        list: true
+        fields:
+          - { name: text, label: Submenu-item, type: string }
+          - { name: url, label: Link, type: string }
+          - { name: muted, label: "Gedimd weergeven (archief)", type: boolean }

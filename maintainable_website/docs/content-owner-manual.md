@@ -19,12 +19,14 @@ content here — the editor only lets you fill in fixed fields.
 - **Replace or add photos**.
 - Keep the **Agenda** (upcoming concerts / services / events) up to date.
 - Add a new **choir sub-page** or **workshop sub-page**.
+- Change the **menu bar** — rename an item, reorder it, or add/remove a
+  dropdown entry (see §7a).
 
 After you click **Save**, the website updates itself within about a minute.
 
 ## What you cannot do here (ask the developer)
 
-- Change the page layout, the menu, the colours or the fonts.
+- Change the page layout, the colours or the fonts (the menu bar *is* editable — §7a).
 - Add a completely new *kind* of page or section.
 - Add a 4th block to the Home page (it is a fixed 3-column design).
 
@@ -76,6 +78,7 @@ Down the left side, under **Content**:
 | **Agenda — kop en introtekst** | The "Agenda" heading and the sentence above the calendar. |
 | **Agenda — optredens (kalender)** | The list of upcoming events shown on the page and marked on the calendar. |
 | **Privacyverklaring** | The privacy page (currently a placeholder). |
+| **Menubalk (hoofdmenu)** | The menu bar at the top of every page: which items appear, their order, and the dropdown entries under Koren and Workshop/les (§7a). |
 
 Under **Media** is the photo library.
 
@@ -168,8 +171,40 @@ For a new choir or workshop page:
 2. Click **Add** / **New**.
 3. Fill in **Titel**, the **Tekst**, and photos.
 4. **Save.**
-5. Tell the developer the page exists — they add it to the dropdown menu (that one
-   step is not in the editor).
+5. Add the new page to the menu so visitors can reach it — see §7a. (Its web
+   address is the site address + `/koren/` + a simplified version of the title,
+   e.g. *Nieuw Koor* → `/koren/nieuw-koor/`. If unsure, open the new page from
+   its list first and copy the address from your browser.)
+
+---
+
+## 7a. The menu bar
+
+Open **Menubalk (hoofdmenu)** in the left list. It is the list of items in the
+bar at the top of every page, in order.
+
+Each item has:
+
+- **Menu-item** — the wording shown in the bar, e.g. *Koren*.
+- **Link** — where it goes, written as a path with slashes: `/koren/` for the
+  Koren page, `/` for Home, `/contact/` for Contact. Always start and end with a
+  slash.
+- **Submenu** — leave empty for a normal item. Fill it in to make the item open a
+  dropdown (as *Koren* and *Workshop/les* do). Each submenu entry has its own
+  **Submenu-item**, **Link**, and a **Gedimd weergeven** switch (turn on to grey
+  a link out, used for archived pages like *Koor Voluum*).
+
+To **reorder** items, drag the ⣿ handle. To **add** one, click **Add** at the
+bottom; to **remove** one, use the trash icon. Then **Save**.
+
+Watch out:
+
+- A menu item still needs a page behind it. Adding *"Nieuws"* with link
+  `/nieuws/` only works once a `/nieuws/` page actually exists.
+- An item that has a **Submenu** is *also* a clickable link to its own **Link** —
+  it does both, like *Koren* today. If you want a pure dropdown with no landing
+  page, that is a layout change — ask the developer.
+- Don't rename or re-link **Home** away from `/`.
 
 ---
 

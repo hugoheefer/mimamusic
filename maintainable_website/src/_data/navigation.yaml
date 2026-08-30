@@ -1,0 +1,35 @@
+# Primary navigation — the menu bar. Editable in Pages CMS ("Menubalk").
+# Order here is the order on the site. A parent with `children` is still a real
+# link to its own landing page AND opens a dropdown. `muted: true` greys a
+# child link (used for archived pages).
+- text: Home
+  url: /
+- text: Koren
+  url: /koren/
+  children:
+    - text: Gospelpopkoor Spirit
+      url: /koren/gospelpopkoor-spirit/
+    - text: Singin'Gestel
+      url: /koren/singin-gestel/
+    - text: Popkoor MIKS
+      url: /koren/popkoor-miks/
+    - text: Koor Voluum (archief)
+      url: /koren/koor-voluum/
+      muted: true
+- text: Onderwijs
+  url: /onderwijs/
+- text: Dwarsfluit
+  url: /dwarsfluit/
+- text: Arrangeren
+  url: /arrangeren/
+- text: Workshop/les
+  url: /workshop-les/
+  children:
+    - text: Muzikale ondersteuning
+      url: /workshop-les/muzikale-ondersteuning/
+    - text: Workshopmogelijkheden
+      url: /workshop-les/workshopmogelijkheden/
+- text: Agenda
+  url: /agenda/
+- text: Contact
+  url: /contact/
