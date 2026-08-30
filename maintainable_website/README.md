@@ -10,6 +10,16 @@ keep the black theme / the display fonts is still an open owner decision (spec �
 nothing here pre-empts it — the design tokens in
 [`src/assets/css/tokens.css`](src/assets/css/tokens.css) are the single place to change it.
 
+## Manuals
+
+- **[docs/developer-manual.md](docs/developer-manual.md)** — run, change, deploy,
+  set up GitHub Pages + Pages CMS, go to production, troubleshoot.
+- **[docs/content-owner-manual.md](docs/content-owner-manual.md)** — for the person
+  who edits text and photos through Pages CMS (no code).
+
+This README is the reference for the code layout; the manuals are the step-by-step
+procedures.
+
 ---
 
 ## Quick start
