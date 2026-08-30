@@ -51,8 +51,13 @@ const IMAGE_DIR = "src/assets/images";
 
 async function imageShortcode(src, alt, opts = {}) {
   // A CMS editor can clear an image field and leave the object behind
-  // ({ alt, layout } with no src). Skip rather than fail the whole build.
-  if (!src) return "";
+  // ({ alt, layout } with no src). Skip that element rather than fail the
+  // whole build (a failed build = the live site frozen out of sync with the
+  // CMS). Warn so the gap is visible in the deploy log.
+  if (!src) {
+    console.warn(`[image] skipped: empty src${alt ? ` (alt: "${alt}")` : ""}`);
+    return "";
+  }
 
   const {
     className = "",

@@ -4,8 +4,8 @@ titleClass: is-dim
 description: "Gospelpopkoor Spirit — in 2002 opgericht door Wilma van der Schoot. Pop en gospel, begeleid door een vaste band."
 photoLayout: stack
 photos:
-  - { src: _DSC8853.jpg, alt: "Gospelpopkoor Spirit in concert" }
-  - { src: spirit_3.jpg, alt: "Gospelpopkoor Spirit in concert" }
+  - { src: /assets/images/_DSC8853.jpg, alt: "Gospelpopkoor Spirit in concert" }
+  - { src: /assets/images/spirit_3.jpg, alt: "Gospelpopkoor Spirit in concert" }
 ---
 In 2002 heb ik Gospelpopkoor Spirit opgericht. Het is een zeer enthousiast koor. De
 energie spat ervan af als dit 60 koppige koor staat te zingen. Het koor wordt altijd

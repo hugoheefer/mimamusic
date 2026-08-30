@@ -4,8 +4,8 @@ titleClass: is-dim
 description: "Singin'Gestel (voorheen GGK) — gemengd koor in Sint-Michielsgestel, modern repertoire, dirigent Wilma van der Schoot sinds 2014."
 photoLayout: pair
 photos:
-  - { src: 2024-05_met_kinderen.jpg, alt: "Singin'Gestel in de kerk" }
-  - { src: 2024-03-20.jpg, alt: "Singin'Gestel" }
+  - { src: /assets/images/2024-05_met_kinderen.jpg, alt: "Singin'Gestel in de kerk" }
+  - { src: /assets/images/2024-03-20.jpg, alt: "Singin'Gestel" }
 ---
 Het GGK heeft haar naam veranderd: het koor heet voortaan
 <span class="t-red-strong">Singin'Gestel</span>. Elke woensdagavond wordt er gerepeteerd in

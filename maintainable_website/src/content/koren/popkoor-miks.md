@@ -4,7 +4,7 @@ titleClass: is-dim
 description: "Popkoor MIKS in Sint-Michielsgestel — popsongs, alle leeftijden, repetitie maandagochtend. Dirigent Wilma van der Schoot vanaf januari 2025."
 photoLayout: logo
 photos:
-  - { src: MIKS_logo.png, alt: "Popkoor MIKS" }
+  - { src: /assets/images/MIKS_logo.png, alt: "Popkoor MIKS" }
 ---
 Per 1 januari 2025 ga ik popkoor MIKS dirigeren. Het koor bestaat nog niet zo lang en ik
 heb er veel zin in om met hen aan de slag te gaan. Er worden voornamelijk popsongs

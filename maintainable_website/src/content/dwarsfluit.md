@@ -17,7 +17,7 @@ articles:
   - heading: fluitist
     narrow: true
     photo:
-      src: Wilma_fluitist_1986.jpg
+      src: /assets/images/Wilma_fluitist_1986.jpg
       alt: "Wilma als fluitiste, 1986"
       layout: ph-side
     body: |

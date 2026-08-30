@@ -20,7 +20,7 @@ teasers:
       Voor informatie kunt u terecht bij:
       [basisschool Emmaus](https://sites.google.com/filiosscholengroep.nl/bsemmaus/startpagina)
     image:
-      src: Emmaus1.jpg
+      src: /assets/images/Emmaus1.jpg
       alt: Basisschool Emmaus
 ---
 De studie Docent Muziek heb ik aan de Fontys in Tilburg gedaan. Sindsdien geef ik op

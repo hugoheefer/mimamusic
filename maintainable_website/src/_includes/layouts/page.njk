@@ -5,9 +5,9 @@ layout: layouts/base.njk
 <section class="page">
   <h1 class="visually-hidden">{{ title }}</h1>
   {%- for a in articles -%}
-  <article class="art{% if a.photo %} clearfix{% endif %}">
+  <article class="art{% if a.photo and a.photo.src %} clearfix{% endif %}">
     <h2 class="page-title is-red">{{ a.heading }}</h2>
-    {%- if a.photo -%}
+    {%- if a.photo and a.photo.src -%}
     <div class="ph {{ a.photo.layout or 'ph-side' }}">{% image a.photo.src, a.photo.alt, { sizes: "(max-width: 760px) 100vw, 300px", widths: [300, 600] } %}</div>
     {%- endif -%}
     <div class="prose{% if a.narrow %} is-narrow{% endif %}">{{ a.body | md | safe }}</div>
@@ -18,17 +18,17 @@ layout: layouts/base.njk
 <section class="page clearfix">
   <h1 class="page-title {{ titleClass }}">{{ title }}</h1>
   <div class="prose">
-    {%- if photo -%}
+    {%- if photo and photo.src -%}
     <div class="ph {{ photo.layout or 'ph-portrait' }}">{% image photo.src, photo.alt, { sizes: "(max-width: 760px) 100vw, 300px", widths: [280, 560] } %}</div>
     {%- endif -%}
     {{ content | safe }}
     {%- if photos and photos.length -%}
       {%- if photoLayout == "stack" -%}
-      <div class="photo-stack">{%- for p in photos -%}<div class="ph">{% image p.src, p.alt, { sizes: "(max-width: 440px) 100vw, 400px", widths: [400, 800] } %}</div>{%- endfor -%}</div>
+      <div class="photo-stack">{%- for p in photos -%}{%- if p.src -%}<div class="ph">{% image p.src, p.alt, { sizes: "(max-width: 440px) 100vw, 400px", widths: [400, 800] } %}</div>{%- endif -%}{%- endfor -%}</div>
       {%- elif photoLayout == "pair" -%}
-      <div class="photo-pair">{%- for p in photos -%}<div class="ph">{% image p.src, p.alt, { sizes: "(max-width: 480px) 100vw, 212px", widths: [212, 424] } %}</div>{%- endfor -%}</div>
+      <div class="photo-pair">{%- for p in photos -%}{%- if p.src -%}<div class="ph">{% image p.src, p.alt, { sizes: "(max-width: 480px) 100vw, 212px", widths: [212, 424] } %}</div>{%- endif -%}{%- endfor -%}</div>
       {%- elif photoLayout == "logo" -%}
-      {%- for p in photos -%}<div class="ph ph-logo contain">{% image p.src, p.alt, { sizes: "170px", widths: [170, 340] } %}</div>{%- endfor -%}
+      {%- for p in photos -%}{%- if p.src -%}<div class="ph ph-logo contain">{% image p.src, p.alt, { sizes: "170px", widths: [170, 340] } %}</div>{%- endif -%}{%- endfor -%}
       {%- endif -%}
     {%- endif -%}
   </div>

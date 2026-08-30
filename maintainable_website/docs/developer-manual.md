@@ -199,6 +199,32 @@ used: `string`, `text`, `rich-text`, `image`, `boolean`, `number`, `select`,
   them, move those keys into a `*.11tydata.json` directory-data file so they're not
   in the `.md` at all.
 
+### 6.2 Keeping the CMS and the live site in sync
+
+The live site is whatever the **last green deploy** built. So the rule is: **every
+CMS Save must produce a build that succeeds.** Two things enforce that:
+
+1. **Image paths are stored the way the CMS writes them** — `/assets/images/<file>`,
+   not a bare `foo.jpg`. Pages CMS matches an `image` field to a media file by that
+   exact public path; if it can't match (bare filename), it shows the field empty
+   and the *next* Save drops it. All seed content uses the `/assets/images/...`
+   form — keep it that way when adding content by hand, and after wiring a new
+   `image` field into `.pages.yml`, open that page in the CMS once and re-Save to
+   confirm the value round-trips.
+2. **A missing image can't break the build** — the `image` shortcode returns `""`
+   (and logs `[image] skipped: empty src` in the deploy log) instead of throwing,
+   and every `{% image %}` call site is guarded by `if …src`. A blanked photo
+   field then just omits that one photo; the page and all other pages still build
+   and deploy.
+
+If a photo silently disappears from the live site: search the latest deploy log for
+`[image] skipped`, then check that page's front matter for an image object that
+lost its `src`, and restore it as `/assets/images/<file>`.
+
+`src/_data/*.yaml` (navigation, agenda) round-trips fine — but Pages CMS rewrites
+the whole file on Save, so any comments in `navigation.yaml` / `agenda.yaml` are
+lost after the owner's first edit. Don't rely on them.
+
 ---
 
 ## 7. Going to production (adoption)
@@ -280,6 +306,8 @@ files — none of them transfer):
 | **Images missing** when added inside a Nunjucks **macro** | The `{% image %}` shortcode is async and can't run inside `{% macro %}`. Inline the loop into the template instead (see `layouts/section.njk`). |
 | `<title>` shows **"MimaMusic — MimaMusic"** on home | Home is detected with `page.url == "/"`, not `fileSlug` — keep that check in `base.njk`. |
 | **Agenda entries don't show** on the site | Eleventy has no built-in `.yaml` data loader. `eleventy.config.js` registers one via `addDataExtension("yaml,yml", …)` with `js-yaml` — keep it, or `src/_data/agenda.yaml` is silently ignored. |
+| **A photo vanished after a CMS Save**, build still green | Pages CMS dropped that `image` field's `src`. Grep the deploy log for `[image] skipped`, restore the value as `/assets/images/<file>` in the page's front matter. Prevention: store every image path in that form (§6.2). |
+| Build fails: `ENOENT … src/assets/images/undefined` | An `{% image %}` call reached the shortcode with `src` undefined and an unguarded call site. The shortcode now returns `""` for empty `src`; if you see this, a new call site is missing its `if …src` guard (§6.2). |
 | Env var mangled to a `C:/Program Files/Git/...` path in local builds | Windows Git Bash MSYS path conversion — prefix with `MSYS_NO_PATHCONV=1` (§5). |
 | `sharp` install-script warning during `npm install` | Harmless — sharp ships prebuilt binaries; the image pipeline still works. CI installs the Linux binary automatically. |
 
