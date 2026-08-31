@@ -63,6 +63,7 @@ npm run clean     # delete _site/
 | Styles | `src/assets/css/*.css` (6 files, bundled in `eleventy.config.js`) |
 | Images | `src/assets/images/` (real files; `{% image %}` makes responsive `<picture>`) |
 | Filters, shortcodes, CSS bundle, path prefix | `eleventy.config.js` |
+| External-link / iframe-wrapper behaviour (temporary) | `eleventy.config.js` (`SITE_HOSTS` + `externalLinksBreakOutOfIframe`); see §5.1 |
 | CMS field schema | `.pages.yml` **at the repo root** |
 | Deploy | `.github/workflows/deploy.yml` **at the repo root** |
 
@@ -168,6 +169,46 @@ directory-index behaviour. The resulting `_site/` runs from any location:
 double-clicked from a folder (`file://`), any web server's webroot, or any
 subfolder. Hand this to anyone who wants a self-contained copy of the site.
 
+### 5.1 External links & the `mimamusic.nl` iframe wrapper (temporary)
+
+**Setup today.** The DNS for `mimamusic.nl` still points at the old dds.nl
+hosting, not GitHub Pages. To keep `mimamusic.nl` in the address bar, that host
+serves a wrapper — `../temp-redirect/index.php` (with a hand-synced
+`index.html` beside it) — placed in `public_html/joomla/` so the web server runs
+it instead of Joomla's own `index.php`. It is a full-window `<iframe>` whose
+`src` is `https://hugoheefer.github.io/mimamusic/`. **Do not edit that file.**
+
+```
+visitor → mimamusic.nl            (dds.nl hosting)
+          └─ public_html/joomla/index.php   ← full-window <iframe>
+             └─ src = https://hugoheefer.github.io/mimamusic/   (this site)
+```
+
+**The problem it creates.** Inside the iframe, a normal `<a>` click loads in the
+frame — good for our own pages (the bar stays `mimamusic.nl`), wrong for links
+to other websites: those would also load framed, so the visitor never sees the
+real destination URL (and many sites refuse to be framed at all).
+
+**The fix (build-time, no client JS).** `eleventy.config.js` registers the
+`externalLinksBreakOutOfIframe` transform. For every `<a>` whose `href` is an
+`http(s)` URL to a host **not** in the `SITE_HOSTS` set, it bakes in
+`target="_blank" rel="noopener"`, so off-site links open in a new tab showing
+the real URL while the wrapper tab is left untouched. `mailto:` / `tel:` /
+root-relative / relative / `#fragment` links, and any `<a>` that already has an
+explicit `target`, are left alone. The full rationale is the block comment above
+`SITE_HOSTS` in `eleventy.config.js`.
+
+- To leave the visitor in the **same** tab instead, change `"_blank"` to
+  `"_top"` in the transform.
+- If the site ever gains a subdomain that should count as "internal", add its
+  host to `SITE_HOSTS` (keep it in sync with `src/_data/site.js` `domain`).
+
+**Remove it when the domain moves.** Once `mimamusic.nl` is pointed straight at
+GitHub Pages (§7 step 5), there is no iframe. Delete `SITE_HOSTS` + the
+transform, delete `../temp-redirect/`, and remove this section, the §7 step, the
+README section, and the `eleventy.config.js` tree note in the README. Keep
+new-tab behaviour afterward only as a deliberate UX decision.
+
 ---
 
 ## 6. Pages CMS setup
@@ -255,6 +296,11 @@ lost after the owner's first edit. Don't rely on them.
    - **Leave the `MX` records untouched** — `@mimamusic.nl` email is separate.
    - Set `PATH_PREFIX` to `/` in the workflow (§5); redeploy.
    - Enable "Enforce HTTPS" in Settings → Pages once the cert is issued.
+   - **Retire the iframe wrapper** (§5.1): remove the `externalLinksBreakOutOfIframe`
+     transform and `SITE_HOSTS` from `eleventy.config.js`, delete
+     `../temp-redirect/`, remove the wrapper on the dds.nl host, and drop §5.1
+     here plus the matching README section. No iframe means no reason to force
+     off-site links into a new tab.
 6. **Finish the open content** (see `../README.md` "Open items"): Privacy statement,
    Koor Voluum body, contact form vs `mailto:`, owner proofread of all copy,
    confirm the Agenda model, finalise the redirect table against a crawl of the

@@ -225,6 +225,50 @@ function agendaCalendarShortcode(entries = []) {
   </div>`;
 }
 
+/*
+ * ── TEMPORARY SHIM: send off-site links out of the iframe wrapper ────────────
+ *
+ * Until mimamusic.nl is pointed straight at GitHub Pages, the domain is kept in
+ * the visitor's address bar by a wrapper the DNS host serves at mimamusic.nl:
+ *
+ *     visitor → mimamusic.nl            (dds.nl hosting)
+ *               └─ public_html/joomla/index.php   ← a full-window <iframe>
+ *                  └─ src = https://hugoheefer.github.io/mimamusic/   (THIS site)
+ *
+ * That wrapper lives in ../temp-redirect/ (index.php + a hand-synced index.html)
+ * and must not be edited. Inside the iframe a normal <a> click loads in the
+ * frame, so the bar keeps showing mimamusic.nl — correct for OUR pages, wrong
+ * for links to other sites (the visitor should see the real destination URL).
+ *
+ * This transform bakes  target="_blank" rel="noopener"  into every <a> whose
+ * href points off-site, at BUILD TIME — no client-side JS (see README). Net effect:
+ *   • internal link → stays in the frame, address bar stays mimamusic.nl
+ *   • external link → opens in a new tab showing the real URL; wrapper untouched
+ *
+ * "Off-site" = an http(s) href whose host is not in SITE_HOSTS. mailto:, tel:,
+ * root-relative (/koren/), relative and #fragment hrefs are left alone, as is
+ * any <a> that already carries an explicit target= (e.g. the `t.external`
+ * teasers in _includes/layouts/section.njk).
+ *
+ * ▓▓ WHEN BUILDING THE DEFINITIVE SITE — REMOVE THIS ▓▓
+ * Once mimamusic.nl serves this site directly there is no iframe to break out
+ * of. Delete SITE_HOSTS + the "externalLinksBreakOutOfIframe" transform below,
+ * retire ../temp-redirect/, and drop the matching notes in README.md and
+ * docs/developer-manual.md (§5.1, §7). If you still want off-site links to open
+ * in a new tab, re-add it then as a deliberate UX choice — not an iframe patch.
+ *
+ * Tweaks: swap "_blank" for "_top" to leave the visitor in the SAME tab; add
+ * "noreferrer" to rel to also strip the Referer header sent to the external site.
+ * Limitation: a deliberately naive regex — assumes well-formed <a …> tags with
+ * no ">" inside an attribute value (holds for this site's Markdown + templates).
+ */
+const SITE_HOSTS = new Set([
+  "mimamusic.nl",
+  "www.mimamusic.nl",
+  "hugoheefer.github.io", // GitHub Pages project host = the current iframe target
+  // keep in sync with src/_data/site.js `domain`
+]);
+
 export default function (eleventyConfig) {
   eleventyConfig.setLibrary("md", md);
   eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
@@ -254,6 +298,38 @@ export default function (eleventyConfig) {
         );
     });
   }
+
+  // TEMPORARY SHIM (see the SITE_HOSTS comment above): rewrite off-site <a> tags
+  // so they open OUTSIDE the mimamusic.nl iframe wrapper — in a new tab, showing
+  // the real destination URL. Build-time only, no client JS. Remove once the
+  // domain is pointed straight at GitHub Pages.
+  eleventyConfig.addTransform("externalLinksBreakOutOfIframe", function (content) {
+    if (!String(this.page.outputPath || "").endsWith(".html")) return content;
+
+    return content.replace(/<a\b([^>]*)>/gi, (whole, attrs) => {
+      const href = attrs.match(/\shref=("|')(https?:\/\/[^"']+)\1/i);
+      if (!href) return whole; // no absolute http(s) href — internal/relative/mailto:/tel:
+      if (/\btarget\s*=/i.test(attrs)) return whole; // author set a target — respect it
+      let host;
+      try {
+        host = new URL(href[2]).hostname.toLowerCase();
+      } catch {
+        return whole;
+      }
+      if (SITE_HOSTS.has(host)) return whole; // our own site — leave it in the frame
+
+      let out = attrs;
+      const rel = out.match(/\srel=("|')([^"']*)\1/i);
+      if (rel) {
+        const tokens = new Set(rel[2].split(/\s+/).filter(Boolean));
+        tokens.add("noopener");
+        out = out.replace(rel[0], ` rel="${[...tokens].join(" ")}"`);
+      } else {
+        out += ' rel="noopener"';
+      }
+      return `<a${out} target="_blank">`;
+    });
+  });
 
   // Eleventy has no built-in YAML data loader — register one so
   // src/_data/agenda.yaml (Pages CMS-editable) is actually read.

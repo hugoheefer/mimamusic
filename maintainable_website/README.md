@@ -62,7 +62,8 @@ src/
   sitemap.njk robots.njk
 eleventy.config.js     filters (md, nldate, pageSlug); the {% image %},
                        {% agendaList %} and {% agendaCalendar %} shortcodes;
-                       YAML data loader; the CSS bundle step
+                       YAML data loader; the CSS bundle step; the temporary
+                       externalLinksBreakOutOfIframe transform (see below)
 .pages.yml             Pages CMS schema (see "Editing" below)
 deploy/                staging copies of the GitHub Actions workflow + CNAME
 ```
@@ -152,6 +153,27 @@ GitHub Pages has no `_redirects` file, so `src/redirects.njk` renders one
 `<meta http-equiv="refresh">` + `<link rel="canonical">` stub per entry in
 `src/_data/redirects.json` (the spec §12 table). Finalise that table against a
 Screaming Frog crawl of the live site before go-live.
+
+### Temporary: the `mimamusic.nl` iframe wrapper
+
+Until the domain is pointed straight at GitHub Pages (the *Custom domain* step
+above), `mimamusic.nl` is kept in the address bar by a wrapper the DNS host
+serves — [`../temp-redirect/index.php`](../temp-redirect/) — which loads this
+site in a full-window `<iframe>`. Internal clicks load inside the frame (so the
+bar keeps showing `mimamusic.nl`); links to **other** sites must instead break
+out of the frame so the visitor sees the real destination URL.
+
+`eleventy.config.js` handles that at build time: the
+**`externalLinksBreakOutOfIframe`** transform adds `target="_blank"
+rel="noopener"` to every `<a>` whose `href` points to a host not in
+`SITE_HOSTS`. No client-side JS. `mailto:` / `tel:` / relative / `#fragment`
+links and any `<a>` with an explicit `target` are left alone.
+
+**When `mimamusic.nl` serves this site directly, delete it** — the transform
+and `SITE_HOSTS` in `eleventy.config.js`, the `../temp-redirect/` folder, and
+these notes (here + developer-manual §5.1, §7). Re-add new-tab behaviour then
+only if it's a deliberate UX choice. Full rationale is in the block comment
+above `SITE_HOSTS` in `eleventy.config.js`.
 
 ---
 
