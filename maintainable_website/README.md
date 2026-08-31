@@ -81,7 +81,8 @@ picks a layout via a tiny `*.11tydata.json` file, and `content.11tydata.js` maps
 | `workshop-les.md` | section | `body` |
 | `dwarsfluit.md` | page | `articles[]` = `{ heading, body, narrow?, photo? }` |
 | `arrangeren.md` | page | `body` (heading colour quirk is in CSS: `.p-arrangeren`) |
-| `koren/*.md`, `workshop-les/*.md` | page | `body`, `photos[]` / `photo`, `photoLayout` |
+| `koren/*.md`, `workshop-les/muzikale-ondersteuning.md` | page | `body`, `photos[]` / `photo`, `photoLayout` |
+| `workshop-les/workshopmogelijkheden.md` | page | `items[]` = `{ heading?, body, photo{src,alt}? }` — visible `<h1>` + repeatable blocks, each with an optional grey `<h2>` and a right-floated photo |
 | `contact.md` | page | `photo`, `body` (raw inline HTML kept verbatim) |
 | `agenda.md` | agenda | intro body text; the list is built from `_data/agenda.yaml` |
 
@@ -215,5 +216,8 @@ above `SITE_HOSTS` in `eleventy.config.js`.
 - **Design:** black theme vs lighter; keep Henny Penny / Gabriela or pick cleaner
   faces (spec §15 — owner decision).
 - **Pages CMS check:** on the owner's first save, confirm Pages CMS preserves
-  front-matter keys not in `.pages.yml` (e.g. `titleClass` on sub-pages). If it
-  strips them, move those keys into a `*.11tydata.json` directory-data file.
+  front-matter keys not in `.pages.yml`. Every `titleClass` / `description` key
+  is now declared in the schema (the `koren/*` collection excepted — its files
+  that carry `titleClass` are Spirit only; add the field there if a save strips
+  it). If a key is ever stripped, move it into a `*.11tydata.json` directory-data
+  file.

@@ -74,7 +74,8 @@ Down the left side, under **Content**:
 | **Workshop/les — overzicht** | The main Workshop/les page (the "Muzikale ondersteuning" text). |
 | **Contact** | The "over mij" text, the portrait photo, e-mail and phone. |
 | **Koren — subpagina's** | Spirit, Singin'Gestel, Popkoor MIKS, Koor Voluum. You can add a new one here. |
-| **Workshop/les — subpagina's** | Muzikale ondersteuning, Workshopmogelijkheden. |
+| **Workshop/les — Muzikale ondersteuning** | That sub-page: title, text, optional photo. |
+| **Workshop/les — Workshopmogelijkheden** | That sub-page: the title, plus **Onderdelen** — a list of blocks you can add to (see §6a). |
 | **Agenda — kop en introtekst** | The "Agenda" heading and the sentence above the list. |
 | **Agenda — optredens** | The list of upcoming events shown on the page. |
 | **Privacyverklaring** | The privacy page (currently a placeholder). |
@@ -163,11 +164,28 @@ delete them now and then.
 
 ---
 
+## 6a. The Workshopmogelijkheden blocks (Onderdelen)
+
+**Workshop/les — Workshopmogelijkheden** has a fixed **Titel** at the top and
+then **Onderdelen** — a list of blocks. The page today is one block (the current
+text + the boomwhackers photo).
+
+Each block has:
+- **Kop** — optional. A short grey sub-heading above the block. Leave it empty for
+  no heading (the first block has none).
+- **Tekst** — the block's text, with the formatting toolbar (bold, lists, links…).
+- **Foto rechts** — optional. A photo that floats to the right of the text.
+
+Click **Add** under *Onderdelen* for another block, drag the handle to reorder,
+trash icon to remove. **Save**.
+
+---
+
 ## 7. Adding a new sub-page
 
-For a new choir or workshop page:
+For a new **choir** page (Koren):
 
-1. Click **Koren — subpagina's** (or **Workshop/les — subpagina's**).
+1. Click **Koren — subpagina's**.
 2. Click **Add** / **New**.
 3. Fill in **Titel**, the **Tekst**, and photos.
 4. **Save.**
@@ -175,6 +193,9 @@ For a new choir or workshop page:
    address is the site address + `/koren/` + a simplified version of the title,
    e.g. *Nieuw Koor* → `/koren/nieuw-koor/`. If unsure, open the new page from
    its list first and copy the address from your browser.)
+
+The two **Workshop/les** sub-pages are fixed entries, not a list — to add another
+one, ask the developer.
 
 ---
 

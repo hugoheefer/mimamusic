@@ -179,12 +179,14 @@ content:
           - { name: src, label: Afbeelding, type: image }
           - { name: alt, label: Alt-tekst, type: string }
 
-  - name: workshop_subpaginas
-    label: "Workshop/les — subpagina's"
-    type: collection
-    path: maintainable_website/src/content/workshop-les
+  - name: workshop_muzikale_ondersteuning
+    label: "Workshop/les — Muzikale ondersteuning"
+    type: file
+    path: maintainable_website/src/content/workshop-les/muzikale-ondersteuning.md
     fields:
       - { name: title, label: Titel, type: string }
+      - { name: titleClass, label: Titelkleur, type: select, options: { values: [is-red, is-dim] }, default: is-dim }
+      - { name: description, label: Omschrijving voor Google, type: text }
       - { name: body, label: Tekst, type: rich-text }
       - name: photo
         label: Foto (optioneel)
@@ -192,7 +194,29 @@ content:
         fields:
           - { name: src, label: Afbeelding, type: image }
           - { name: alt, label: Alt-tekst, type: string }
-          - { name: layout, label: Plaatsing, type: select, options: { values: [ph-side] } }
+          - { name: layout, label: Plaatsing, type: select, options: { values: [ph-side, ph-portrait] } }
+
+  - name: workshop_mogelijkheden
+    label: "Workshop/les — Workshopmogelijkheden"
+    type: file
+    path: maintainable_website/src/content/workshop-les/workshopmogelijkheden.md
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: titleClass, label: Titelkleur, type: select, options: { values: [is-red, is-dim] }, default: is-red }
+      - { name: description, label: Omschrijving voor Google, type: text }
+      - name: items
+        label: Onderdelen
+        type: object
+        list: { min: 1 }
+        fields:
+          - { name: heading, label: "Kop (optioneel — grijs, zoals andere subtitels)", type: string }
+          - { name: body, label: Tekst, type: rich-text }
+          - name: photo
+            label: Foto rechts (optioneel)
+            type: object
+            fields:
+              - { name: src, label: Afbeelding, type: image }
+              - { name: alt, label: Alt-tekst, type: string }
 
   - name: agenda_intro
     label: "Agenda — kop en introtekst"

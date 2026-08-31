@@ -1,7 +1,22 @@
 ---
 layout: layouts/base.njk
 ---
-{%- if articles and articles.length -%}
+{%- if items and items.length -%}
+<section class="page">
+  <h1 class="page-title {{ titleClass }}">{{ title }}</h1>
+  {%- for item in items -%}
+  <article class="art clearfix">
+    {%- if item.heading -%}<h2 class="page-title is-dim">{{ item.heading }}</h2>{%- endif -%}
+    <div class="prose">
+      {%- if item.photo and item.photo.src -%}
+      <div class="ph ph-side">{% image item.photo.src, item.photo.alt, { sizes: "(max-width: 760px) 100vw, 300px", widths: [280, 560] } %}</div>
+      {%- endif -%}
+      {{ item.body | md | safe }}
+    </div>
+  </article>
+  {%- endfor -%}
+</section>
+{%- elif articles and articles.length -%}
 <section class="page">
   <h1 class="visually-hidden">{{ title }}</h1>
   {%- for a in articles -%}
