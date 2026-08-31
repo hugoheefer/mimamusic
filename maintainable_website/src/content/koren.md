@@ -20,10 +20,6 @@ band:
     alt: Wilma, 2024
     w: 212
     h: 159
-  - src: /assets/images/test-foto.png
-    alt: test-toegevoegd-item
-    w: 100
-    h: 100
 ---
 Wat is er nou heerlijker dan het dirigeren van een koor. Ik hou ervan om flink te
 werken tijdens de repetities en na afloop zijn we dan ook allemaal voldaan. Je wordt

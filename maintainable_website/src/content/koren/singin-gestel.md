@@ -1,19 +1,13 @@
 ---
 title: Singin'Gestel
-titleClass: is-dim
-description: "Singin'Gestel (voorheen GGK) — gemengd koor in Sint-Michielsgestel, modern repertoire, dirigent Wilma van der Schoot sinds 2014."
 photoLayout: pair
 photos:
-  - { src: /assets/images/2024-05_met_kinderen.jpg, alt: "Singin'Gestel in de kerk" }
-  - { src: /assets/images/2024-03-20.jpg, alt: "Singin'Gestel" }
+  - src: /assets/images/2024-05_met_kinderen.jpg
+    alt: Singin'Gestel in de kerk
+  - src: /assets/images/2024-03-20.jpg
+    alt: Singin'Gestel
 ---
-Het GGK heeft haar naam veranderd: het koor heet voortaan
-<span class="t-red-strong">Singin'Gestel</span>. Elke woensdagavond wordt er gerepeteerd in
-de 'Blaula' van Beekvliet in Sint-Michielsgestel. Sind 2014 ben ik daar dirigent. Het koor
-heeft de overstap naar moderner repertoire gemaakt, én naar moderne kleding. Ze komen
-tegenwoordig met een frisgroene uitstraling. Het repertoire gaat van 'Dancing Queen' van
-ABBA tot 'Tonight' van Son Mieux. In augustus gaat er o.a. gestart worden met 'Mijn houten
-Hart' van De Poema's en 'All I want for Christmas' van Mariah Carey.
+Sinds 2014 ben ik dirigent bij Singin'Gestel . Het koor heeft een flinke overstap naar moderner repertoire én moderne kleding gemaakt. Ze komen tegenwoordig met een frisgroene uitstraling.  Het repertoire gaat van 'Dancing Queen' van ABBA tot 'Tonight' van Son Mieux. En af en toe wordt er nog een licht klassiek werk gezongen. Door die overstap zijn er veel nieuwe leden bijgekomen. Het koor repeteert elke woensdagavond in de 'Blaula' van gymnasium Beekvliet in Sint-Michielsgestel. 
 
 Voor meer informatie kun je naar hun website:
 [www.singingestel.nl](https://www.singingestel.nl)

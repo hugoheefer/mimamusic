@@ -43,7 +43,7 @@ articles:
     narrow: true
     photo:
       src: Wilma_fluitist_1986.jpg
-      alt: "Wilma als fluitiste, 1986"
+      alt: Wilma als fluitiste, 1986
       layout: ph-side
   - heading: Dwarsfluitles
     body: >-
@@ -68,18 +68,5 @@ articles:
 
 
       De lessen vinden in Rosmalen plaats.
-    narrow: false
-  - heading: Blokfluitles
-    body: >-
-      je hebt grote en kleine blokfluiten, je hebt ze in allerlei soorten en
-      maten. In
-
-      blokfluitensembles wordt graag met verschillende maten van blokfluiten
-      samen gespeeld.
-
-      De klank reikt dan van zeer laag door de (contra) basblokfluit tot zeer
-      hoog door de
-
-      (kleine) sopranino.Ben je geïnteresseerd dan kun je bij me aankloppen.
     narrow: false
 ---
