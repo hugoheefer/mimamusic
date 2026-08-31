@@ -52,8 +52,4 @@ items:
     photo:
       src: /assets/images/boomwhackers_1c.jpg
       alt: Boomwhackers
-  - heading: Item2
-    body: Dit is item 2.
-    photo:
-      src: /assets/images/test-foto2.png
 ---
