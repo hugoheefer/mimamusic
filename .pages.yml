@@ -201,18 +201,18 @@ content:
     fields:
       - { name: title, label: Kop, type: string }
       - { name: description, label: Omschrijving voor Google, type: text }
-      - { name: body, label: Introtekst (boven de kalender), type: text }
+      - { name: body, label: Introtekst (boven de lijst), type: text }
 
   - name: agenda
-    label: "Agenda — optredens (kalender)"
+    label: "Agenda — optredens"
     type: file
     path: maintainable_website/src/_data/agenda.yaml
     list: true
     fields:
       - { name: date, label: Datum, type: date }
       - { name: title, label: Titel, type: string }
-      - { name: type, label: Soort, type: select, options: { values: [concert, dienst, evenement] } }
       - { name: location, label: Locatie (optioneel), type: string }
+      - { name: url, label: "Link bij de locatie (optioneel — volledige https://…-adres)", type: string }
 
   - name: privacy
     label: Privacyverklaring

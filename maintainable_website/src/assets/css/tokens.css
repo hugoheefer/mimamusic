@@ -26,14 +26,6 @@
   --menu-ink: #333333;
   --menu-hover: #ececec;
 
-  --panel: #f5f5f5;
-  --panel-ink: #333333;
-  --panel-mut: #b3b3b3;
-  --panel-rule: #e4e4e4;
-  --panel-shade: #ececec;
-  --cal-red: #e8402e;
-  --cal-blue: #3e5c7a;
-
   --container: 1200px;         /* GK5 .container max-width, centred (margin: 0 auto) */
   --pad: 15px;
   --measure: 1170px;

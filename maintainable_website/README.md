@@ -61,7 +61,7 @@ src/
   redirects.njk        emits a meta-refresh stub per redirects.json entry
   sitemap.njk robots.njk
 eleventy.config.js     filters (md, nldate, pageSlug); the {% image %},
-                       {% agendaList %} and {% agendaCalendar %} shortcodes;
+                       {% agendaList %} shortcode;
                        YAML data loader; the CSS bundle step; the temporary
                        externalLinksBreakOutOfIframe transform (see below)
 .pages.yml             Pages CMS schema (see "Editing" below)
@@ -83,7 +83,7 @@ picks a layout via a tiny `*.11tydata.json` file, and `content.11tydata.js` maps
 | `arrangeren.md` | page | `body` (heading colour quirk is in CSS: `.p-arrangeren`) |
 | `koren/*.md`, `workshop-les/*.md` | page | `body`, `photos[]` / `photo`, `photoLayout` |
 | `contact.md` | page | `photo`, `body` (raw inline HTML kept verbatim) |
-| `agenda.md` | agenda | body text; the grid is built from `_data/agenda.yaml` |
+| `agenda.md` | agenda | intro body text; the list is built from `_data/agenda.yaml` |
 
 Images are referenced by **filename only** (`2017-12b.jpg`). The `{% image %}`
 shortcode generates responsive `<picture>` markup (WebP + fallback, `srcset`,
@@ -189,13 +189,13 @@ above `SITE_HOSTS` in `eleventy.config.js`.
   `@media print`, `sitemap.xml`, `robots.txt`, a `404.html`. The nav is the
   prototype's plain wrapping bar with CSS-only dropdowns (no JS, no hamburger);
   on touch the parent links reach their landing pages, which list the children.
-- Agenda: the fake JEvents mode toggles are dropped. Left half = the "Agenda"
-  heading + intro + "Aankomende optredens" list; right half = one month grid,
-  top-aligned with the heading. Stacks < 900px. Grids run from the current month
-  through the month of the furthest upcoming event (cap 6); **one shows at a
-  time**, switched by `‹ vorige / volgende ›` `<label>`s that flip a hidden radio
-  (`:checked` + positional `:nth-of-type` CSS) — no client JS, and no scroll jump.
-  All auto-updates as dates pass.
+- Agenda: the JEvents month calendar is dropped entirely (owner decision). The
+  page is now just the "Agenda" heading + intro + the "Aankomende optredens"
+  list, built from `_data/agenda.yaml` by `{% agendaList %}`; past dates fall off
+  automatically. Each entry may carry a `url` — when it is a valid `http(s)`
+  address the location is rendered as a link (which the
+  `externalLinksBreakOutOfIframe` transform then opens in a new tab); an invalid
+  or empty `url` leaves the location as plain text.
 - Dwarsfluit "Dwarsfluitles" `<br>` pseudo-list → a real Markdown bullet list
   (spec D16 open question — converted for CMS cleanliness).
 - Transcribed copy keeps the original quirks verbatim ("Daarna heeft heb ik",
@@ -210,8 +210,8 @@ above `SITE_HOSTS` in `eleventy.config.js`.
 - **Contact:** still `mailto:` + `tel:` (the "/at/" text is kept from the live
   site). A real form (Web3Forms / Formspree — GitHub Pages has no form handler)
   is a later step.
-- **Agenda mechanism:** confirm this hand-maintained YAML list is the model the
-  owner wants.
+- **Agenda mechanism:** the month calendar was removed; the page is the
+  hand-maintained YAML list only. Confirm that list is the model the owner wants.
 - **Design:** black theme vs lighter; keep Henny Penny / Gabriela or pick cleaner
   faces (spec §15 — owner decision).
 - **Pages CMS check:** on the owner's first save, confirm Pages CMS preserves

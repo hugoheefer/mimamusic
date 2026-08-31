@@ -75,8 +75,8 @@ Down the left side, under **Content**:
 | **Contact** | The "over mij" text, the portrait photo, e-mail and phone. |
 | **Koren — subpagina's** | Spirit, Singin'Gestel, Popkoor MIKS, Koor Voluum. You can add a new one here. |
 | **Workshop/les — subpagina's** | Muzikale ondersteuning, Workshopmogelijkheden. |
-| **Agenda — kop en introtekst** | The "Agenda" heading and the sentence above the calendar. |
-| **Agenda — optredens (kalender)** | The list of upcoming events shown on the page and marked on the calendar. |
+| **Agenda — kop en introtekst** | The "Agenda" heading and the sentence above the list. |
+| **Agenda — optredens** | The list of upcoming events shown on the page. |
 | **Privacyverklaring** | The privacy page (currently a placeholder). |
 | **Menubalk (hoofdmenu)** | The menu bar at the top of every page: which items appear, their order, and the dropdown entries under Koren and Workshop/les (§7a). |
 
@@ -139,23 +139,23 @@ the site slower; the build automatically makes smaller versions for phones.
 
 The Agenda has **two** entries in the editor:
 
-**Agenda — kop en introtekst** — the heading and the sentence above the calendar.
+**Agenda — kop en introtekst** — the heading and the sentence above the list.
 Edit the **Kop** and **Introtekst** fields, **Save**.
 
-**Agenda — optredens (kalender)** — the list of events:
+**Agenda — optredens** — the list of events:
 1. Each entry has:
    - **Datum** — the date.
    - **Titel** — e.g. *"Najaarsconcert Singin'Gestel"*.
-   - **Soort** — `concert`, `dienst`, or `evenement` (sets the colour dot).
    - **Locatie** — optional, e.g. *"Sint-Michielsgestel"*.
+   - **Link bij de locatie** — optional. Paste a full web address
+     (`https://…`). When it's a valid address the **Locatie** text becomes a
+     clickable link that opens in a new tab. Anything that isn't a proper web
+     address is ignored — the location just stays plain text.
 2. **Add** a new entry, or delete a past one.
 3. **Save**.
 
-On the site, the Agenda page shows the intro text and the list of upcoming events
-on the left, and one month of the calendar on the right. The calendar covers every
-month up to your furthest event (up to 6 months ahead); **‹ vorige / volgende ›**
-switch which month is shown, in place — so an event next month appears both in the
-list and on its own calendar page. Nothing to configure.
+On the site, the Agenda page shows the intro text and the list of upcoming
+events. Nothing to configure.
 
 If the list is empty, the page shows *"Op dit moment staan er geen activiteiten
 gepland…"*. Past dates drop off the upcoming list on their own, but it's tidy to

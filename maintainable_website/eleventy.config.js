@@ -44,7 +44,6 @@ const nlWeekdayLong = new Intl.DateTimeFormat("nl-NL", {
   month: "long",
   year: "numeric",
 });
-const nlMonth = new Intl.DateTimeFormat("nl-NL", { month: "long", year: "numeric" });
 const capFirst = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
 const IMAGE_DIR = "src/assets/images";
@@ -87,142 +86,58 @@ async function imageShortcode(src, alt, opts = {}) {
   });
 }
 
-const CAL_TYPE_COLOUR = { concert: "#4a77b5", dienst: "#5aa469", evenement: "#d98b3a" };
-const CAL_MAX_MONTHS = 6; // this month .. furthest upcoming event, capped
 const htmlEsc = (s) =>
   String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
-/* Shared: parse entries, keep the future ones, decide how many months to draw. */
-function agendaData(entries = []) {
+// A CMS "Link" value counts only if it parses as an absolute http(s) URL —
+// anything else (blank, "n.v.t.", a bare word) leaves the location as plain text.
+function validHttpUrl(raw) {
+  if (!raw) return null;
+  try {
+    const u = new URL(String(raw).trim());
+    return u.protocol === "http:" || u.protocol === "https:" ? u.href : null;
+  } catch {
+    return null;
+  }
+}
+
+/* Upcoming entries from _data/agenda.yaml: parse dates, drop the unparseable and
+ * the past, sort ascending. */
+function upcomingAgenda(entries = []) {
   const now = new Date();
-  const today = { y: now.getFullYear(), m: now.getMonth(), d: now.getDate() };
-  const startOfToday = new Date(today.y, today.m, today.d);
-
-  const events = (entries || [])
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return (entries || [])
     .map((e) => ({ ...e, d: new Date(e.date) }))
-    .filter((e) => !Number.isNaN(e.d.getTime()))
+    .filter((e) => !Number.isNaN(e.d.getTime()) && e.d >= startOfToday)
     .sort((a, b) => a.d - b.d);
-  const future = events.filter((e) => e.d >= startOfToday);
-
-  let monthCount = 1;
-  if (future.length) {
-    const last = future[future.length - 1].d;
-    monthCount = (last.getFullYear() - today.y) * 12 + (last.getMonth() - today.m) + 1;
-    monthCount = Math.min(Math.max(monthCount, 1), CAL_MAX_MONTHS);
-  }
-  return { events, future, today, monthCount };
 }
 
-/* One month grid: Monday-first, prev/next spill greyed, today marked (only in the
- * real current month), events chipped on their day. prev/next are <label>s that
- * flip a hidden radio — no navigation, so the page never scrolls. */
-function renderMonthGrid(year, month, byDay, today, prevInputId, nextInputId) {
-  const firstDow = (new Date(year, month, 1).getDay() + 6) % 7; // Mon = 0
-  const daysThis = new Date(year, month + 1, 0).getDate();
-  const daysPrev = new Date(year, month, 0).getDate();
-
-  const cells = [];
-  for (let i = 0; i < firstDow; i++) cells.push({ n: daysPrev - firstDow + 1 + i, mute: true });
-  for (let d = 1; d <= daysThis; d++) cells.push({ n: d, mute: false });
-  // always 6 rows (42 cells) so the grid is the same height every month
-  while (cells.length < 42) cells.push({ n: cells.length - (firstDow + daysThis) + 1, mute: true });
-
-  const isCurrentMonth = year === today.y && month === today.m;
-  let rows = "";
-  for (let i = 0; i < cells.length; i += 7) {
-    rows += "<tr>";
-    for (const cell of cells.slice(i, i + 7)) {
-      const evs = cell.mute ? [] : byDay.get(cell.n) || [];
-      const isToday = isCurrentMonth && !cell.mute && cell.n === today.d;
-      const label = isToday ? `<span class="today">${cell.n}</span>` : `${cell.n}`;
-      const chips = evs
-        .map(
-          (e) =>
-            `<span class="cal-ev" style="border-left-color:${
-              CAL_TYPE_COLOUR[e.type] || "#bbbbbb"
-            }">${htmlEsc(e.title)}</span>`
-        )
-        .join("");
-      rows += `<td class="${cell.mute ? "mute" : ""}">${label}${chips}</td>`;
-    }
-    rows += "</tr>";
-  }
-
-  const nav =
-    prevInputId || nextInputId
-      ? `<div class="cal-nav">
-        ${prevInputId ? `<label for="${prevInputId}">&#8249; vorige</label>` : `<span></span>`}
-        ${nextInputId ? `<label for="${nextInputId}">volgende &#8250;</label>` : `<span></span>`}
-      </div>`
-      : "";
-
-  return `
-    <div class="cal">
-      <div class="cal-top"><div class="cal-month">${nlMonth.format(new Date(year, month, 1))}</div></div>
-      ${nav}
-      <table class="cal-grid">
-        <thead><tr><th>ma</th><th>di</th><th>wo</th><th>do</th><th>vr</th><th class="we">za</th><th class="we">zo</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-      <div class="cal-legend">
-        <span><i style="background:#4a77b5;"></i>concert</span>
-        <span><i style="background:#5aa469;"></i>dienst</span>
-        <span><i style="background:#d98b3a;"></i>evenement</span>
-      </div>
-    </div>`;
-}
-
-/* Left column: the "Aankomende optredens" list (or the empty-state line). */
+/* The "Aankomende optredens" list (or the empty-state line). Data comes from
+ * _data/agenda.yaml, which the owner maintains in Pages CMS. When an entry
+ * carries a valid http(s) "Link", its location renders as an <a> — the
+ * build-time externalLinksBreakOutOfIframe transform then makes it open in a
+ * new tab. No "Link", or an invalid one: plain-text location, as before. */
 function agendaListShortcode(entries = []) {
-  const { future } = agendaData(entries);
+  const future = upcomingAgenda(entries);
   if (!future.length) {
     return `<p class="cal-empty">Op dit moment staan er geen activiteiten gepland &mdash; kom hier binnenkort terug voor nieuwe data.</p>`;
   }
   return `<ul class="cal-upcoming">${future
-    .map(
-      (e) =>
+    .map((e) => {
+      const loc = e.location ? htmlEsc(e.location) : "";
+      const href = validHttpUrl(e.url);
+      const locHtml = loc
+        ? `<span class="cal-loc">${href ? `<a href="${htmlEsc(href)}">${loc}</a>` : loc}</span>`
+        : "";
+      return (
         `<li>` +
         `<time datetime="${e.d.toISOString().slice(0, 10)}">${capFirst(nlWeekdayLong.format(e.d))}</time>` +
         `<span class="cal-up-title">${htmlEsc(e.title)}</span>` +
-        (e.location ? `<span class="cal-loc">${htmlEsc(e.location)}</span>` : "") +
+        locHtml +
         `</li>`
-    )
+      );
+    })
     .join("")}</ul>`;
-}
-
-/* Right column: current month through the furthest upcoming event (cap 6). Only
- * the chosen month shows (hidden radios + CSS); prev/next flip the radio, so the
- * page does not move. Fully static — no client JS. */
-function agendaCalendarShortcode(entries = []) {
-  const { events, today, monthCount } = agendaData(entries);
-  const inputId = (i) => `agenda-month-${i}`;
-
-  let inputs = "";
-  let grids = "";
-  for (let i = 0; i < monthCount; i++) {
-    const dt = new Date(today.y, today.m + i, 1);
-    const y = dt.getFullYear();
-    const m = dt.getMonth();
-    const byDay = new Map();
-    for (const e of events) {
-      if (e.d.getFullYear() === y && e.d.getMonth() === m) {
-        byDay.set(e.d.getDate(), [...(byDay.get(e.d.getDate()) || []), e]);
-      }
-    }
-    inputs += `<input class="cal-pick" type="radio" name="agenda-month" id="${inputId(i)}"${
-      i === 0 ? " checked" : ""
-    } hidden>`;
-    grids += renderMonthGrid(
-      y,
-      m,
-      byDay,
-      today,
-      i > 0 ? inputId(i - 1) : null,
-      i < monthCount - 1 ? inputId(i + 1) : null
-    );
-  }
-  return `<div class="cal-pager">${inputs}${grids}
-  </div>`;
 }
 
 /*
@@ -345,7 +260,6 @@ export default function (eleventyConfig) {
 
   eleventyConfig.addNunjucksAsyncShortcode("image", imageShortcode);
   eleventyConfig.addShortcode("agendaList", agendaListShortcode);
-  eleventyConfig.addShortcode("agendaCalendar", agendaCalendarShortcode);
 
   // stylesheet bundle — six files, fixed cascade order, one request
   eleventyConfig.addWatchTarget("src/assets/css/");
