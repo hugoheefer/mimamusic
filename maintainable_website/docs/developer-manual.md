@@ -58,7 +58,7 @@ npm run clean     # delete _site/
 | Agenda entries | `src/_data/agenda.yaml` |
 | Old→new redirect table | `src/_data/redirects.json` |
 | Header / footer / `<head>` | `src/_includes/layouts/base.njk` |
-| Page layouts | `src/_includes/layouts/{page,section,home,agenda}.njk` |
+| Page layouts | `src/_includes/layouts/{page,home,agenda}.njk` — `page.njk` covers every hand-written content page; `home` and `agenda` are special |
 | Nav markup | `src/_includes/partials/nav.njk` |
 | Styles | `src/assets/css/*.css` (6 files, bundled in `eleventy.config.js`) |
 | Images | `src/assets/images/` (real files; `{% image %}` makes responsive `<picture>`) |
@@ -70,8 +70,24 @@ npm run clean     # delete _site/
 ### 2.2 Common changes
 
 **Edit text/photo of an existing page** — edit the `.md` in `src/content/`. Front
-matter carries the fixed fields (`title`, `band`, `blocks`, `photos`, …); the body
+matter carries the fixed fields (`title`, `band`, `sections`, `photos`, …); the body
 below `---` is the prose.
+
+**The one content layout — `layouts/page.njk`.** Every hand-written page uses it
+(default set in `src/content/content.11tydata.js`; Home and Agenda opt out via
+their own `*.11tydata.json`). Two rendering modes:
+
+| `sectionStyle` | Shape | Pages |
+|---|---|---|
+| unset / `prose` | title + body + optional single `photo` + optional `band` (photo row) + optional `photos`/`photoLayout` group + optional `sections` shown as *teaser* blocks under the text | Koren, Onderwijs, Workshop/les, Arrangeren, Contact, Privacy, 404, sub-pages |
+| `article` | title + a stack of `sections`, each an `<article class="art">` with its own heading, optional floated `photo`, body | Dwarsfluit, Workshopmogelijkheden |
+
+`sections` ("Onderdelen" in the CMS) is **one shared field shape** — `heading`,
+`body`, `photo{src,alt,layout}`, `narrow`, `link`, `external` — defined once in
+`.pages.yml` (YAML anchor `&sections`) and reused by all four pages that have it.
+`sectionStyle`, `sectionHeadingClass` (red/grey, template-fixed, never an editor
+choice) and `hideTitle` live in per-page `*.11tydata.json`, not the front matter,
+so a CMS Save can't drop them.
 
 **Add a page** — e.g. a new choir sub-page:
 1. `src/content/koren/new-choir.md` with `title`, `body`, `photos`, `photoLayout`.
@@ -81,8 +97,13 @@ below `---` is the prose.
 3. It's already covered by the `koor_subpaginas` collection in `.pages.yml`, so the
    owner can edit it too (and could have created it from the CMS).
 
-**Add a whole new section type** — new layout in `src/_includes/layouts/`, wire a
-`*.11tydata.json` for the layout, add a collection/file entry to `.pages.yml`.
+**Add a block to Dwarsfluit / Workshopmogelijkheden** — add a `sections` entry in
+the `.md` front matter (or in the CMS under "Onderdelen"). No template change.
+
+**Add a whole new section type** — prefer extending `page.njk` (a new optional
+front-matter field, or a third `sectionStyle`). Only add a new layout in
+`src/_includes/layouts/` + a `*.11tydata.json` + a `.pages.yml` entry if the shape
+is genuinely unlike everything else (as Home and Agenda are).
 
 **Change styles** — edit the relevant `src/assets/css/*.css`. Colours, type scale,
 spacing and layout constants are all tokens in `tokens.css`.
@@ -234,11 +255,16 @@ used: `string`, `text`, `rich-text`, `image`, `boolean`, `number`, `select`,
 
 - Home `blocks` is pinned to exactly 3 (`list: { min: 3, max: 3 }`) — the homepage
   CSS is a fixed 3-column grid keyed on `variant: dir|ond|dwf`. Loosening it means
-  reworking `#page-home` CSS in `content.css`.
+  reworking `#page-home` CSS in `content.css`. It is a different thing from
+  `sections` and deliberately not shared with it.
+- `sections` ("Onderdelen") is one anchored definition (`&sections` on the Koren
+  entry, `*sections` on Onderwijs / Dwarsfluit / Workshopmogelijkheden). Edit it
+  once; keep the four usages identical.
 - After the owner's first Save, **check the file still has the front-matter keys
   the CMS doesn't manage** (e.g. `titleClass` on sub-pages). If Pages CMS strips
   them, move those keys into a `*.11tydata.json` directory-data file so they're not
-  in the `.md` at all.
+  in the `.md` at all — this is already done for `sectionStyle` &co. on
+  `dwarsfluit.11tydata.json` and `workshop-les/workshopmogelijkheden.11tydata.json`.
 
 ### 6.2 Keeping the CMS and the live site in sync
 
@@ -349,7 +375,7 @@ files — none of them transfer):
 | Deploy fails: **"Get Pages site failed" / "Not Found"** | Settings → Pages → Source not set to "GitHub Actions" (§4.3). |
 | **Menu bar disappears on desktop** | Don't wrap the nav in `<details>` — current Chrome hides closed `<details>` content in a way CSS can't override. The nav is a plain `<ul class="menu">`. |
 | Page URLs contain **`/content/`** | `src/content/content.11tydata.js` sets a computed `permalink` that strips the `content/` segment — keep it. |
-| **Images missing** when added inside a Nunjucks **macro** | The `{% image %}` shortcode is async and can't run inside `{% macro %}`. Inline the loop into the template instead (see `layouts/section.njk`). |
+| **Images missing** when added inside a Nunjucks **macro** | The `{% image %}` shortcode is async and can't run inside `{% macro %}`. Inline the loop into the template instead (the `page.njk` heading macro is deliberately text-only). |
 | `<title>` shows **"MimaMusic — MimaMusic"** on home | Home is detected with `page.url == "/"`, not `fileSlug` — keep that check in `base.njk`. |
 | **Agenda entries don't show** on the site | Eleventy has no built-in `.yaml` data loader. `eleventy.config.js` registers one via `addDataExtension("yaml,yml", …)` with `js-yaml` — keep it, or `src/_data/agenda.yaml` is silently ignored. |
 | **A photo vanished after a CMS Save**, build still green | Pages CMS dropped that `image` field's `src`. Grep the deploy log for `[image] skipped`, restore the value as `/assets/images/<file>` in the page's front matter. Prevention: store every image path in that form (§6.2). |

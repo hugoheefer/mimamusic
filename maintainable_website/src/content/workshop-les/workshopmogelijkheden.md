@@ -3,7 +3,7 @@ title: Workshopmogelijkheden
 titleClass: is-red
 description: Workshops op maat voor bedrijf of familie — samen zingen,
   ontspanning door zang, djembé, boomwhackers, kennismaken met instrumenten.
-items:
+sections:
   - body: >-
       Wil je iets leuks organiseren als bedrijfsactiviteit of als
       familieworkshop dan is er van
@@ -52,4 +52,5 @@ items:
     photo:
       src: /assets/images/boomwhackers_1c.jpg
       alt: Boomwhackers
+      layout: ph-side
 ---

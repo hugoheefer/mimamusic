@@ -67,15 +67,15 @@ Down the left side, under **Content**:
 | Item | What it is |
 |---|---|
 | **Home** | The front page: the 3 short blocks (Dirigeren / Onderwijs / Dwarsfluit). |
-| **Koren — overzicht** | The main Koren page: the "Koordirigent" text, the row of photos, and optional blocks under it. |
-| **Onderwijs** | The Onderwijs page: text, photo row, and the "Bs Emmaus" block. |
-| **Dwarsfluit** | The four stacked parts (Geschiedenis, fluitist, Dwarsfluitles, Blokfluitles). |
+| **Koren — overzicht** | The main Koren page: the "Koordirigent" text, the **Fotoreeks** photo row, and **Onderdelen** — optional blocks under the text (§6a). |
+| **Onderwijs** | The Onderwijs page: text, **Fotoreeks** photo row, and **Onderdelen** — here one block, "Bs Emmaus" (§6a). |
+| **Dwarsfluit** | Title + **Onderdelen** — the stacked parts (Geschiedenis, fluitist, Dwarsfluitles, Blokfluitles). Same block editor as the others (§6a). |
 | **Arrangeren** | Single page of text. |
 | **Workshop/les — overzicht** | The main Workshop/les page (the "Muzikale ondersteuning" text). |
 | **Contact** | The "over mij" text, the portrait photo, e-mail and phone. |
 | **Koren — subpagina's** | Spirit, Singin'Gestel, Popkoor MIKS, Koor Voluum. You can add a new one here. |
 | **Workshop/les — Muzikale ondersteuning** | That sub-page: title, text, optional photo. |
-| **Workshop/les — Workshopmogelijkheden** | That sub-page: the title, plus **Onderdelen** — a list of blocks you can add to (see §6a). |
+| **Workshop/les — Workshopmogelijkheden** | That sub-page: the title, plus **Onderdelen** — a list of blocks you can add to (§6a). |
 | **Agenda — kop en introtekst** | The "Agenda" heading and the sentence above the list. |
 | **Agenda — optredens** | The list of upcoming events shown on the page. |
 | **Privacyverklaring** | The privacy page (currently a placeholder). |
@@ -164,20 +164,32 @@ delete them now and then.
 
 ---
 
-## 6a. The Workshopmogelijkheden blocks (Onderdelen)
+## 6a. Onderdelen — the block lists
 
-**Workshop/les — Workshopmogelijkheden** has a fixed **Titel** at the top and
-then **Onderdelen** — a list of blocks. The page today is one block (the current
-text + the boomwhackers photo).
+Four pages have an **Onderdelen** section: **Koren — overzicht**, **Onderwijs**,
+**Dwarsfluit** and **Workshop/les — Workshopmogelijkheden**. It works the same way
+on all of them — a list of blocks you can add to, reorder and remove.
 
-Each block has:
-- **Kop** — optional. A short grey sub-heading above the block. Leave it empty for
-  no heading (the first block has none).
+Each block has the same fields:
+- **Kop** — a short sub-heading for the block. Optional on Koren, Onderwijs and
+  Workshopmogelijkheden; on Dwarsfluit each part has one (Geschiedenis, fluitist…).
 - **Tekst** — the block's text, with the formatting toolbar (bold, lists, links…).
-- **Foto rechts** — optional. A photo that floats to the right of the text.
+- **Link (optioneel)** — a web address. If you fill it in, the **Kop** becomes a
+  clickable link to that address. Leave it empty for a plain heading. A link
+  *inside* a sentence goes in **Tekst** with the toolbar's link button instead —
+  you only need this field to make the heading itself a link.
+- **Opent in nieuw tabblad** — turn on if the **Link** goes to another website.
+- **Smalle tekstkolom** — turn on when the block has a photo beside it and you want
+  the text to sit in a narrower column next to it (used on Dwarsfluit's "fluitist").
+- **Foto (optioneel)** — a photo for the block. On Koren/Onderwijs it appears
+  under the block's text; on Dwarsfluit/Workshopmogelijkheden it floats to the
+  right of the text.
 
-Click **Add** under *Onderdelen* for another block, drag the handle to reorder,
+Click **Add** under *Onderdelen* for another block, drag the ⣿ handle to reorder,
 trash icon to remove. **Save**.
+
+How the blocks *look* (spacing, heading colour, photo placement) is set per page by
+the developer and isn't something you choose here — you just fill in the fields.
 
 ---
 

@@ -47,14 +47,16 @@ src/
     redirects.json     old Joomla URL -> new path (spec §12)
   _includes/
     layouts/base.njk   <head>, header wordmark, nav, footer — the only copy of these
-    layouts/{page,section,home,agenda}.njk
+    layouts/page.njk   every hand-written content page (two modes; see Content model)
+    layouts/{home,agenda}.njk   the two pages that need their own shape
   content/
     *.md               one file per page; front matter = the editable fields
     koren/*.md          Koren sub-pages
     workshop-les/*.md    Workshop/les sub-pages
     404.md
-    content.11tydata.js   strips the "content/" segment from URLs; default layout
-    <name>.11tydata.json  per-page layout override (home/section/agenda)
+    content.11tydata.js   strips the "content/" segment from URLs; default layout = page.njk
+    <name>.11tydata.json  per-page overrides (home/agenda layout; dwarsfluit &
+                          workshopmogelijkheden section mode)
   assets/
     css/*.css          six files, concatenated in cascade order to /assets/styles.css
     images/*           real photos (from ../website/images/web/)
@@ -70,21 +72,37 @@ deploy/                staging copies of the GitHub Actions workflow + CNAME
 
 ### Content model
 
-Each page's front matter carries only fixed, named fields — never layout. A page
-picks a layout via a tiny `*.11tydata.json` file, and `content.11tydata.js` maps
-`content/koren.md` → `/koren/`.
+Each page's front matter carries only fixed, named fields — never layout.
+`content.11tydata.js` sets the default layout (`page.njk`) and maps
+`content/koren.md` → `/koren/`; `index.md` and `agenda.md` opt out via their own
+`*.11tydata.json`.
 
-| Page | Layout | Key front-matter fields |
+`page.njk` has two modes, picked by `sectionStyle` (default = the prose mode):
+
+- **prose** — `<h1>` + body + optional single `photo` + optional `band[]` photo row
+  + optional `photos[]`/`photoLayout` group + optional `sections[]` shown as
+  *teaser* blocks under the text.
+- **article** (`sectionStyle: article`, set in a `*.11tydata.json`) — `<h1>` +
+  a stack of `sections[]`, each an `<article class="art">` with its own heading,
+  optional right-floated `photo`, and body. `sectionHeadingClass` fixes the heading
+  colour; `hideTitle` makes the `<h1>` screen-reader-only.
+
+`sections[]` = `{ heading?, body, photo{src,alt,layout}?, narrow?, link?, external? }`
+— the same shape in both modes, and one shared definition in `.pages.yml`
+(anchor `&sections`, label "Onderdelen").
+
+| Page | Mode | Key front-matter fields |
 |---|---|---|
-| `index.md` | home | `blocks[]` = `{ heading, text, photo{src,alt,variant} }` ×3 |
-| `koren.md`, `onderwijs.md` | section | `body`, `band[]` = `{src,alt,w,h}`, `teasers[]` |
-| `workshop-les.md` | section | `body` |
-| `dwarsfluit.md` | page | `articles[]` = `{ heading, body, narrow?, photo? }` |
-| `arrangeren.md` | page | `body` (heading colour quirk is in CSS: `.p-arrangeren`) |
-| `koren/*.md`, `workshop-les/muzikale-ondersteuning.md` | page | `body`, `photos[]` / `photo`, `photoLayout` |
-| `workshop-les/workshopmogelijkheden.md` | page | `items[]` = `{ heading?, body, photo{src,alt}? }` — visible `<h1>` + repeatable blocks, each with an optional grey `<h2>` and a right-floated photo |
-| `contact.md` | page | `photo`, `body` (raw inline HTML kept verbatim) |
-| `agenda.md` | agenda | intro body text; the list is built from `_data/agenda.yaml` |
+| `index.md` | *(home layout)* | `blocks[]` = `{ heading, text, photo{src,alt,variant} }` ×3 |
+| `koren.md` | prose | `body`, `band[]` = `{src,alt,w,h}`, `sections[]` |
+| `onderwijs.md` | prose | `body`, `band[]`, `sections[]` (the "Bs Emmaus" block) |
+| `workshop-les.md` | prose | `body` |
+| `dwarsfluit.md` | article | `sections[]`; `.11tydata.json` sets `sectionHeadingClass: is-red`, `hideTitle` |
+| `workshop-les/workshopmogelijkheden.md` | article | `sections[]`; `.11tydata.json` sets `sectionHeadingClass: is-dim` |
+| `arrangeren.md` | prose | `body` (heading colour quirk is in CSS: `.p-arrangeren`) |
+| `koren/*.md`, `workshop-les/muzikale-ondersteuning.md` | prose | `body`, `photos[]` / `photo`, `photoLayout` |
+| `contact.md` | prose | `photo`, `body` (raw inline HTML kept verbatim) |
+| `agenda.md` | *(agenda layout)* | intro body text; the list is built from `_data/agenda.yaml` |
 
 Images are referenced by **filename only** (`2017-12b.jpg`). The `{% image %}`
 shortcode generates responsive `<picture>` markup (WebP + fallback, `srcset`,
@@ -201,6 +219,13 @@ above `SITE_HOSTS` in `eleventy.config.js`.
   (spec D16 open question — converted for CMS cleanliness).
 - Transcribed copy keeps the original quirks verbatim ("Daarna heeft heb ik",
   "sopranino.Ben je", "Sind 2014", "posongs", "vanalles"). Owner proofread pending.
+- One content layout: `section.njk` + the three branches of the old `page.njk`
+  were merged into a single `page.njk` with a `prose` / `article` mode switch, and
+  the per-page block lists (`teasers` / `articles` / `items`) unified to one
+  `sections` field ("Onderdelen" in the CMS). Rendered output is unchanged — the
+  only markup differences are an inert `clearfix` on a few `<section>` tags and,
+  on Workshopmogelijkheden, the floated photo moved from inside `.prose` to a
+  sibling before it (identical render at every breakpoint).
 
 ---
 

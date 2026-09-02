@@ -2,7 +2,7 @@
 title: Dwarsfluit
 description: Dwarsfluit- en blokfluitles in Rosmalen, plus de geschiedenis en
   podiumervaring van fluitiste Wilma van der Schoot.
-articles:
+sections:
   - heading: Geschiedenis
     body: >-
       Ik ben begonnen met dwarsfluit spelen toen ik 10 jaar was. Al vrij snel

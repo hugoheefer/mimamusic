@@ -162,8 +162,8 @@ function agendaListShortcode(entries = []) {
  *
  * "Off-site" = an http(s) href whose host is not in SITE_HOSTS. mailto:, tel:,
  * root-relative (/koren/), relative and #fragment hrefs are left alone, as is
- * any <a> that already carries an explicit target= (e.g. the `t.external`
- * teasers in _includes/layouts/section.njk).
+ * any <a> that already carries an explicit target= (e.g. a `sections[]` block
+ * with `external: true` in _includes/layouts/page.njk).
  *
  * ▓▓ WHEN BUILDING THE DEFINITIVE SITE — REMOVE THIS ▓▓
  * Once mimamusic.nl serves this site directly there is no iframe to break out

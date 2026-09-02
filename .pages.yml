@@ -9,6 +9,12 @@
 # because the Eleventy project is still a subfolder. If that folder is ever
 # promoted to the repo root, drop the `maintainable_website/` prefix from every
 # `path:` and from the media `input:`.
+#
+# "Onderdelen" (key `sections`) is the same block list on every content page —
+# Koren, Onderwijs, Dwarsfluit and Workshopmogelijkheden all use the shared
+# definition anchored below. How a page shows those blocks (as teaser blocks
+# under the text, or as a stack of stacked article sections) is fixed in the
+# template, not here.
 
 media:
   input: maintainable_website/src/assets/images
@@ -56,21 +62,26 @@ content:
           - { name: alt, label: Alt-tekst, type: string }
           - { name: w, label: Breedte in px, type: number }
           - { name: h, label: Hoogte in px, type: number }
-      - name: teasers
-        label: Blokken onder de tekst
+      # `sections` ("Onderdelen") is defined once here and reused (YAML anchor) on
+      # Onderwijs, Dwarsfluit and Workshopmogelijkheden — one shared block shape.
+      - &sections
+        name: sections
+        label: Onderdelen
         type: object
         list: true
         fields:
-          - { name: title, label: Kop, type: string }
+          - { name: heading, label: Kop, type: string }
           - { name: body, label: Tekst, type: rich-text }
-          - { name: link, label: Link (optioneel), type: string }
+          - { name: link, label: "Link (optioneel — maakt de kop klikbaar)", type: string }
           - { name: external, label: Opent in nieuw tabblad, type: boolean }
-          - name: image
-            label: Foto
+          - { name: narrow, label: "Smalle tekstkolom (naast een foto)", type: boolean }
+          - name: photo
+            label: Foto (optioneel)
             type: object
             fields:
               - { name: src, label: Afbeelding, type: image }
               - { name: alt, label: Alt-tekst, type: string }
+              - { name: layout, label: Plaatsing, type: select, options: { values: [ph-side] } }
 
   - name: onderwijs
     label: Onderwijs
@@ -90,19 +101,7 @@ content:
           - { name: alt, label: Alt-tekst, type: string }
           - { name: w, label: Breedte in px, type: number }
           - { name: h, label: Hoogte in px, type: number }
-      - name: teasers
-        label: Blokken onder de tekst
-        type: object
-        list: true
-        fields:
-          - { name: title, label: Kop, type: string }
-          - { name: body, label: Tekst, type: rich-text }
-          - name: image
-            label: Foto
-            type: object
-            fields:
-              - { name: src, label: Afbeelding, type: image }
-              - { name: alt, label: Alt-tekst, type: string }
+      - *sections
 
   - name: dwarsfluit
     label: Dwarsfluit
@@ -111,21 +110,7 @@ content:
     fields:
       - { name: title, label: Titel, type: string }
       - { name: description, label: Omschrijving voor Google, type: text }
-      - name: articles
-        label: Onderdelen
-        type: object
-        list: true
-        fields:
-          - { name: heading, label: Kop, type: string }
-          - { name: body, label: Tekst, type: rich-text }
-          - { name: narrow, label: Smalle tekstkolom (naast een foto), type: boolean }
-          - name: photo
-            label: Foto (optioneel)
-            type: object
-            fields:
-              - { name: src, label: Afbeelding, type: image }
-              - { name: alt, label: Alt-tekst, type: string }
-              - { name: layout, label: Plaatsing, type: select, options: { values: [ph-side] } }
+      - *sections
 
   - name: arrangeren
     label: Arrangeren
@@ -202,21 +187,8 @@ content:
     path: maintainable_website/src/content/workshop-les/workshopmogelijkheden.md
     fields:
       - { name: title, label: Titel, type: string }
-      - { name: titleClass, label: Titelkleur, type: select, options: { values: [is-red, is-dim] }, default: is-red }
       - { name: description, label: Omschrijving voor Google, type: text }
-      - name: items
-        label: Onderdelen
-        type: object
-        list: { min: 1 }
-        fields:
-          - { name: heading, label: "Kop (optioneel — grijs, zoals andere subtitels)", type: string }
-          - { name: body, label: Tekst, type: rich-text }
-          - name: photo
-            label: Foto rechts (optioneel)
-            type: object
-            fields:
-              - { name: src, label: Afbeelding, type: image }
-              - { name: alt, label: Alt-tekst, type: string }
+      - *sections
 
   - name: agenda_intro
     label: "Agenda — kop en introtekst"
