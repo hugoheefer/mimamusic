@@ -166,9 +166,12 @@ delete them now and then.
 
 ## 6a. Onderdelen — the block lists
 
-Four pages have an **Onderdelen** section: **Koren — overzicht**, **Onderwijs**,
-**Dwarsfluit** and **Workshop/les — Workshopmogelijkheden**. It works the same way
-on all of them — a list of blocks you can add to, reorder and remove.
+**Every content page** has an **Onderdelen** section (all except Home and the
+Agenda). It works the same way everywhere — a list of blocks you can add to,
+reorder and remove — so you can give any page extra structured content without
+asking the developer. On **Dwarsfluit** the whole page is already built from these
+blocks; on the others it starts empty (except **Onderwijs**, which has the "Bs
+Emmaus" block).
 
 Each block has the same fields:
 - **Kop** — a short sub-heading for the block. Optional on Koren, Onderwijs and

@@ -10,11 +10,12 @@
 # promoted to the repo root, drop the `maintainable_website/` prefix from every
 # `path:` and from the media `input:`.
 #
-# "Onderdelen" (key `sections`) is the same block list on every content page —
-# Koren, Onderwijs, Dwarsfluit and Workshopmogelijkheden all use the shared
-# definition anchored below. How a page shows those blocks (as teaser blocks
-# under the text, or as a stack of stacked article sections) is fixed in the
-# template, not here.
+# "Onderdelen" (key `sections`) is the same block list on every content page.
+# It is defined once (YAML anchor `&sections`, on the Koren entry) and reused
+# (`*sections`) on every other page except Home and Agenda — so the owner can add
+# structured blocks (with their own heading, text, photo and link) to any page
+# without a developer. How a page shows those blocks (as teaser blocks under the
+# text, or as a stack of article sections) is fixed in the template, not here.
 
 media:
   input: maintainable_website/src/assets/images
@@ -120,6 +121,7 @@ content:
       - { name: title, label: Titel, type: string }
       - { name: description, label: Omschrijving voor Google, type: text }
       - { name: body, label: Tekst, type: rich-text }
+      - *sections
 
   - name: workshop_les
     label: "Workshop/les — overzicht"
@@ -130,6 +132,7 @@ content:
       - { name: titleClass, label: Titelkleur, type: select, options: { values: [is-red, is-dim] }, default: is-red }
       - { name: description, label: Omschrijving voor Google, type: text }
       - { name: body, label: Tekst, type: rich-text }
+      - *sections
 
   - name: contact
     label: Contact
@@ -147,6 +150,7 @@ content:
           - { name: alt, label: Alt-tekst, type: string }
           - { name: layout, label: Plaatsing, type: select, options: { values: [ph-portrait] } }
       - { name: body, label: Tekst, type: rich-text }
+      - *sections
 
   - name: koor_subpaginas
     label: "Koren — subpagina's"
@@ -163,6 +167,7 @@ content:
         fields:
           - { name: src, label: Afbeelding, type: image }
           - { name: alt, label: Alt-tekst, type: string }
+      - *sections
 
   - name: workshop_muzikale_ondersteuning
     label: "Workshop/les — Muzikale ondersteuning"
@@ -180,6 +185,7 @@ content:
           - { name: src, label: Afbeelding, type: image }
           - { name: alt, label: Alt-tekst, type: string }
           - { name: layout, label: Plaatsing, type: select, options: { values: [ph-side, ph-portrait] } }
+      - *sections
 
   - name: workshop_mogelijkheden
     label: "Workshop/les — Workshopmogelijkheden"
@@ -218,6 +224,7 @@ content:
       - { name: title, label: Titel, type: string }
       - { name: draft, label: Verborgen (concept), type: boolean }
       - { name: body, label: Tekst, type: rich-text }
+      - *sections
 
   - name: navigation
     label: "Menubalk (hoofdmenu)"

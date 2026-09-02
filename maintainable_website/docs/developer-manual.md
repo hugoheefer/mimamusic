@@ -84,7 +84,10 @@ their own `*.11tydata.json`). Two rendering modes:
 
 `sections` ("Onderdelen" in the CMS) is **one shared field shape** — `heading`,
 `body`, `photo{src,alt,layout}`, `narrow`, `link`, `external` — defined once in
-`.pages.yml` (YAML anchor `&sections`) and reused by all four pages that have it.
+`.pages.yml` (YAML anchor `&sections`) and reused (`*sections`) on **every content
+page except Home and Agenda**, so the owner can add structured blocks anywhere
+without a developer. Most pages ship with none; the template renders nothing when
+`sections` is absent or empty.
 `sectionStyle`, `sectionHeadingClass` (red/grey, template-fixed, never an editor
 choice) and `hideTitle` live in per-page `*.11tydata.json`, not the front matter,
 so a CMS Save can't drop them.
@@ -258,8 +261,8 @@ used: `string`, `text`, `rich-text`, `image`, `boolean`, `number`, `select`,
   reworking `#page-home` CSS in `content.css`. It is a different thing from
   `sections` and deliberately not shared with it.
 - `sections` ("Onderdelen") is one anchored definition (`&sections` on the Koren
-  entry, `*sections` on Onderwijs / Dwarsfluit / Workshopmogelijkheden). Edit it
-  once; keep the four usages identical.
+  entry, `*sections` on every other page except Home / Agenda). Edit it once; keep
+  every usage a bare `*sections` alias so they stay identical.
 - After the owner's first Save, **check the file still has the front-matter keys
   the CMS doesn't manage** (e.g. `titleClass` on sub-pages). If Pages CMS strips
   them, move those keys into a `*.11tydata.json` directory-data file so they're not
