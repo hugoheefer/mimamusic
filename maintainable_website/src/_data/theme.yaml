@@ -1,17 +1,2 @@
-# Fonts the content owner controls in Pages CMS ("Lettertypes").
-#
-# Wired up today:
-#   logoFont      — catalogue key for the header wordmark  (unknown -> henny-penny)
-#   logoFontSize  — wordmark size in px on a wide screen, 24-120  (else -> 60);
-#                   narrow screens scale it down automatically
-#
-# Reserved for later (needs a FONT_ROLES entry + a .pages.yml select first):
-#   headingFont   — section titles   -> --font-title
-#   bodyFont      — body text        -> --font-body
-#   menuFont      — the menu bar     -> --font-menu (once the CSS reads it)
-#
-# Catalogue + resolver: FONT_CATALOGUE / FONT_ROLES / themeFonts() in
-# eleventy.config.js. Pages CMS rewrites this whole file on Save, so these
-# comments are lost after the owner's first edit — see docs/developer-manual.md 6.2.
-logoFont: henny-penny
+logoFont: great-vibes
 logoFontSize: 60
