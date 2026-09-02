@@ -10,11 +10,16 @@
 
 .wordmark {
   display: inline-block;
-  font: 400 clamp(38px, 6vw, 60px)/1 var(--font-script);   /* #logo a: 60px 'Henny Penny' */
+  /* font + size come from :root vars base.njk writes from the owner's Pages CMS
+     choice ("Logo-lettertype"); the fallbacks here are the original look. */
+  font-family: var(--font-script);
+  font-weight: var(--wordmark-weight, 400);
+  font-size: clamp(38px, 6vw, var(--wordmark-size, 60px));
+  line-height: 1;
   color: #ffffff;
   text-decoration: none;
   margin: 0;
-  /* live site renders this as text in 'Henny Penny', not an image */
+  /* live site renders this as text, not an image */
 }
 .wordmark:hover { color: #ffffff; }
 

@@ -184,6 +184,116 @@ const SITE_HOSTS = new Set([
   // keep in sync with src/_data/site.js `domain`
 ]);
 
+/*
+ * ── Owner-editable fonts ───────────────────────────────────────────────────
+ * The owner picks fonts from FIXED lists in Pages CMS (.pages.yml →
+ * "Lettertypes", stored in src/_data/theme.yaml). Only the header wordmark is
+ * wired up today; the machinery below takes on more roles (section titles,
+ * body text, menu, …) with no rework — see "Adding a role".
+ *
+ * FONT_CATALOGUE — every font the build knows how to serve. One row per font:
+ *   family — exact Google Fonts family name, or null for a system font (no load)
+ *   weight — the weight to request from Google and to apply
+ *   stack  — the CSS `font-family` value. Web-font stacks end with the current
+ *            font for that use + a generic family, so a webfont that fails to
+ *            load degrades to today's look, never to a bare serif.
+ *
+ * FONT_ROLES — maps a theme.yaml key to the CSS custom property it overrides.
+ *   key       — field in theme.yaml (e.g. "logoFont")
+ *   cssVar    — custom property set on :root by base.njk
+ *   fallback  — catalogue key used when the saved value is unknown / blank
+ *   sizeKey / sizeVar / sizeDefault / sizeMin / sizeMax — optional px size
+ *   weightVar — optional custom property for the font's weight
+ *
+ * themeFonts(theme) (the `themeFonts` filter) resolves every role and returns
+ * { href, css }: ONE combined css2 <link> for all roles plus the always-load
+ * safety nets, and the full :root{…} override string. An unknown key falls back
+ * to the role's `fallback`; a bad size to `sizeDefault` — so theme.yaml can
+ * never break a page.
+ *
+ * Adding a role (e.g. section titles):
+ *   1. FONT_ROLES entry:  heading: { key: "headingFont", cssVar: "--font-title", fallback: "gabriela" }
+ *   2. a `headingFont` select in .pages.yml (values = FONT_CATALOGUE keys)
+ *   3. only if `--font-title` isn't already consumed in src/assets/css/*, use it
+ *   No change to base.njk, this resolver, or the size handling.
+ */
+const FONT_CATALOGUE = {
+  // system fonts — no network load (family: null)
+  arial: { family: null, weight: 400, stack: `Arial, Helvetica, "Helvetica Neue", sans-serif` },
+  georgia: { family: null, weight: 400, stack: `Georgia, "Times New Roman", serif` },
+  // Google Fonts
+  "henny-penny": { family: "Henny Penny", weight: 400, stack: `"Henny Penny", "Comic Sans MS", cursive` },
+  lobster: { family: "Lobster", weight: 400, stack: `"Lobster", "Henny Penny", cursive` },
+  yellowtail: { family: "Yellowtail", weight: 400, stack: `"Yellowtail", "Henny Penny", cursive` },
+  "dancing-script": { family: "Dancing Script", weight: 600, stack: `"Dancing Script", "Henny Penny", cursive` },
+  courgette: { family: "Courgette", weight: 400, stack: `"Courgette", "Henny Penny", cursive` },
+  pacifico: { family: "Pacifico", weight: 400, stack: `"Pacifico", "Henny Penny", cursive` },
+  "kaushan-script": { family: "Kaushan Script", weight: 400, stack: `"Kaushan Script", "Henny Penny", cursive` },
+  satisfy: { family: "Satisfy", weight: 400, stack: `"Satisfy", "Henny Penny", cursive` },
+  "great-vibes": { family: "Great Vibes", weight: 400, stack: `"Great Vibes", "Henny Penny", cursive` },
+  sacramento: { family: "Sacramento", weight: 400, stack: `"Sacramento", "Henny Penny", cursive` },
+  caveat: { family: "Caveat", weight: 600, stack: `"Caveat", "Henny Penny", cursive` },
+  righteous: { family: "Righteous", weight: 400, stack: `"Righteous", "Henny Penny", sans-serif` },
+  gabriela: { family: "Gabriela", weight: 400, stack: `"Gabriela", Georgia, "Times New Roman", serif` },
+};
+
+// Loaded on every page whatever the owner picks: the wordmark's own fallback
+// and the section-title face the site ships with.
+const FONT_ALWAYS_LOAD = ["henny-penny", "gabriela"];
+
+const FONT_ROLES = {
+  logo: {
+    key: "logoFont",
+    cssVar: "--font-script",
+    fallback: "henny-penny",
+    sizeKey: "logoFontSize",
+    sizeVar: "--wordmark-size",
+    weightVar: "--wordmark-weight",
+    sizeDefault: 60,
+    sizeMin: 24,
+    sizeMax: 120,
+  },
+  // heading: { key: "headingFont", cssVar: "--font-title", fallback: "gabriela" },
+  // body:    { key: "bodyFont",    cssVar: "--font-body",  fallback: "arial" },
+};
+
+function themeFonts(theme) {
+  const t = theme || {};
+  const families = new Map(); // family name -> weight (deduped)
+  const decls = []; // :root declarations
+
+  const need = (entry) => {
+    if (entry && entry.family) families.set(entry.family, entry.weight);
+  };
+  for (const k of FONT_ALWAYS_LOAD) need(FONT_CATALOGUE[k]);
+
+  for (const role of Object.values(FONT_ROLES)) {
+    const entry = FONT_CATALOGUE[t[role.key]] || FONT_CATALOGUE[role.fallback];
+    need(entry);
+    decls.push(`${role.cssVar}:${entry.stack}`);
+    if (role.weightVar) decls.push(`${role.weightVar}:${entry.weight}`);
+    if (role.sizeKey) {
+      const n = Number(t[role.sizeKey]);
+      const ok = Number.isFinite(n) && n >= role.sizeMin && n <= role.sizeMax;
+      decls.push(`${role.sizeVar}:${ok ? Math.round(n) : role.sizeDefault}px`);
+    }
+  }
+
+  // weight axis only when it isn't the default; sorted for a stable URL
+  const query = [...families.entries()]
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .map(([fam, wght]) => {
+      const f = `family=${encodeURIComponent(fam).replace(/%20/g, "+")}`;
+      return wght === 400 ? f : `${f}:wght@${wght}`;
+    })
+    .join("&");
+
+  return {
+    href: `https://fonts.googleapis.com/css2?${query}&display=swap`,
+    css: `:root{${decls.join(";")}}`,
+  };
+}
+
 export default function (eleventyConfig) {
   eleventyConfig.setLibrary("md", md);
   eleventyConfig.addPlugin(EleventyHtmlBasePlugin);
@@ -254,6 +364,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter("mdInline", (s) => (s ? md.renderInline(String(s)) : ""));
   eleventyConfig.addFilter("nldate", (d) => nlLong.format(d instanceof Date ? d : new Date(d)));
   eleventyConfig.addFilter("startsWith", (s, prefix) => String(s).startsWith(prefix));
+  eleventyConfig.addFilter("themeFonts", themeFonts);
   eleventyConfig.addFilter("pageSlug", (url) =>
     url === "/" ? "home" : url.replace(/\.html$/, "").replace(/^\/|\/$/g, "").replace(/\//g, "-")
   );

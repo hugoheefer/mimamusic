@@ -54,6 +54,7 @@ npm run clean     # delete _site/
 |---|---|
 | Page text / photos / structured fields | `src/content/*.md` front matter (and body) |
 | Menu bar — item order, dropdowns | `src/_data/navigation.yaml` (CMS: "Menubalk") |
+| Owner-editable fonts (today: logo wordmark + size) | `src/_data/theme.yaml` (CMS: "Lettertypes") — `FONT_CATALOGUE` / `FONT_ROLES` / `themeFonts()` in `eleventy.config.js`, emitted in `base.njk` as one css2 `<link>` + a `:root{}` override; consumed via `--font-*` tokens (`.wordmark` in `layout.css`) |
 | Brand, contact details | `src/_data/site.js` |
 | Agenda entries | `src/_data/agenda.yaml` |
 | Old→new redirect table | `src/_data/redirects.json` |
@@ -102,6 +103,29 @@ so a CMS Save can't drop them.
 
 **Add a block to Dwarsfluit / Workshopmogelijkheden** — add a `sections` entry in
 the `.md` front matter (or in the CMS under "Onderdelen"). No template change.
+
+**Add a font to the owner's list** — two edits, no template change:
+1. `eleventy.config.js` — a row in `FONT_CATALOGUE`: `key: { family, weight,
+   stack }`. `family` is the exact Google Fonts name (or `null` for a system
+   font); `stack` ends with the current font for that use + a generic family, so
+   a webfont that fails to load degrades to today's look.
+2. `.pages.yml` — a matching `{ value: key, label: "…" }` under the relevant
+   `*Font` select.
+
+**Let the owner change another font role** (section titles, body, menu, …) —
+extend, don't rebuild:
+1. `eleventy.config.js` — a `FONT_ROLES` entry, e.g.
+   `heading: { key: "headingFont", cssVar: "--font-title", fallback: "gabriela" }`
+   (add `sizeKey`/`sizeVar`/`sizeDefault`/`sizeMin`/`sizeMax` for a size field).
+2. `.pages.yml` — a `headingFont` select under the "Lettertypes" entry
+   (`values` = `FONT_CATALOGUE` keys).
+3. Only if that `--font-*` token isn't already used in `src/assets/css/*`, use it.
+
+`themeFonts(theme)` then folds the new role into the single css2 `<link>` and
+the `:root{}` override in `base.njk` automatically. Unknown key → the role's
+`fallback`; bad size → `sizeDefault`; so `theme.yaml` can never break a page.
+`.wordmark` in `layout.css` reads `--font-script` / `--wordmark-weight` /
+`--wordmark-size` with the original values as CSS fallbacks.
 
 **Add a whole new section type** — prefer extending `page.njk` (a new optional
 front-matter field, or a third `sectionStyle`). Only add a new layout in

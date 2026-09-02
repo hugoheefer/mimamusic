@@ -21,12 +21,15 @@ content here — the editor only lets you fill in fixed fields.
 - Add a new **choir sub-page** or **workshop sub-page**.
 - Change the **menu bar** — rename an item, reorder it, or add/remove a
   dropdown entry (see §7a).
+- Change the **logo font** — pick the typeface and size of the "MimaMusic"
+  wording in the header from a fixed list (see §7b).
 
 After you click **Save**, the website updates itself within about a minute.
 
 ## What you cannot do here (ask the developer)
 
-- Change the page layout, the colours or the fonts (the menu bar *is* editable — §7a).
+- Change the page layout, the colours, or the body / heading fonts (the *logo*
+  font is editable — §7b; the menu bar — §7a).
 - Add a completely new *kind* of page or section.
 - Add a 4th block to the Home page (it is a fixed 3-column design).
 
@@ -80,6 +83,7 @@ Down the left side, under **Content**:
 | **Agenda — optredens** | The list of upcoming events shown on the page. |
 | **Privacyverklaring** | The privacy page (currently a placeholder). |
 | **Menubalk (hoofdmenu)** | The menu bar at the top of every page: which items appear, their order, and the dropdown entries under Koren and Workshop/les (§7a). |
+| **Logo-lettertype** | The typeface and size of the "MimaMusic" text in the header. Pick from a fixed list (§7b). |
 
 Under **Media** is the photo library.
 
@@ -241,6 +245,27 @@ Watch out:
   it does both, like *Koren* today. If you want a pure dropdown with no landing
   page, that is a layout change — ask the developer.
 - Don't rename or re-link **Home** away from `/`.
+
+---
+
+## 7b. The logo font
+
+Open **Logo-lettertype** in the left list. Two fields:
+
+- **Lettertype** — the typeface of the "MimaMusic" wording in the header, chosen
+  from a fixed list. Each option has a one-word description (playful, elegant,
+  bold, …). The list is short on purpose, so the header always looks right.
+  *Want a font that isn't in the list?* Browse **https://fonts.google.com** —
+  every font there has a live preview — note its exact name, and ask the
+  developer to add it to the list. That's a small change for them.
+- **Grootte in px** — how large the wording is on a wide screen. **60** is the
+  current value. On phones it scales down by itself, so you rarely need this;
+  nudge it only if a new font looks too big or too small. Keep it roughly
+  between 40 and 80. Anything left blank or nonsensical falls back to 60.
+
+**Save**, wait about a minute, then hard-refresh the site (§4).
+
+Only the header text changes — the small logo image in the footer stays as it is.
 
 ---
 

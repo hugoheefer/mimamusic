@@ -8,8 +8,9 @@
   <link rel="canonical" href="https://{{ site.domain }}{{ page.url }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gabriela&family=Henny+Penny&display=swap">
+  {% set fonts = theme | themeFonts %}<link rel="stylesheet" href="{{ fonts.href | safe }}">
   <link rel="stylesheet" href="/assets/styles.css">
+  {# owner's font choices from Pages CMS ("Lettertypes"); overrides the tokens.css defaults #}<style>{{ fonts.css | safe }}</style>
 </head>
 <body class="p-{{ page.url | pageSlug }}">
   <a class="skip-link" href="#main">Naar de inhoud</a>

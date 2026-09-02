@@ -242,3 +242,45 @@ content:
           - { name: text, label: Submenu-item, type: string }
           - { name: url, label: Link, type: string }
           - { name: muted, label: "Gedimd weergeven (archief)", type: boolean }
+
+  # Owner-editable fonts. Today just the header wordmark; the resolver in
+  # maintainable_website/eleventy.config.js (FONT_CATALOGUE / FONT_ROLES /
+  # themeFonts) is built to add more roles — section titles, body, menu — as
+  # extra fields here. Every `*Font` option value is a FONT_CATALOGUE key.
+  - name: fonts
+    label: "Lettertypes"
+    type: file
+    path: maintainable_website/src/_data/theme.yaml
+    fields:
+      - name: logoFont
+        label: "Logo-lettertype"
+        type: select
+        default: henny-penny
+        description: >-
+          Het lettertype van de tekst 'MimaMusic' in de kop van elke pagina.
+          Elke keuze is een Google Font die automatisch met de site meegeladen
+          wordt. Wil je een lettertype dat er niet bij staat? Blader op
+          https://fonts.google.com — daar zie je van elk lettertype meteen een
+          voorbeeld — en geef de ontwikkelaar de precieze naam door; die zet het
+          er dan bij (een kleine aanpassing). Verandert het logo na opslaan
+          niet? Wacht een minuut en ververs de pagina met Ctrl+Shift+R.
+        options:
+          values:
+            - { value: henny-penny, label: "Henny Penny — speels (huidige)" }
+            - { value: lobster, label: "Lobster — vet, klassiek logo-schrift" }
+            - { value: yellowtail, label: "Yellowtail — retro penseelschrift" }
+            - { value: dancing-script, label: "Dancing Script — vriendelijk, luchtig" }
+            - { value: courgette, label: "Courgette — rond, goed leesbaar" }
+            - { value: pacifico, label: "Pacifico — warm, rond penseel" }
+            - { value: kaushan-script, label: "Kaushan Script — energiek penseel" }
+            - { value: satisfy, label: "Satisfy — losse handtekening" }
+            - { value: great-vibes, label: "Great Vibes — elegant en sierlijk" }
+            - { value: sacramento, label: "Sacramento — dun, fijn schrift" }
+            - { value: caveat, label: "Caveat — handschrift met stift" }
+            - { value: righteous, label: "Righteous — modern, geen schrift" }
+            - { value: gabriela, label: "Gabriela — zelfde als de kopjes, geen schrift" }
+      - name: logoFontSize
+        label: "Grootte in px (standaard 60)"
+        type: number
+        default: 60
+        description: "De grootte op een breed scherm; 60 is de huidige waarde. Op smalle schermen schaalt het logo automatisch mee omlaag. Houd het ruwweg tussen 40 en 80."
