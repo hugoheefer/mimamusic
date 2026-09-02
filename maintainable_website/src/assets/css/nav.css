@@ -1,0 +1,84 @@
+/* Primary navigation — grey gradient mega-menu bar (matches the live template).
+   Desktop and mobile both show the bar; it wraps on narrow screens. Dropdowns
+   (Koren, Workshop/les) open on hover / keyboard focus, CSS only. On touch, the
+   parent link goes to its landing page, which lists the same children. */
+
+.nav { border-top: 1px solid var(--divider); background: var(--bg); }   /* full-width divider rule #1 */
+.nav-inner { max-width: var(--container); margin: 0 auto; padding: 0 var(--pad); }
+
+.menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  background: linear-gradient(var(--nav-top), var(--nav-bot));
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+.menu > li { position: relative; }
+
+.nav-link {
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+  border-right: 1px solid rgba(0, 0, 0, 0.32);
+  font-family: Arial, "Helvetica Neue", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--nav-ink);
+  text-decoration: none;
+  padding: 15px 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 120ms linear, color 120ms linear;
+}
+.menu > li:first-child .nav-link { border-left: 0; }
+.nav-link:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+.is-current > .nav-link {
+  background: rgba(0, 0, 0, 0.18);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.45);
+  color: #fff;
+}
+
+.caret {
+  width: 6px; height: 6px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  opacity: 0.85;
+}
+
+.submenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 40;
+  min-width: 250px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--menu-bg);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5);
+}
+.submenu li { list-style: none; }
+.has-sub:hover .submenu,
+.has-sub:focus-within .submenu { display: block; }
+.submenu a {
+  display: block;
+  padding: 15px 22px;
+  font-family: Arial, "Helvetica Neue", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--menu-ink);
+  text-decoration: none;
+}
+.submenu a:hover { background: var(--menu-hover); }
+.submenu .arch { color: #8a8a8a; font-weight: 400; }
+
+@media (max-width: 760px) {
+  .nav-link { padding: 13px 13px; font-size: 10.5px; letter-spacing: 0.08em; }
+}

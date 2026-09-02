@@ -1,0 +1,21 @@
+{
+  "name": "mimamusic-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "MiMaMusic — static website (Eleventy) with Pages CMS editing.",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "eleventy --serve",
+    "build": "eleventy",
+    "build:portable": "cross-env RELATIVE_URLS=1 eleventy",
+    "clean": "node -e \"import('node:fs').then(fs => fs.rmSync('_site', { recursive: true, force: true }))\""
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0",
+    "@11ty/eleventy-img": "^7.0.0",
+    "cross-env": "^10.1.0",
+    "js-yaml": "^5.4.1",
+    "markdown-it": "^14.1.0"
+  }
+}

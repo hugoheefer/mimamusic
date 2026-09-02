@@ -1,0 +1,36 @@
+/*
+  Design tokens — read off the live mimamusic.nl template.css (fetched 2026-08-29)
+  and the screenshots. SINGLE THEME BY INTENT: an all-black Joomla site on the
+  Gavick GK5 "Theatre" template. No light/dark variants; every colour is painted
+  explicitly so the page holds on any host ground.
+
+  Whether to keep the black look / the display fonts is an OPEN OWNER DECISION
+  (spec §15). Nothing here pre-empts that — change a token, the whole site follows.
+*/
+:root {
+  --bg: #000000;
+  --ink: #989898;              /* real site body copy: body { color: #989898 } */
+  --ink-dim: #7e7e7e;
+  --accent: #cb4752;           /* real template red — links + red headings */
+  --accent-soft: #cb4752;
+  --title-red: #cb4752;        /* linked section titles + links */
+  --title-dim: #9a9a9a;        /* sub-page titles — live is #333 (invisible on black); lifted for legibility (spec D4) */
+  --divider: #333333;          /* the two horizontal rules (real site: #1c1c1c) */
+  --rule: #333333;
+
+  --nav-top: #595959;
+  --nav-bot: #3a3a3a;
+  --nav-ink: #e8e8e8;
+
+  --menu-bg: #ffffff;
+  --menu-ink: #333333;
+  --menu-hover: #ececec;
+
+  --container: 1200px;         /* GK5 .container max-width, centred (margin: 0 auto) */
+  --pad: 15px;
+  --measure: 1170px;
+
+  --font-script: "Henny Penny", "Comic Sans MS", cursive;        /* logo wordmark */
+  --font-title: "Gabriela", Georgia, "Times New Roman", serif;   /* section titles */
+  --font-body: Arial, Helvetica, "Helvetica Neue", sans-serif;   /* content text (real site body {}) */
+}

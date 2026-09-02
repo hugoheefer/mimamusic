@@ -1,0 +1,436 @@
+# Developer manual — MiMaMusic site
+
+Everything needed to run, change, deploy and hand over the site. Companion to
+[`../README.md`](../README.md) (which explains the code layout) — this file is the
+step-by-step operational guide.
+
+| | |
+|---|---|
+| Repo | `https://github.com/hugoheefer/mimamusic` |
+| Site code | `maintainable_website/` (Eleventy project) |
+| Live (preview) | `https://hugoheefer.github.io/mimamusic/` |
+| Working branch | `feature/build-mainainable-site` |
+| Editor for the owner | Pages CMS — `https://app.pagescms.org` |
+| Stack | Eleventy 3 · Nunjucks · `@11ty/eleventy-img` · `markdown-it` · `js-yaml` · GitHub Actions → GitHub Pages |
+
+---
+
+## 1. Prerequisites
+
+- **Node.js 20+** (developed and CI both on 24) and **npm**
+- **git**
+- A **GitHub account with admin on the repo** (for the one-time Pages/Actions setup)
+
+---
+
+## 2. Local development
+
+```sh
+git clone https://github.com/hugoheefer/mimamusic.git
+cd mimamusic
+git checkout feature/build-mainainable-site
+cd maintainable_website
+npm install
+npm start
+```
+
+Open the URL it prints — **http://localhost:8080/** (it bumps to 8081/8082 if busy).
+Live-reload: edit any file under `src/`, the browser refreshes. `Ctrl+C` stops it.
+
+```sh
+npm run build     # one-off build into _site/
+npm run clean     # delete _site/
+```
+
+`node_modules/` and `_site/` are git-ignored. Never commit them.
+
+> There is also a `docs/index.html` at the **repo root** — that is the *old
+> single-file prototype's* GitHub Pages output, unrelated to this project. Don't
+> confuse the two.
+
+### 2.1 Where things live
+
+| Task | File(s) |
+|---|---|
+| Page text / photos / structured fields | `src/content/*.md` front matter (and body) |
+| Menu bar — item order, dropdowns | `src/_data/navigation.yaml` (CMS: "Menubalk") |
+| Owner-editable fonts (today: logo wordmark + size) | `src/_data/theme.yaml` (CMS: "Lettertypes") — `FONT_CATALOGUE` / `FONT_ROLES` / `themeFonts()` in `eleventy.config.js`, emitted in `base.njk` as one css2 `<link>` + a `:root{}` override; consumed via `--font-*` tokens (`.wordmark` in `layout.css`) |
+| Brand, contact details | `src/_data/site.js` |
+| Agenda entries | `src/_data/agenda.yaml` |
+| Old→new redirect table | `src/_data/redirects.json` |
+| Header / footer / `<head>` | `src/_includes/layouts/base.njk` |
+| Page layouts | `src/_includes/layouts/{page,home,agenda}.njk` — `page.njk` covers every hand-written content page; `home` and `agenda` are special |
+| Nav markup | `src/_includes/partials/nav.njk` |
+| Styles | `src/assets/css/*.css` (6 files, bundled in `eleventy.config.js`) |
+| Images | `src/assets/images/` (real files; `{% image %}` makes responsive `<picture>`) |
+| Filters, shortcodes, CSS bundle, path prefix | `eleventy.config.js` |
+| External-link / iframe-wrapper behaviour (temporary) | `eleventy.config.js` (`SITE_HOSTS` + `externalLinksBreakOutOfIframe`); see §5.1 |
+| CMS field schema | `.pages.yml` **at the repo root** |
+| Deploy | `.github/workflows/deploy.yml` **at the repo root** |
+
+### 2.2 Common changes
+
+**Edit text/photo of an existing page** — edit the `.md` in `src/content/`. Front
+matter carries the fixed fields (`title`, `band`, `sections`, `photos`, …); the body
+below `---` is the prose.
+
+**The one content layout — `layouts/page.njk`.** Every hand-written page uses it
+(default set in `src/content/content.11tydata.js`; Home and Agenda opt out via
+their own `*.11tydata.json`). Two rendering modes:
+
+| `sectionStyle` | Shape | Pages |
+|---|---|---|
+| unset / `prose` | title + body + optional single `photo` + optional `band` (photo row) + optional `photos`/`photoLayout` group + optional `sections` shown as *teaser* blocks under the text | Koren, Onderwijs, Workshop/les, Arrangeren, Contact, Privacy, 404, sub-pages |
+| `article` | title + a stack of `sections`, each an `<article class="art">` with its own heading, optional floated `photo`, body | Dwarsfluit, Workshopmogelijkheden |
+
+`sections` ("Onderdelen" in the CMS) is **one shared field shape** — `heading`,
+`body`, `photo{src,alt,layout}`, `narrow`, `link`, `external` — defined once in
+`.pages.yml` (YAML anchor `&sections`) and reused (`*sections`) on **every content
+page except Home and Agenda**, so the owner can add structured blocks anywhere
+without a developer. Most pages ship with none; the template renders nothing when
+`sections` is absent or empty.
+`sectionStyle`, `sectionHeadingClass` (red/grey, template-fixed, never an editor
+choice) and `hideTitle` live in per-page `*.11tydata.json`, not the front matter,
+so a CMS Save can't drop them.
+
+**Add a page** — e.g. a new choir sub-page:
+1. `src/content/koren/new-choir.md` with `title`, `body`, `photos`, `photoLayout`.
+2. Add it to the Koren dropdown: a new `children` entry under Koren in
+   `src/_data/navigation.yaml`. The owner can now also do this step themselves in
+   the CMS ("Menubalk").
+3. It's already covered by the `koor_subpaginas` collection in `.pages.yml`, so the
+   owner can edit it too (and could have created it from the CMS).
+
+**Add a block to Dwarsfluit / Workshopmogelijkheden** — add a `sections` entry in
+the `.md` front matter (or in the CMS under "Onderdelen"). No template change.
+
+**Add a font to the owner's list** — two edits, no template change:
+1. `eleventy.config.js` — a row in `FONT_CATALOGUE`: `key: { family, weight,
+   stack }`. `family` is the exact Google Fonts name (or `null` for a system
+   font); `stack` ends with the current font for that use + a generic family, so
+   a webfont that fails to load degrades to today's look.
+2. `.pages.yml` — a matching `{ value: key, label: "…" }` under the relevant
+   `*Font` select.
+
+**Let the owner change another font role** (section titles, body, menu, …) —
+extend, don't rebuild:
+1. `eleventy.config.js` — a `FONT_ROLES` entry, e.g.
+   `heading: { key: "headingFont", cssVar: "--font-title", fallback: "gabriela" }`
+   (add `sizeKey`/`sizeVar`/`sizeDefault`/`sizeMin`/`sizeMax` for a size field).
+2. `.pages.yml` — a `headingFont` select under the "Lettertypes" entry
+   (`values` = `FONT_CATALOGUE` keys).
+3. Only if that `--font-*` token isn't already used in `src/assets/css/*`, use it.
+
+`themeFonts(theme)` then folds the new role into the single css2 `<link>` and
+the `:root{}` override in `base.njk` automatically. Unknown key → the role's
+`fallback`; bad size → `sizeDefault`; so `theme.yaml` can never break a page.
+`.wordmark` in `layout.css` reads `--font-script` / `--wordmark-weight` /
+`--wordmark-size` with the original values as CSS fallbacks.
+
+**Add a whole new section type** — prefer extending `page.njk` (a new optional
+front-matter field, or a third `sectionStyle`). Only add a new layout in
+`src/_includes/layouts/` + a `*.11tydata.json` + a `.pages.yml` entry if the shape
+is genuinely unlike everything else (as Home and Agenda are).
+
+**Change styles** — edit the relevant `src/assets/css/*.css`. Colours, type scale,
+spacing and layout constants are all tokens in `tokens.css`.
+
+---
+
+## 3. How deployment works
+
+`.github/workflows/deploy.yml` runs on every push to `master`, `main`, or
+`feature/build-mainainable-site` that touches `maintainable_website/**` (or the
+workflow file). It:
+
+1. `npm ci` + `npm run build` inside `maintainable_website/`, with
+   `PATH_PREFIX=/mimamusic/` (see §5).
+2. Uploads `maintainable_website/_site` as the Pages artifact.
+3. Deploys it to the `github-pages` environment → `https://hugoheefer.github.io/mimamusic/`.
+
+A Pages CMS "Save" is just a commit on the branch, so it triggers the same run.
+Watch runs at **repo → Actions → "Deploy site to GitHub Pages"**.
+
+`_site/` is git-ignored — the built site is never committed. Each run keeps two
+90-day downloadable artifacts (`actions/upload-artifact`), plus the transient
+`github-pages` artifact the deploy step consumes:
+
+- **`site`** — the deployed build (`PATH_PREFIX=/mimamusic/`, absolute links).
+- **`site-portable`** — a `npm run build:portable` rebuild with relative links;
+  runs from `file://`, any webroot, or any subfolder (§5).
+
+Get them from **Actions → a run → Artifacts**.
+
+---
+
+## 4. First-time GitHub setup (what was done)
+
+Do these once, in order.
+
+1. **Push the branch**
+   ```sh
+   git push -u origin feature/build-mainainable-site
+   ```
+2. **Workflow location** — the deploy file must be at `/.github/workflows/deploy.yml`
+   (repo root), not inside `maintainable_website/`. (Already there; a reference copy
+   of the original is in `maintainable_website/deploy/`.)
+3. **Repo → Settings → Pages → Build and deployment → Source = "GitHub Actions".**
+   Without this the deploy step fails with *"Get Pages site failed / Not Found"*.
+4. **Repo → Settings → Environments → `github-pages` → Deployment branches and tags.**
+   By default only the repo's **default branch** may deploy. To preview from
+   `feature/build-mainainable-site`, either add it as an allowed branch or set the
+   dropdown to **No restriction**. Without this the deploy fails with *"Branch … is
+   not allowed to deploy to github-pages due to environment protection rules."*
+5. **Repo visibility.** GitHub Pages serves **public** repos free. A **private**
+   repo needs **GitHub Pro (~€4/mo)**. (This is what paused an earlier Pages test.)
+6. **Trigger + watch.** Push, or Actions → Run workflow. When both jobs are green,
+   the run shows the live URL (also under repo → right sidebar → *Deployments*).
+
+---
+
+## 5. The path prefix
+
+A GitHub Pages **project site** is served from `…github.io/<repo>/`, not the domain
+root. Without handling this, every root-relative URL (`/assets/styles.css`,
+`/koren/`, image `src`) 404s and the site loads unstyled with dead links.
+
+- `eleventy.config.js` reads **`PATH_PREFIX`** (default `/`) and loads
+  `EleventyHtmlBasePlugin`, which rewrites every `href`/`src`/`srcset` in the output
+  HTML to match.
+- The deploy workflow sets `PATH_PREFIX: /mimamusic/` on the `npm run build` step.
+- **Local dev** and the **eventual custom domain** both use the `/` default.
+- When `mimamusic.nl` is attached (served at root), set `PATH_PREFIX` back to `/`
+  in the workflow (or delete that `env:` block) and let it redeploy.
+
+To reproduce the deployed build locally (Linux/macOS):
+```sh
+PATH_PREFIX=/mimamusic/ npm run build
+```
+(On Windows Git Bash use `MSYS_NO_PATHCONV=1 PATH_PREFIX=/mimamusic/ npm run build`
+— otherwise the shell mangles the value into a Windows path.)
+
+**Portable copy** — `npm run build:portable` (`RELATIVE_URLS=1`, cross-platform via
+`cross-env`). A `relativeUrls` transform rewrites every root-relative `href` /
+`src` / `srcset` to `../…` based on page depth, and rewrites page (directory)
+links to their explicit `…/index.html` so they resolve without a server's
+directory-index behaviour. The resulting `_site/` runs from any location:
+double-clicked from a folder (`file://`), any web server's webroot, or any
+subfolder. Hand this to anyone who wants a self-contained copy of the site.
+
+### 5.1 External links & the `mimamusic.nl` iframe wrapper (temporary)
+
+**Setup today.** The DNS for `mimamusic.nl` still points at the old dds.nl
+hosting, not GitHub Pages. To keep `mimamusic.nl` in the address bar, that host
+serves a wrapper — `../temp-redirect/index.php` (with a hand-synced
+`index.html` beside it) — placed in `public_html/joomla/` so the web server runs
+it instead of Joomla's own `index.php`. It is a full-window `<iframe>` whose
+`src` is `https://hugoheefer.github.io/mimamusic/`. **Do not edit that file.**
+
+```
+visitor → mimamusic.nl            (dds.nl hosting)
+          └─ public_html/joomla/index.php   ← full-window <iframe>
+             └─ src = https://hugoheefer.github.io/mimamusic/   (this site)
+```
+
+**The problem it creates.** Inside the iframe, a normal `<a>` click loads in the
+frame — good for our own pages (the bar stays `mimamusic.nl`), wrong for links
+to other websites: those would also load framed, so the visitor never sees the
+real destination URL (and many sites refuse to be framed at all).
+
+**The fix (build-time, no client JS).** `eleventy.config.js` registers the
+`externalLinksBreakOutOfIframe` transform. For every `<a>` whose `href` is an
+`http(s)` URL to a host **not** in the `SITE_HOSTS` set, it bakes in
+`target="_blank" rel="noopener"`, so off-site links open in a new tab showing
+the real URL while the wrapper tab is left untouched. `mailto:` / `tel:` /
+root-relative / relative / `#fragment` links, and any `<a>` that already has an
+explicit `target`, are left alone. The full rationale is the block comment above
+`SITE_HOSTS` in `eleventy.config.js`.
+
+- To leave the visitor in the **same** tab instead, change `"_blank"` to
+  `"_top"` in the transform.
+- If the site ever gains a subdomain that should count as "internal", add its
+  host to `SITE_HOSTS` (keep it in sync with `src/_data/site.js` `domain`).
+
+**Remove it when the domain moves.** Once `mimamusic.nl` is pointed straight at
+GitHub Pages (§7 step 5), there is no iframe. Delete `SITE_HOSTS` + the
+transform, delete `../temp-redirect/`, and remove this section, the §7 step, the
+README section, and the `eleventy.config.js` tree note in the README. Keep
+new-tab behaviour afterward only as a deliberate UX decision.
+
+---
+
+## 6. Pages CMS setup
+
+1. **`.pages.yml` must be at the repo root.** It is. Its `path:` / `input:` values
+   point into `maintainable_website/` because the project is still a subfolder.
+2. Go to **https://app.pagescms.org**, "Sign in with GitHub", authorise the app,
+   grant it access to the **`hugoheefer/mimamusic`** repo.
+3. Open the project. **Select the branch** that has the content
+   (`feature/build-mainainable-site`) — Pages CMS defaults to the repo's default
+   branch, which may not have `.pages.yml` yet.
+4. **Add the content owner** as a repo collaborator: repo → Settings →
+   Collaborators → Add people. They also need their own free GitHub account.
+5. In Pages CMS, the **Collaborators** and **Configuration** items (left nav, under
+   *Admin*) manage CMS access and show the parsed schema.
+
+### 6.1 Editing the schema
+
+`.pages.yml` `content:` is a list of collections. Each `file` = one page; each
+`collection` = a folder of same-shaped pages the owner can add to. Field types
+used: `string`, `text`, `rich-text`, `image`, `boolean`, `number`, `select`,
+`object` (+ `list: true` or `list: { min, max }` for repeatables).
+
+- Home `blocks` is pinned to exactly 3 (`list: { min: 3, max: 3 }`) — the homepage
+  CSS is a fixed 3-column grid keyed on `variant: dir|ond|dwf`. Loosening it means
+  reworking `#page-home` CSS in `content.css`. It is a different thing from
+  `sections` and deliberately not shared with it.
+- `sections` ("Onderdelen") is one anchored definition (`&sections` on the Koren
+  entry, `*sections` on every other page except Home / Agenda). Edit it once; keep
+  every usage a bare `*sections` alias so they stay identical.
+- After the owner's first Save, **check the file still has the front-matter keys
+  the CMS doesn't manage** (e.g. `titleClass` on sub-pages). If Pages CMS strips
+  them, move those keys into a `*.11tydata.json` directory-data file so they're not
+  in the `.md` at all — this is already done for `sectionStyle` &co. on
+  `dwarsfluit.11tydata.json` and `workshop-les/workshopmogelijkheden.11tydata.json`.
+
+### 6.2 Keeping the CMS and the live site in sync
+
+The live site is whatever the **last green deploy** built. So the rule is: **every
+CMS Save must produce a build that succeeds.** Two things enforce that:
+
+1. **Image paths are stored the way the CMS writes them** — `/assets/images/<file>`,
+   not a bare `foo.jpg`. Pages CMS matches an `image` field to a media file by that
+   exact public path; if it can't match (bare filename), it shows the field empty
+   and the *next* Save drops it. All seed content uses the `/assets/images/...`
+   form — keep it that way when adding content by hand, and after wiring a new
+   `image` field into `.pages.yml`, open that page in the CMS once and re-Save to
+   confirm the value round-trips.
+2. **A missing image can't break the build** — the `image` shortcode returns `""`
+   (and logs `[image] skipped: empty src` in the deploy log) instead of throwing,
+   and every `{% image %}` call site is guarded by `if …src`. A blanked photo
+   field then just omits that one photo; the page and all other pages still build
+   and deploy.
+
+If a photo silently disappears from the live site: search the latest deploy log for
+`[image] skipped`, then check that page's front matter for an image object that
+lost its `src`, and restore it as `/assets/images/<file>`.
+
+`src/_data/*.yaml` (navigation, agenda) round-trips fine — but Pages CMS rewrites
+the whole file on Save, so any comments in `navigation.yaml` / `agenda.yaml` are
+lost after the owner's first edit. Don't rely on them.
+
+---
+
+## 7. Going to production (adoption)
+
+1. **Merge to `master`:**
+   ```sh
+   git checkout master
+   git merge feature/build-mainainable-site
+   git push
+   ```
+2. **Revert the preview-only bits** in `.github/workflows/deploy.yml`:
+   remove `feature/build-mainainable-site` from the `on: push: branches:` list.
+   Then re-tighten repo → Settings → Environments → `github-pages` deployment
+   branches back to the default branch only.
+3. **Point Pages CMS at `master`** (branch selector).
+4. **(Optional but cleaner) promote the project to the repo root.** Move everything
+   in `maintainable_website/` up one level, then:
+   - drop `working-directory: maintainable_website`, the `maintainable_website/`
+     prefixes and the `paths:` filter from the workflow;
+   - drop the `maintainable_website/` prefix from every `path:` / `input:` in
+     `.pages.yml`.
+5. **Custom domain** (`mimamusic.nl`):
+   - Repo → Settings → Pages → Custom domain = `mimamusic.nl` (writes `CNAME`;
+     `maintainable_website/deploy/CNAME` is a reference copy).
+   - At the DNS host — apex `A` records to GitHub's Pages IPs:
+     `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+     (verify against GitHub's current docs); `CNAME` `www` → `hugoheefer.github.io`.
+   - **Leave the `MX` records untouched** — `@mimamusic.nl` email is separate.
+   - Set `PATH_PREFIX` to `/` in the workflow (§5); redeploy.
+   - Enable "Enforce HTTPS" in Settings → Pages once the cert is issued.
+   - **Retire the iframe wrapper** (§5.1): remove the `externalLinksBreakOutOfIframe`
+     transform and `SITE_HOSTS` from `eleventy.config.js`, delete
+     `../temp-redirect/`, remove the wrapper on the dds.nl host, and drop §5.1
+     here plus the matching README section. No iframe means no reason to force
+     off-site links into a new tab.
+6. **Finish the open content** (see `../README.md` "Open items"): Privacy statement,
+   Koor Voluum body, contact form vs `mailto:`, owner proofread of all copy,
+   confirm the Agenda model, finalise the redirect table against a crawl of the
+   old site.
+
+---
+
+## 7a. Moving it to a different GitHub account / repo
+
+**Travels unchanged** — the whole `maintainable_website/` project (`src/`,
+`eleventy.config.js`, `package.json`, `.github/workflows/deploy.yml`, `.pages.yml`
+at the repo root). `npm install && npm run build` works anywhere. The workflow
+derives the Pages path from the repo name (`PATH_PREFIX=/${GITHUB_REPOSITORY#*/}/`),
+so a project site at `newowner.github.io/newrepo/` just works.
+
+**Edit in the files** (only if the value actually changes):
+
+| File | What | When |
+|---|---|---|
+| `src/_data/site.js` | `domain`, contact details | different domain / details |
+| `src/_data/navigation.yaml` | menu bar items / links | different page set or paths |
+| `src/_data/redirects.json` | old→new URL map | different old site |
+| `deploy/CNAME` | the custom domain | different domain |
+| `.github/workflows/deploy.yml` | drop `feature/build-mainainable-site` from `on: push: branches`; `PATH_PREFIX` line → `/` for a custom domain at root | always / custom domain |
+| `.pages.yml`, workflow `paths:` + `working-directory:` | the `maintainable_website/` prefix | if you don't keep that subfolder name |
+| `README.md`, `docs/*.md` | `hugoheefer/mimamusic`, the github.io URL, branch name | cosmetic, but do it |
+
+**Set up in the new repo's GitHub UI** (these are per-repo settings, not in the
+files — none of them transfer):
+
+- Settings → Pages → Source = **GitHub Actions**
+- Settings → Environments → `github-pages` → allowed deployment branches
+- Repo **public**, or GitHub **Pro** for private Pages
+- **app.pagescms.org** → connect the new repo, pick the branch
+- Settings → Collaborators → re-add the owner
+- Custom domain + DNS, if used
+
+---
+
+## 8. Troubleshooting (issues hit during the build)
+
+| Symptom | Cause / fix |
+|---|---|
+| Site loads with **no styling, broken images, dead links** | Project-path prefix missing. Ensure the deploy sets `PATH_PREFIX=/mimamusic/` and `EleventyHtmlBasePlugin` is loaded (§5). |
+| Deploy fails: **"Branch … is not allowed to deploy to github-pages"** | Settings → Environments → `github-pages` → allow the branch, or "No restriction" (§4.4). |
+| Deploy fails: **"Get Pages site failed" / "Not Found"** | Settings → Pages → Source not set to "GitHub Actions" (§4.3). |
+| **Menu bar disappears on desktop** | Don't wrap the nav in `<details>` — current Chrome hides closed `<details>` content in a way CSS can't override. The nav is a plain `<ul class="menu">`. |
+| Page URLs contain **`/content/`** | `src/content/content.11tydata.js` sets a computed `permalink` that strips the `content/` segment — keep it. |
+| **Images missing** when added inside a Nunjucks **macro** | The `{% image %}` shortcode is async and can't run inside `{% macro %}`. Inline the loop into the template instead (the `page.njk` heading macro is deliberately text-only). |
+| `<title>` shows **"MimaMusic — MimaMusic"** on home | Home is detected with `page.url == "/"`, not `fileSlug` — keep that check in `base.njk`. |
+| **Agenda entries don't show** on the site | Eleventy has no built-in `.yaml` data loader. `eleventy.config.js` registers one via `addDataExtension("yaml,yml", …)` with `js-yaml` — keep it, or `src/_data/agenda.yaml` is silently ignored. |
+| **A photo vanished after a CMS Save**, build still green | Pages CMS dropped that `image` field's `src`. Grep the deploy log for `[image] skipped`, restore the value as `/assets/images/<file>` in the page's front matter. Prevention: store every image path in that form (§6.2). |
+| Build fails: `ENOENT … src/assets/images/undefined` | An `{% image %}` call reached the shortcode with `src` undefined and an unguarded call site. The shortcode now returns `""` for empty `src`; if you see this, a new call site is missing its `if …src` guard (§6.2). |
+| Env var mangled to a `C:/Program Files/Git/...` path in local builds | Windows Git Bash MSYS path conversion — prefix with `MSYS_NO_PATHCONV=1` (§5). |
+| `sharp` install-script warning during `npm install` | Harmless — sharp ships prebuilt binaries; the image pipeline still works. CI installs the Linux binary automatically. |
+
+---
+
+## 9. Command reference
+
+```sh
+# local
+cd maintainable_website
+npm install                 # once, and after dependency changes
+npm start                   # dev server, live reload, http://localhost:8080
+npm run build               # build to _site/ (absolute links)
+npm run build:portable      # build to _site/ with relative links (runs anywhere)
+npm run clean               # remove _site/
+
+# reproduce the deployed build locally (Linux/macOS)
+PATH_PREFIX=/mimamusic/ npm run build
+
+# git
+git checkout feature/build-mainainable-site
+git add -A && git commit -m "..."
+git push
+
+# see what the owner's CMS saves changed
+git fetch origin && git log --stat origin/feature/build-mainainable-site
+```

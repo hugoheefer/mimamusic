@@ -1,0 +1,286 @@
+# Pages CMS configuration — https://pagescms.org
+#
+# The site owner edits content at https://app.pagescms.org (sign in with GitHub,
+# pick this repo, select the branch this file is on). Every field below maps to a
+# fixed key in a content file, so editing text or swapping a photo can never
+# break the layout or the build.
+#
+# This file MUST live at the repo root. Paths point into maintainable_website/
+# because the Eleventy project is still a subfolder. If that folder is ever
+# promoted to the repo root, drop the `maintainable_website/` prefix from every
+# `path:` and from the media `input:`.
+#
+# "Onderdelen" (key `sections`) is the same block list on every content page.
+# It is defined once (YAML anchor `&sections`, on the Koren entry) and reused
+# (`*sections`) on every other page except Home and Agenda — so the owner can add
+# structured blocks (with their own heading, text, photo and link) to any page
+# without a developer. How a page shows those blocks (as teaser blocks under the
+# text, or as a stack of article sections) is fixed in the template, not here.
+
+media:
+  input: maintainable_website/src/assets/images
+  output: /assets/images
+  extensions: [jpg, jpeg, png, webp, svg]
+
+content:
+  - name: home
+    label: Home
+    type: file
+    path: maintainable_website/src/content/index.md
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: description, label: Omschrijving voor Google, type: text }
+      - name: blocks
+        label: Blokken
+        type: object
+        list: { min: 3, max: 3 }
+        fields:
+          - { name: heading, label: Kop, type: string }
+          - { name: text, label: Tekst, type: text }
+          - name: photo
+            label: Foto
+            type: object
+            fields:
+              - { name: src, label: Afbeelding, type: image }
+              - { name: alt, label: Alt-tekst (voor schermlezers), type: string }
+              - { name: variant, label: Kolom, type: select, options: { values: [dir, ond, dwf] } }
+
+  - name: koren
+    label: "Koren — overzicht"
+    type: file
+    path: maintainable_website/src/content/koren.md
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: titleClass, label: Titelkleur, type: select, options: { values: [is-red, is-dim] }, default: is-red }
+      - { name: description, label: Omschrijving voor Google, type: text }
+      - { name: body, label: Tekst, type: rich-text }
+      - name: band
+        label: Fotoreeks
+        type: object
+        list: true
+        fields:
+          - { name: src, label: Afbeelding, type: image }
+          - { name: alt, label: Alt-tekst, type: string }
+          - { name: w, label: Breedte in px, type: number }
+          - { name: h, label: Hoogte in px, type: number }
+      # `sections` ("Onderdelen") is defined once here and reused (YAML anchor) on
+      # Onderwijs, Dwarsfluit and Workshopmogelijkheden — one shared block shape.
+      - &sections
+        name: sections
+        label: Onderdelen
+        type: object
+        list: true
+        fields:
+          - { name: heading, label: Kop, type: string }
+          - { name: body, label: Tekst, type: rich-text }
+          - { name: link, label: "Link (optioneel — maakt de kop klikbaar)", type: string }
+          - { name: external, label: Opent in nieuw tabblad, type: boolean }
+          - { name: narrow, label: "Smalle tekstkolom (naast een foto)", type: boolean }
+          - name: photo
+            label: Foto (optioneel)
+            type: object
+            fields:
+              - { name: src, label: Afbeelding, type: image }
+              - { name: alt, label: Alt-tekst, type: string }
+              - { name: layout, label: Plaatsing, type: select, options: { values: [ph-side] } }
+
+  - name: onderwijs
+    label: Onderwijs
+    type: file
+    path: maintainable_website/src/content/onderwijs.md
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: titleClass, label: Titelkleur, type: select, options: { values: [is-red, is-dim] }, default: is-red }
+      - { name: description, label: Omschrijving voor Google, type: text }
+      - { name: body, label: Tekst, type: rich-text }
+      - name: band
+        label: Fotoreeks
+        type: object
+        list: true
+        fields:
+          - { name: src, label: Afbeelding, type: image }
+          - { name: alt, label: Alt-tekst, type: string }
+          - { name: w, label: Breedte in px, type: number }
+          - { name: h, label: Hoogte in px, type: number }
+      - *sections
+
+  - name: dwarsfluit
+    label: Dwarsfluit
+    type: file
+    path: maintainable_website/src/content/dwarsfluit.md
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: description, label: Omschrijving voor Google, type: text }
+      - *sections
+
+  - name: arrangeren
+    label: Arrangeren
+    type: file
+    path: maintainable_website/src/content/arrangeren.md
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: description, label: Omschrijving voor Google, type: text }
+      - { name: body, label: Tekst, type: rich-text }
+      - *sections
+
+  - name: workshop_les
+    label: "Workshop/les — overzicht"
+    type: file
+    path: maintainable_website/src/content/workshop-les.md
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: titleClass, label: Titelkleur, type: select, options: { values: [is-red, is-dim] }, default: is-red }
+      - { name: description, label: Omschrijving voor Google, type: text }
+      - { name: body, label: Tekst, type: rich-text }
+      - *sections
+
+  - name: contact
+    label: Contact
+    type: file
+    path: maintainable_website/src/content/contact.md
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: titleClass, label: Titelkleur, type: select, options: { values: [is-red, is-dim] }, default: is-red }
+      - { name: description, label: Omschrijving voor Google, type: text }
+      - name: photo
+        label: Portretfoto
+        type: object
+        fields:
+          - { name: src, label: Afbeelding, type: image }
+          - { name: alt, label: Alt-tekst, type: string }
+          - { name: layout, label: Plaatsing, type: select, options: { values: [ph-portrait] } }
+      - { name: body, label: Tekst, type: rich-text }
+      - *sections
+
+  - name: koor_subpaginas
+    label: "Koren — subpagina's"
+    type: collection
+    path: maintainable_website/src/content/koren
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: body, label: Tekst, type: rich-text }
+      - { name: photoLayout, label: Fotolayout, type: select, options: { values: [stack, pair, logo] } }
+      - name: photos
+        label: Foto's
+        type: object
+        list: true
+        fields:
+          - { name: src, label: Afbeelding, type: image }
+          - { name: alt, label: Alt-tekst, type: string }
+      - *sections
+
+  - name: workshop_muzikale_ondersteuning
+    label: "Workshop/les — Muzikale ondersteuning"
+    type: file
+    path: maintainable_website/src/content/workshop-les/muzikale-ondersteuning.md
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: titleClass, label: Titelkleur, type: select, options: { values: [is-red, is-dim] }, default: is-dim }
+      - { name: description, label: Omschrijving voor Google, type: text }
+      - { name: body, label: Tekst, type: rich-text }
+      - name: photo
+        label: Foto (optioneel)
+        type: object
+        fields:
+          - { name: src, label: Afbeelding, type: image }
+          - { name: alt, label: Alt-tekst, type: string }
+          - { name: layout, label: Plaatsing, type: select, options: { values: [ph-side, ph-portrait] } }
+      - *sections
+
+  - name: workshop_mogelijkheden
+    label: "Workshop/les — Workshopmogelijkheden"
+    type: file
+    path: maintainable_website/src/content/workshop-les/workshopmogelijkheden.md
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: description, label: Omschrijving voor Google, type: text }
+      - *sections
+
+  - name: agenda_intro
+    label: "Agenda — kop en introtekst"
+    type: file
+    path: maintainable_website/src/content/agenda.md
+    fields:
+      - { name: title, label: Kop, type: string }
+      - { name: description, label: Omschrijving voor Google, type: text }
+      - { name: body, label: Introtekst (boven de lijst), type: text }
+
+  - name: agenda
+    label: "Agenda — optredens"
+    type: file
+    path: maintainable_website/src/_data/agenda.yaml
+    list: true
+    fields:
+      - { name: date, label: Datum, type: date }
+      - { name: title, label: Titel, type: string }
+      - { name: location, label: Locatie (optioneel), type: string }
+      - { name: url, label: "Link bij de locatie (optioneel — volledige https://…-adres)", type: string }
+
+  - name: privacy
+    label: Privacyverklaring
+    type: file
+    path: maintainable_website/src/content/privacy.md
+    fields:
+      - { name: title, label: Titel, type: string }
+      - { name: draft, label: Verborgen (concept), type: boolean }
+      - { name: body, label: Tekst, type: rich-text }
+      - *sections
+
+  - name: navigation
+    label: "Menubalk (hoofdmenu)"
+    type: file
+    path: maintainable_website/src/_data/navigation.yaml
+    list: true
+    fields:
+      - { name: text, label: Menu-item, type: string }
+      - { name: url, label: "Link (bijv. /koren/ — met schuine strepen)", type: string }
+      - name: children
+        label: Submenu (optioneel — laat leeg voor een gewoon menu-item)
+        type: object
+        list: true
+        fields:
+          - { name: text, label: Submenu-item, type: string }
+          - { name: url, label: Link, type: string }
+          - { name: muted, label: "Gedimd weergeven (archief)", type: boolean }
+
+  # Owner-editable fonts. Today just the header wordmark; the resolver in
+  # maintainable_website/eleventy.config.js (FONT_CATALOGUE / FONT_ROLES /
+  # themeFonts) is built to add more roles — section titles, body, menu — as
+  # extra fields here. Every `*Font` option value is a FONT_CATALOGUE key.
+  - name: fonts
+    label: "Lettertypes"
+    type: file
+    path: maintainable_website/src/_data/theme.yaml
+    fields:
+      - name: logoFont
+        label: "Logo-lettertype"
+        type: select
+        default: henny-penny
+        description: >-
+          Het lettertype van de tekst 'MimaMusic' in de kop van elke pagina.
+          Elke keuze is een Google Font die automatisch met de site meegeladen
+          wordt. Wil je een lettertype dat er niet bij staat? Blader op
+          https://fonts.google.com — daar zie je van elk lettertype meteen een
+          voorbeeld — en geef de ontwikkelaar de precieze naam door; die zet het
+          er dan bij (een kleine aanpassing). Verandert het logo na opslaan
+          niet? Wacht een minuut en ververs de pagina met Ctrl+Shift+R.
+        options:
+          values:
+            - { value: henny-penny, label: "Henny Penny — speels (huidige)" }
+            - { value: lobster, label: "Lobster — vet, klassiek logo-schrift" }
+            - { value: yellowtail, label: "Yellowtail — retro penseelschrift" }
+            - { value: dancing-script, label: "Dancing Script — vriendelijk, luchtig" }
+            - { value: courgette, label: "Courgette — rond, goed leesbaar" }
+            - { value: pacifico, label: "Pacifico — warm, rond penseel" }
+            - { value: kaushan-script, label: "Kaushan Script — energiek penseel" }
+            - { value: satisfy, label: "Satisfy — losse handtekening" }
+            - { value: great-vibes, label: "Great Vibes — elegant en sierlijk" }
+            - { value: sacramento, label: "Sacramento — dun, fijn schrift" }
+            - { value: caveat, label: "Caveat — handschrift met stift" }
+            - { value: righteous, label: "Righteous — modern, geen schrift" }
+            - { value: gabriela, label: "Gabriela — zelfde als de kopjes, geen schrift" }
+      - name: logoFontSize
+        label: "Grootte in px (standaard 60)"
+        type: number
+        default: 60
+        description: "De grootte op een breed scherm; 60 is de huidige waarde. Op smalle schermen schaalt het logo automatisch mee omlaag. Houd het ruwweg tussen 40 en 80."

@@ -1,0 +1,90 @@
+---
+layout: layouts/base.njk
+---
+{#
+  One content-page layout for every hand-written page (Home and Agenda keep their
+  own). Two rendering modes, chosen per page by `sectionStyle`:
+
+    (unset / "prose")  title + body + optional single photo + optional photo row
+                       (`band`) + optional photo group (`photos` + `photoLayout`)
+                       + optional block list (`sections`) shown as teaser blocks.
+                       Used by Koren, Onderwijs, Workshop/les, Arrangeren,
+                       Contact, Privacy, 404 and every sub-page.
+
+    "article"          title + a stack of `sections`, each an <article class="art">
+                       with its own heading, optional floated photo and body.
+                       Used by Dwarsfluit and Workshopmogelijkheden.
+
+  `sections` carries the same fields in both modes (heading, body, photo{src,alt,
+  layout}, narrow, link, external); each mode uses the parts it needs. Heading
+  colour in "article" mode is fixed per page via `sectionHeadingClass`, never by
+  the editor. `hideTitle` renders the page <h1> for screen-readers only
+  (Dwarsfluit: every block already carries its own visible heading).
+#}
+{%- macro pageHeading() -%}
+{%- if hideTitle -%}<h1 class="visually-hidden">{{ title }}</h1>
+{%- else -%}<h1 class="page-title {{ titleClass }}">{{ title }}</h1>
+{%- endif -%}
+{%- endmacro -%}
+{%- if sectionStyle == "article" -%}
+<section class="page clearfix">
+  {{ pageHeading() }}
+  {%- for b in sections -%}
+  <article class="art{% if b.photo and b.photo.src %} clearfix{% endif %}">
+    {%- if b.heading -%}<h2 class="page-title {{ sectionHeadingClass }}">{% if b.link %}<a href="{{ b.link }}"{% if b.external %} target="_blank" rel="noopener"{% endif %}>{{ b.heading }}</a>{% else %}{{ b.heading }}{% endif %}</h2>{%- endif -%}
+    {%- if b.photo and b.photo.src -%}
+    <div class="ph {{ b.photo.layout or 'ph-side' }}">{% image b.photo.src, b.photo.alt, { sizes: "(max-width: 760px) 100vw, 300px", widths: [300, 600] } %}</div>
+    {%- endif -%}
+    <div class="prose{% if b.narrow %} is-narrow{% endif %}">{{ b.body | md | safe }}</div>
+  </article>
+  {%- endfor -%}
+</section>
+{%- else -%}
+<section class="page clearfix">
+  {{ pageHeading() }}
+  <div class="prose">
+    {%- if photo and photo.src %}
+    <div class="ph {{ photo.layout or 'ph-portrait' }}">{% image photo.src, photo.alt, { sizes: "(max-width: 760px) 100vw, 300px", widths: [280, 560] } %}</div>
+    {%- endif %}
+    {{ content | safe }}
+
+    {%- if band and band.length %}
+    <div class="photo-band">
+      {%- for p in band %}
+      {%- if p.src %}
+      <div class="ph band-photo" style="flex: {{ (p.w / p.h) | round(3) }} 1 0; aspect-ratio: {{ p.w }} / {{ p.h }};">
+        {% image p.src, p.alt, { sizes: "(max-width: 620px) 50vw, 22vw", widths: [240, 480, 720] } %}
+      </div>
+      {%- endif %}
+      {%- endfor %}
+    </div>
+    {%- endif %}
+
+    {%- if photos and photos.length -%}
+      {%- if photoLayout == "stack" -%}
+      <div class="photo-stack">{%- for p in photos -%}{%- if p.src -%}<div class="ph">{% image p.src, p.alt, { sizes: "(max-width: 440px) 100vw, 400px", widths: [400, 800] } %}</div>{%- endif -%}{%- endfor -%}</div>
+      {%- elif photoLayout == "pair" -%}
+      <div class="photo-pair">{%- for p in photos -%}{%- if p.src -%}<div class="ph">{% image p.src, p.alt, { sizes: "(max-width: 480px) 100vw, 212px", widths: [212, 424] } %}</div>{%- endif -%}{%- endfor -%}</div>
+      {%- elif photoLayout == "logo" -%}
+      {%- for p in photos -%}{%- if p.src -%}<div class="ph ph-logo contain">{% image p.src, p.alt, { sizes: "170px", widths: [170, 340] } %}</div>{%- endif -%}{%- endfor -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- if sections and sections.length %}
+    <div class="teaser-grid">
+      {%- for t in sections %}
+      <article class="teaser">
+        <h2 class="teaser-title">
+          {%- if t.link -%}<a href="{{ t.link }}"{% if t.external %} target="_blank" rel="noopener"{% endif %}>{{ t.heading }}</a>{%- else -%}{{ t.heading }}{%- endif -%}
+        </h2>
+        {{ t.body | md | safe }}
+        {%- if t.photo and t.photo.src %}
+        <div class="ph teaser-img">{% image t.photo.src, t.photo.alt, { sizes: "(max-width: 420px) 100vw, 380px", widths: [380, 760] } %}</div>
+        {%- endif %}
+      </article>
+      {%- endfor %}
+    </div>
+    {%- endif %}
+  </div>
+</section>
+{%- endif -%}

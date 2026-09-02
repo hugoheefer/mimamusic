@@ -1,0 +1,248 @@
+# maintainable_website — the production MiMaMusic site
+
+A clean, maintainable rebuild of the single-file prototype in [`../website/`](../website/).
+Static site generated with **Eleventy (11ty)**, content in Markdown/YAML, edited by
+the site owner through **Pages CMS**, hosted on **GitHub Pages**.
+
+The look is a faithful reproduction of the prototype (which itself matches the live
+`mimamusic.nl` template) plus low-risk polish — see *Deviations* below. Whether to
+keep the black theme / the display fonts is still an open owner decision (spec §15);
+nothing here pre-empts it — the design tokens in
+[`src/assets/css/tokens.css`](src/assets/css/tokens.css) are the single place to change it.
+
+## Manuals
+
+- **[docs/developer-manual.md](docs/developer-manual.md)** — run, change, deploy,
+  set up GitHub Pages + Pages CMS, go to production, troubleshoot.
+- **[docs/content-owner-manual.md](docs/content-owner-manual.md)** — for the person
+  who edits text and photos through Pages CMS (no code).
+
+This README is the reference for the code layout; the manuals are the step-by-step
+procedures.
+
+---
+
+## Quick start
+
+```sh
+cd maintainable_website
+npm install
+npm start          # dev server + live reload at http://localhost:8080
+npm run build      # writes the static site to _site/
+```
+
+Requires Node 18+ (built and tested on Node 24). The image pipeline uses `sharp`;
+`npm install` pulls the right prebuilt binary per platform.
+
+---
+
+## How it is put together
+
+```
+src/
+  _data/
+    site.js            brand, contact details, build year
+    navigation.yaml    menu bar: item order + dropdowns (CMS-editable, "Menubalk")
+    agenda.yaml        upcoming events (CMS-editable); empty => "geen activiteiten gepland"
+    redirects.json     old Joomla URL -> new path (spec §12)
+  _includes/
+    layouts/base.njk   <head>, header wordmark, nav, footer — the only copy of these
+    layouts/page.njk   every hand-written content page (two modes; see Content model)
+    layouts/{home,agenda}.njk   the two pages that need their own shape
+  content/
+    *.md               one file per page; front matter = the editable fields
+    koren/*.md          Koren sub-pages
+    workshop-les/*.md    Workshop/les sub-pages
+    404.md
+    content.11tydata.js   strips the "content/" segment from URLs; default layout = page.njk
+    <name>.11tydata.json  per-page overrides (home/agenda layout; dwarsfluit &
+                          workshopmogelijkheden section mode)
+  assets/
+    css/*.css          six files, concatenated in cascade order to /assets/styles.css
+    images/*           real photos (from ../website/images/web/)
+  redirects.njk        emits a meta-refresh stub per redirects.json entry
+  sitemap.njk robots.njk
+eleventy.config.js     filters (md, nldate, pageSlug); the {% image %},
+                       {% agendaList %} shortcode;
+                       YAML data loader; the CSS bundle step; the temporary
+                       externalLinksBreakOutOfIframe transform (see below)
+.pages.yml             Pages CMS schema (see "Editing" below)
+deploy/                staging copies of the GitHub Actions workflow + CNAME
+```
+
+### Content model
+
+Each page's front matter carries only fixed, named fields — never layout.
+`content.11tydata.js` sets the default layout (`page.njk`) and maps
+`content/koren.md` → `/koren/`; `index.md` and `agenda.md` opt out via their own
+`*.11tydata.json`.
+
+`page.njk` has two modes, picked by `sectionStyle` (default = the prose mode):
+
+- **prose** — `<h1>` + body + optional single `photo` + optional `band[]` photo row
+  + optional `photos[]`/`photoLayout` group + optional `sections[]` shown as
+  *teaser* blocks under the text.
+- **article** (`sectionStyle: article`, set in a `*.11tydata.json`) — `<h1>` +
+  a stack of `sections[]`, each an `<article class="art">` with its own heading,
+  optional right-floated `photo`, and body. `sectionHeadingClass` fixes the heading
+  colour; `hideTitle` makes the `<h1>` screen-reader-only.
+
+`sections[]` = `{ heading?, body, photo{src,alt,layout}?, narrow?, link?, external? }`
+— the same shape in both modes, and one shared definition in `.pages.yml`
+(anchor `&sections`, label "Onderdelen").
+
+| Page | Mode | Key front-matter fields |
+|---|---|---|
+| `index.md` | *(home layout)* | `blocks[]` = `{ heading, text, photo{src,alt,variant} }` ×3 |
+| `koren.md` | prose | `body`, `band[]` = `{src,alt,w,h}`, `sections[]` |
+| `onderwijs.md` | prose | `body`, `band[]`, `sections[]` (the "Bs Emmaus" block) |
+| `workshop-les.md` | prose | `body` |
+| `dwarsfluit.md` | article | `sections[]`; `.11tydata.json` sets `sectionHeadingClass: is-red`, `hideTitle` |
+| `workshop-les/workshopmogelijkheden.md` | article | `sections[]`; `.11tydata.json` sets `sectionHeadingClass: is-dim` |
+| `arrangeren.md` | prose | `body` (heading colour quirk is in CSS: `.p-arrangeren`) |
+| `koren/*.md`, `workshop-les/muzikale-ondersteuning.md` | prose | `body`, `photos[]` / `photo`, `photoLayout` |
+| `contact.md` | prose | `photo`, `body` (raw inline HTML kept verbatim) |
+| `agenda.md` | *(agenda layout)* | intro body text; the list is built from `_data/agenda.yaml` |
+
+Images are referenced by **filename only** (`2017-12b.jpg`). The `{% image %}`
+shortcode generates responsive `<picture>` markup (WebP + fallback, `srcset`,
+lazy) into `_site/assets/images/`. It also accepts a full `/assets/images/…` path,
+so whatever Pages CMS writes, it resolves.
+
+---
+
+## Editing (the site owner)
+
+1. Go to **https://app.pagescms.org**, "Sign in with GitHub" (a free GitHub
+   account + 2FA is the one unavoidable signup).
+2. Open this repository. The left panel lists: Home, Koren, Onderwijs, Dwarsfluit,
+   Arrangeren, Workshop/les, Contact, the Koren/Workshop sub-pages, Agenda,
+   Privacy.
+3. Edit text in normal fields, swap a photo with the picker, add an agenda entry.
+4. **Save** → Pages CMS commits to GitHub → the Action rebuilds → live in ~1 min.
+
+The schema in `.pages.yml` constrains every field, so content edits cannot break
+the layout or the build.
+
+> `.pages.yml` must sit at the **repo root** of the deployed branch, and its
+> `path:`/`input:` values assume this folder has been promoted to the root (see
+> *Adoption*). Until then, prefix them with `maintainable_website/`.
+
+---
+
+## Adoption / going live (GitHub Pages)
+
+1. **Promote** the folder: move everything in `maintainable_website/` to the repo
+   root (`git mv`), so `.pages.yml` and `.github/` land where they must be.
+2. Move `deploy/deploy.yml` → `.github/workflows/deploy.yml`; drop its `paths:`
+   filter.
+3. Repo **Settings → Pages → Source = "GitHub Actions"**.
+   - GitHub Pages serves **public** repos free. A **private** repo needs GitHub
+     **Pro (~€4/mo)** — this is the choice that paused the earlier test.
+4. **Custom domain**: Settings → Pages → Custom domain = `mimamusic.nl` (this
+   writes the `CNAME` file for you; `deploy/CNAME` is a reference copy). At the
+   DNS host: 4 `A` records to GitHub's Pages IPs for the apex + a `CNAME` for
+   `www`. **Leave the `MX` records alone** — `@mimamusic.nl` mail is unaffected.
+   Then in the workflow set `PATH_PREFIX: /` (or delete that `env:` line) — see
+   *Path prefix* below — and let it redeploy.
+5. Connect the repo at **app.pagescms.org** and hand the owner the one-page
+   runbook above.
+
+### Path prefix
+
+A GitHub Pages **project site** is served from `…github.io/<repo>/`, not the
+domain root, so every root-relative URL (`/assets/…`, `/koren/`) would 404.
+`eleventy.config.js` reads `PATH_PREFIX` (default `/`) and `EleventyHtmlBasePlugin`
+rewrites every `href`/`src`/`srcset` in the output HTML to match. The deploy
+workflow sets `PATH_PREFIX: /mimamusic/`. Once `mimamusic.nl` is attached (served
+at root), set it back to `/`. Local dev and the eventual custom domain both use
+the `/` default.
+
+**Portable build:** `npm run build:portable` (`RELATIVE_URLS=1`) instead rewrites
+every link to be **document-relative** (`../assets/…`) and points each page link
+at its real `…/index.html` file (so it also works under `file://`, which has no
+directory index). That `_site/` runs from anywhere with no server config — opened
+straight from a folder, or served from any web server's root **or** a subfolder
+(URLs just show the explicit `index.html`). It's a hand-off copy, not what the
+workflow deploys.
+
+### Redirects
+
+GitHub Pages has no `_redirects` file, so `src/redirects.njk` renders one
+`<meta http-equiv="refresh">` + `<link rel="canonical">` stub per entry in
+`src/_data/redirects.json` (the spec §12 table). Finalise that table against a
+Screaming Frog crawl of the live site before go-live.
+
+### Temporary: the `mimamusic.nl` iframe wrapper
+
+Until the domain is pointed straight at GitHub Pages (the *Custom domain* step
+above), `mimamusic.nl` is kept in the address bar by a wrapper the DNS host
+serves — [`../temp-redirect/index.php`](../temp-redirect/) — which loads this
+site in a full-window `<iframe>`. Internal clicks load inside the frame (so the
+bar keeps showing `mimamusic.nl`); links to **other** sites must instead break
+out of the frame so the visitor sees the real destination URL.
+
+`eleventy.config.js` handles that at build time: the
+**`externalLinksBreakOutOfIframe`** transform adds `target="_blank"
+rel="noopener"` to every `<a>` whose `href` points to a host not in
+`SITE_HOSTS`. No client-side JS. `mailto:` / `tel:` / relative / `#fragment`
+links and any `<a>` with an explicit `target` are left alone.
+
+**When `mimamusic.nl` serves this site directly, delete it** — the transform
+and `SITE_HOSTS` in `eleventy.config.js`, the `../temp-redirect/` folder, and
+these notes (here + developer-manual §5.1, §7). Re-add new-tab behaviour then
+only if it's a deliberate UX choice. Full rationale is in the block comment
+above `SITE_HOSTS` in `eleventy.config.js`.
+
+---
+
+## Deviations from the prototype (all low-risk, "safe polish")
+
+- Real multi-page site with real URLs (the prototype's JS show/hide is gone) —
+  required for SEO and the §12 redirects.
+- Inline `<style>` → six organised CSS files; `build_images.py` + data-URI baking
+  → `{% image %}` responsive images; the dev "specs" panel is gone.
+- Sub-page title colour `#6f6f6f` → `#9a9a9a` for legibility on black (spec D4,
+  already flagged for the owner).
+- Added: skip link, `<h1>` per page (home/dwarsfluit get a visually-hidden one),
+  `@media print`, `sitemap.xml`, `robots.txt`, a `404.html`. The nav is the
+  prototype's plain wrapping bar with CSS-only dropdowns (no JS, no hamburger);
+  on touch the parent links reach their landing pages, which list the children.
+- Agenda: the JEvents month calendar is dropped entirely (owner decision). The
+  page is now just the "Agenda" heading + intro + the "Aankomende optredens"
+  list, built from `_data/agenda.yaml` by `{% agendaList %}`; past dates fall off
+  automatically. Each entry may carry a `url` — when it is a valid `http(s)`
+  address the location is rendered as a link (which the
+  `externalLinksBreakOutOfIframe` transform then opens in a new tab); an invalid
+  or empty `url` leaves the location as plain text.
+- Dwarsfluit "Dwarsfluitles" `<br>` pseudo-list → a real Markdown bullet list
+  (spec D16 open question — converted for CMS cleanliness).
+- Transcribed copy keeps the original quirks verbatim ("Daarna heeft heb ik",
+  "sopranino.Ben je", "Sind 2014", "posongs", "vanalles"). Owner proofread pending.
+- One content layout: `section.njk` + the three branches of the old `page.njk`
+  were merged into a single `page.njk` with a `prose` / `article` mode switch, and
+  the per-page block lists (`teasers` / `articles` / `items`) unified to one
+  `sections` field ("Onderdelen" in the CMS). Rendered output is unchanged — the
+  only markup differences are an inert `clearfix` on a few `<section>` tags and,
+  on Workshopmogelijkheden, the floated photo moved from inside `.prose` to a
+  sibling before it (identical render at every breakpoint).
+
+---
+
+## Open items carried from the spec
+
+- **Content still missing:** Koor Voluum body, Privacy statement (both marked
+  `draft`, visible placeholder). Owner to supply / proofread everything.
+- **Contact:** still `mailto:` + `tel:` (the "/at/" text is kept from the live
+  site). A real form (Web3Forms / Formspree — GitHub Pages has no form handler)
+  is a later step.
+- **Agenda mechanism:** the month calendar was removed; the page is the
+  hand-maintained YAML list only. Confirm that list is the model the owner wants.
+- **Design:** black theme vs lighter; keep Henny Penny / Gabriela or pick cleaner
+  faces (spec §15 — owner decision).
+- **Pages CMS check:** on the owner's first save, confirm Pages CMS preserves
+  front-matter keys not in `.pages.yml`. Every `titleClass` / `description` key
+  is now declared in the schema (the `koren/*` collection excepted — its files
+  that carry `titleClass` are Spirit only; add the field there if a save strips
+  it). If a key is ever stripped, move it into a `*.11tydata.json` directory-data
+  file.

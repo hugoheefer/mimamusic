@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if page.url == "/" %}{{ site.brand }} &mdash; Wilma van der Schoot{% else %}{{ title }} &mdash; {{ site.brand }}{% endif %}</title>
+  <meta name="description" content="{{ description or site.description }}">
+  <link rel="canonical" href="https://{{ site.domain }}{{ page.url }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  {% set fonts = theme | themeFonts %}<link rel="stylesheet" href="{{ fonts.href | safe }}">
+  <link rel="stylesheet" href="/assets/styles.css">
+  {# owner's font choices from Pages CMS ("Lettertypes"); overrides the tokens.css defaults #}<style>{{ fonts.css | safe }}</style>
+</head>
+<body class="p-{{ page.url | pageSlug }}">
+  <a class="skip-link" href="#main">Naar de inhoud</a>
+
+  <header class="site-header">
+    <a class="wordmark" href="/">{{ site.brand }}</a>
+  </header>
+
+  {% include "partials/nav.njk" %}
+
+  <main id="main">
+    {{ content | safe }}
+  </main>
+
+  <footer class="site-footer">
+    <div class="foot-inner">
+      {% image "MIMAmusic_LOGO2-4.png", "MiMaMusic", { className: "badge-img", widths: [84, 168], sizes: "84px", loading: "eager" } %}
+      {% if page.url == "/" %}
+      <p class="copyright">Copyright &copy; {{ site.buildYear }} {{ site.brand }}. All Rights Reserved.</p>
+      {% endif %}
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,33 @@
+- text: Home
+  url: /
+- text: Koren
+  url: /koren/
+  children:
+    - text: Gospelpopkoor Spirit
+      url: /koren/gospelpopkoor-spirit/
+      muted: false
+    - text: Singin'Gestel
+      url: /koren/singin-gestel/
+      muted: false
+    - text: Popkoor MIKS
+      url: /koren/popkoor-miks/
+      muted: false
+- text: Onderwijs
+  url: /onderwijs/
+- text: Dwarsfluit
+  url: /dwarsfluit/
+- text: Arrangeren
+  url: /arrangeren/
+- text: Workshop/les
+  url: /workshop-les/
+  children:
+    - text: Muzikale ondersteuning
+      url: /workshop-les/muzikale-ondersteuning/
+      muted: false
+    - text: Workshopmogelijkheden
+      url: /workshop-les/workshopmogelijkheden/
+      muted: false
+- text: Agenda
+  url: /agenda/
+- text: Contact
+  url: /contact/

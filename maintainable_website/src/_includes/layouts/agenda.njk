@@ -1,0 +1,10 @@
+---
+layout: layouts/base.njk
+---
+<section class="page" id="page-agenda">
+  <div class="agenda-layout">
+    <h1 class="page-title is-red">{{ title }}</h1>
+    <div class="prose">{{ content | safe }}</div>
+    {% agendaList agenda %}
+  </div>
+</section>
