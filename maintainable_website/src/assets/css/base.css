@@ -5,6 +5,12 @@
 html {
   color-scheme: dark;
   -webkit-text-size-adjust: 100%;
+  /* Always reserve the vertical scrollbar gutter so short pages (e.g. a Koren
+     sub-page with one photo) and tall ones (Spirit, two photos) don't shift the
+     centred header/nav/content sideways as the scrollbar appears and disappears.
+     scrollbar-gutter for modern browsers; overflow-y:scroll as the fallback. */
+  scrollbar-gutter: stable;
+  overflow-y: scroll;
 }
 
 body {
