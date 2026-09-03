@@ -319,6 +319,26 @@ lost its `src`, and restore it as `/assets/images/<file>`.
 the whole file on Save, so any comments in `navigation.yaml` / `agenda.yaml` are
 lost after the owner's first edit. Don't rely on them.
 
+### 6.3 If Pages CMS isn't enough — richer alternatives
+
+Pages CMS is deliberately minimal: `string` / `text` / `rich-text` / `image` /
+`boolean` / `number` / `select` / `object` widgets, a basic media library, and
+access = repo collaborators. No editorial workflow, no on-page/visual preview, no
+relation or conditional fields, no custom widgets. If the owner needs more, the
+options, from least to most disruptive:
+
+| Option | Gain over Pages CMS | Trade-off |
+|---|---|---|
+| **Sveltia CMS** | Drop-in Decap replacement, still one config file, content stays as the same `.md`/`.yaml` in this repo. Real media library (folders, drag-drop, crop/resize), relation + conditional fields, i18n, faster UI. | Free/OSS. Needs a GitHub OAuth handler (their free Cloudflare Worker). Rewrite `.pages.yml` → Sveltia schema; content files mostly unchanged. **Lowest-risk upgrade — prototype this first.** |
+| **Decap CMS** | Editorial workflow (edits → draft PR → review → publish), custom preview templates rendering the real page, custom widgets. | Free. Same OAuth worker. Upstream development has slowed (Sveltia is the livelier fork of the same config model). |
+| **CloudCannon** | Purpose-built for Eleventy — reads this repo as-is. Visual **on-page editing**, editable component regions, data editor, image focal points, scheduled publishing, roles/permissions, staging environments. | Paid (~$25+/mo, per site + per editor). Can keep deploying to Pages or host for you. |
+| **TinaCMS** | Visual contextual editing, block-based pages, structured content with references, Git-backed. | Editing UI is React, first-class only for React frameworks; 11ty support is community-level. Tina Cloud or self-host for auth/media. |
+| **Sanity** (headless) | Most flexible editor overall: customizable Studio, references, revision history, roles, scheduled publishing, strong image pipeline. Generous free tier. | Content leaves Git — add a build-time fetch in `eleventy.config.js` and remodel pages as Sanity documents. Biggest change. |
+
+**Caveat:** if the Squarespace rebuild is still the active direction, its built-in
+editor supersedes this whole question — settle that before investing in a CMS
+swap here.
+
 ---
 
 ## 7. Going to production (adoption)
