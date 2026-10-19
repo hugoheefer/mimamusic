@@ -4,6 +4,7 @@ import { EleventyHtmlBasePlugin } from "@11ty/eleventy";
 import Image from "@11ty/eleventy-img";
 import MarkdownIt from "markdown-it";
 import { load as loadYaml } from "js-yaml";
+import { obfuscateEmails } from "./lib/obfuscate-emails.js";
 
 /*
  * Where the site is served from:
@@ -354,6 +355,13 @@ export default function (eleventyConfig) {
       }
       return `<a${out} target="_blank">`;
     });
+  });
+
+  // Keep address-harvesting bots from reading e-mail addresses off the page
+  // (see lib/obfuscate-emails.js). Build-time only; visitors see no difference.
+  eleventyConfig.addTransform("obfuscateEmails", function (content) {
+    if (!String(this.page.outputPath || "").endsWith(".html")) return content;
+    return obfuscateEmails(content);
   });
 
   // Eleventy has no built-in YAML data loader — register one so
