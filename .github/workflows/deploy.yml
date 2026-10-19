@@ -44,6 +44,7 @@ jobs:
           cache: npm
           cache-dependency-path: maintainable_website/package-lock.json
       - run: npm ci
+      - run: npm test
       - uses: actions/configure-pages@v6
 
       # A GitHub Pages *project* site is served from <owner>.github.io/<repo>/ ,
